@@ -18,6 +18,8 @@ It captures, aggregates and analyzes events from a variety of data sources:
 NetMeta is powered by a number of great open source projects like ClickHouse, 
 Kafka, goflow, Strimzi, clickhouse-operator, Kubernetes, and k3s.
 
+NetMeta is **alpha software** and subject to change.
+
 ### sFlow vs Netflow/IPFIX
 
 **sFlow** is a very simple protocol. In its simplest form, every n-th packet is sampled and the packet header is sent
