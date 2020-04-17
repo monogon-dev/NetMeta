@@ -89,6 +89,10 @@ self-contained and does not touch any of the system's global configuration
 
 It brings its own minimal Kubernetes cluster and container runtime and has no dependencies beyond that.
 
+### nxtOS
+
+Stay tuned - NetMeta will be a first-class citizen on our nxtOS Kubernetes cluster operating system. 
+
 ### Kubernetes
 
 NetMeta works on any Kubernetes cluster that supports LoadBalancer and Ingress objects and can provision storage. It's up to you to carefully read the deployment code and cluster role assigments to make sure it works with your cluster. Note that we use two operators, which require cluster-admin permissions since CRDs are global ([Strimzi](https://strimzi.io/docs/master) for Kafka and [clickhouse-operator](https://github.com/Altinity/clickhouse-operator)).
