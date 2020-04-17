@@ -79,7 +79,7 @@ NetMeta can scale to millions of events per seconds in multi-node deployments.
 
 ### Single-node deployment
 
-Single-node deployment is tested on CentOS/RHEL 7, Debian 10 and Ubuntu 18.04 LTS. 
+Single-node deployment is tested on CentOS/RHEL 8, Debian 10 and Ubuntu 18.04 LTS. 
 Other platforms that are supported by the k3s project will probably work as well, but are not tested or supported.
 
 We strongly recommend deploying NetMeta on a dedicated VM or physical server.
@@ -110,6 +110,8 @@ Work In Progress. Please contact us if you're interested in large-scale deployme
 
 ---
 
-(C) 2020 Nexantic GmbH. This is not (yet?) an official Nexantic product. This software is provided "as-is" and
+(C) 2020 Nexantic GmbH. This is not (yet?) an official Nexantic product. 
+
+This software is provided "as-is" and
 without any express or implied warranties, including, without limitation, the implied warranties of
 merchantability and fitness for a particular purpose.
