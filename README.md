@@ -91,6 +91,17 @@ self-contained and does not touch any of the system's global configuration
 
 It brings its own minimal Kubernetes cluster and container runtime and has no dependencies beyond that.
 
+Quick start:
+
+    git clone https://github.com/leoluk/NetMeta && cd NetMeta
+    
+    # Install dependencies
+    ./install.sh
+    
+    # Deploy single node
+    cd deploy/single-node
+    cue apply ./...
+
 ### nxtOS
 
 Stay tuned - NetMeta will be a first-class citizen on our nxtOS Kubernetes cluster operating system. 
