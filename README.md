@@ -11,9 +11,9 @@ It captures, aggregates and analyzes events from a variety of data sources:
 * Web server logs (soon)
 * Scamper traces (soon)
 
-<img src="https://i.imgur.com/gboWSxV.png" width="550px"/>
+<img src="https://i.imgur.com/gboWSxV.png" width="550px" alt="Graph showing top destination IPs" />
 
-<img src="https://i.imgur.com/W5HnvR6.png" width="550px"/>
+<img src="https://i.imgur.com/W5HnvR6.png" width="550px" alt="Graph showing source code histogram" />
 
 NetMeta is powered by a number of great open source projects like ClickHouse, 
 Kafka, goflow, Strimzi, clickhouse-operator, Kubernetes, and k3s.
@@ -103,10 +103,13 @@ All pieces of NetMeta are installed into a single namespace. By default, this is
 
 Please contact us if you need help porting NetMeta to an existing k8s cluster.
 
-Multi-node deployment
----------------------
+### Multi-node deployment
 
 Work In Progress. Please contact us if you're interested in large-scale deployments.
+
+### Architecture
+
+<img src="https://i.imgur.com/j8lBemH.png" alt="Single Node Dataflow" width="350px" />
 
 ---
 
