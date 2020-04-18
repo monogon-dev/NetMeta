@@ -80,11 +80,10 @@ NetMeta can scale to millions of events per seconds in multi-node deployments.
 ### Single-node deployment
 
 Single-node deployment is tested on CentOS/RHEL 8, Debian 10 and Ubuntu 18.04 LTS. 
-Other platforms that are supported by the k3s project will probably work as well, but are not tested or supported.
 
 We strongly recommend deploying NetMeta on a dedicated VM or physical server.
 
-Our single-node deployment does not touch the host's system configuration, and is designed to be compatible with hosts 
+We try not to touch the host's system configuration, and the deployment is designed to be compatible with hosts 
 that are managed by an organization's configuration management baseline. The NetMeta single-node deployment is 
 self-contained and does not touch any of the system's global configuration 
 (make sure to read and understand install.sh before you run it!). 
