@@ -83,10 +83,10 @@ Single-node deployment is tested on CentOS/RHEL 8, Debian 10 and Ubuntu 18.04 LT
 
 We strongly recommend deploying NetMeta on a dedicated VM or physical server.
 
-We try not to touch the host's system configuration, and the deployment is designed to be compatible with hosts 
-that are managed by an organization's configuration management baseline. The NetMeta single-node deployment is 
-self-contained and does not touch any of the system's global configuration 
-(make sure to read and understand install.sh before you run it!). 
+Deployment is designed to be compatible with hosts that are managed by an organization's configuration management baseline.
+The NetMeta single-node deployment is self-contained and does not touch any of the system's global configuration.
+Make sure to read and understand install.sh before you run it! It can co-exist with other services on the same machine,
+but we do not recommend that.
 
 It brings its own minimal Kubernetes cluster and container runtime and has no dependencies beyond that.
 
