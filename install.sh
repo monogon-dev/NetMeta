@@ -62,7 +62,11 @@ GO=1.14.2
 # Install Go dependencies. Dependency versions and hashes are pinned using the
 # Go module mechanism.
 
-go build -o /usr/local/bin/cue cuelang.org/go/cmd/cue
+(
+  cd third_party/tools
+  go build -o /usr/local/bin/cue cuelang.org/go/cmd/cue
+  go build -o /usr/local/bin/bazel github.com/bazelbuild/bazelisk
+)
 
 # SELinux policies for k3s
 if rpm -q libselinux-utils; then
