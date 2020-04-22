@@ -5,6 +5,6 @@ k8s: kafkatopics: "flow-messages": {
 	spec: {
 		partitions: 1
 		replicas:   1
-		config: "retention.bytes": NetMetaConfig.goflowTopicRetention
+		config: "retention.bytes": "\(NetMetaConfig.goflowTopicRetention)"
 	}
 }
