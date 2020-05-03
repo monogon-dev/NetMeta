@@ -90,12 +90,29 @@ but we do not recommend that.
 
 It brings its own minimal Kubernetes cluster and container runtime and has no dependencies beyond that.
 
+Build dependencies:
+
+- Python >=3.6 (rules_docker)
+- C compiler toolchain (protoc)
+
+Install build dependencies on RHEL/CentOS 8 and Fedora:
+
+    dnf install -y python3 jq "@Development Tools"
+    
+    # TODO(leo): ugh - figure out how to convince Bazel to use the python3 binary
+    ln -s /usr/bin/python3 /usr/local/bin/python
+
+We will eventually provide pre-built images, for now, the build dependencies are always required.
+
 Quick start:
 
     git clone https://github.com/leoluk/NetMeta && cd NetMeta
     
     # Install dependencies
     ./install.sh
+    
+    # Build containers
+    scripts/build_containers.sh
     
     # Deploy single node
     cd deploy/single-node

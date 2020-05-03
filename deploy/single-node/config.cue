@@ -11,3 +11,7 @@ NetMetaConfig :: {
 	// ClickHouse write credentials
 	clickhousePassword: string
 }
+
+NetMetaImages :: {
+	helloworld: string
+}

@@ -1,0 +1,2 @@
+build --incompatible_use_python_toolchains
+test --incompatible_use_python_toolchains
