@@ -303,6 +303,7 @@ def go_repositories():
     )
     go_repository(
         name = "com_github_golang_migrate_migrate_v4",
+        build_tags = ["clickhouse"],  # keep
         importpath = "github.com/golang-migrate/migrate/v4",
         sum = "h1:76R6UL3BGnDTpYeittMtfpaNvGBH5zMZatO/fCzIjWo=",
         version = "v4.10.0",
