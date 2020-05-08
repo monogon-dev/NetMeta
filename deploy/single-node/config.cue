@@ -9,7 +9,7 @@ NetMetaConfig :: {
 	namespace: *"default" | string
 
 	// ClickHouse write credentials
-	clickhousePassword: string
+	clickhouseOperatorPassword: string
 }
 
 NetMetaImages :: {

@@ -6,7 +6,7 @@ k8s: {
 			subjects: [{
 				kind:      "ServiceAccount"
 				name:      "strimzi-cluster-operator"
-				namespace: NetMetaConfig.namespace
+				namespace: netmeta.config.namespace
 			}]
 			roleRef: {
 				kind:     "ClusterRole"
@@ -18,7 +18,7 @@ k8s: {
 			subjects: [{
 				kind:      "ServiceAccount"
 				name:      "strimzi-cluster-operator"
-				namespace: NetMetaConfig.namespace
+				namespace: netmeta.config.namespace
 			}]
 			roleRef: {
 				kind:     "ClusterRole"
@@ -30,7 +30,7 @@ k8s: {
 			subjects: [{
 				kind:      "ServiceAccount"
 				name:      "strimzi-cluster-operator"
-				namespace: NetMetaConfig.namespace
+				namespace: netmeta.config.namespace
 			}]
 			roleRef: {
 				kind:     "ClusterRole"
@@ -45,7 +45,7 @@ k8s: {
 			subjects: [{
 				kind:      "ServiceAccount"
 				name:      "strimzi-cluster-operator"
-				namespace: NetMetaConfig.namespace
+				namespace: netmeta.config.namespace
 			}]
 			roleRef: {
 				kind:     "ClusterRole"
@@ -57,7 +57,7 @@ k8s: {
 			subjects: [{
 				kind:      "ServiceAccount"
 				name:      "strimzi-cluster-operator"
-				namespace: NetMetaConfig.namespace
+				namespace: netmeta.config.namespace
 			}]
 			roleRef: {
 				kind:     "ClusterRole"

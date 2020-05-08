@@ -9,6 +9,6 @@ k8s: clusterrolebindings: "clickhouse-operator": {
 	subjects: [{
 		kind:      "ServiceAccount"
 		name:      "clickhouse-operator"
-		namespace: NetMetaConfig.namespace
+		namespace: netmeta.config.namespace
 	}]
 }
