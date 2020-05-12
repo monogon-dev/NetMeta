@@ -1,5 +1,7 @@
 # NetMeta
 
+⚠️ **PRE-RELEASE**: This is a work in progress - please watch this repo for news.
+
 NetMeta is a scalable network observability toolkit optimized for performance.
 
 It captures, aggregates and analyzes events from a variety of data sources:
