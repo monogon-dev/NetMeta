@@ -104,6 +104,10 @@ Install build dependencies on RHEL/CentOS 8 and Fedora:
     # TODO(leo): ugh - figure out how to convince Bazel to use the python3 binary
     ln -s /usr/bin/python3 /usr/local/bin/python
 
+Install build dependencies on Debian Buster:
+    
+    apt install -y protobuf-compiler jq gcc
+
 We will eventually provide pre-built images, for now, the build dependencies are always required.
 
 Quick start:
