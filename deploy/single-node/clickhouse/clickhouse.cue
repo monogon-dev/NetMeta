@@ -11,6 +11,7 @@ k8s: clickhouseinstallations: netmeta: spec: {
 	defaults: templates: {
 		dataVolumeClaimTemplate: "local-pv"
 		logVolumeClaimTemplate:  "local-pv"
+		serviceTemplate:         "chi-service-internal"
 	}
 	configuration: {
 		settings: {
@@ -156,15 +157,25 @@ k8s: clickhouseinstallations: netmeta: spec: {
       """#
 		}
 	}
-	templates: volumeClaimTemplates: [{
-		name:          "local-pv"
-		reclaimPolicy: ""
-		spec: {
-			accessModes: [
-				"ReadWriteOnce",
+	templates: {
+		volumeClaimTemplates: [{
+			name:          "local-pv"
+			reclaimPolicy: ""
+			spec: {
+				accessModes: [
+					"ReadWriteOnce",
+				]
+				dataSource: null
+				resources: requests: storage: "100Gi"
+			}
+		}]
+		serviceTemplates: [{
+			name:         "chi-service-internal"
+			generateName: "clickhouse-{chi}"
+			spec: ports: [
+				{name: "http", port: 8123},
+				{name: "tcp", port:  9000},
 			]
-			dataSource: null
-			resources: requests: storage: "100Gi"
-		}
-	}]
+		}]
+	}
 }
