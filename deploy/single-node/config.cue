@@ -17,8 +17,9 @@ NetMetaConfig :: {
 	// Public hostname
 	publicHostname: string
 
-	// Admin password (currently used for Grafana only)
-	adminPassword: string
+	// Initial Grafana admin password
+	// (after the first deployment, it can only be changed within Grafana)
+	grafanaInitialAdminPassword: string
 }
 
 NetMetaImages ::
