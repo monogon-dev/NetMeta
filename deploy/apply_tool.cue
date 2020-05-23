@@ -9,3 +9,11 @@ command: apply: {
 		stdin:  yaml.MarshalStream(objects)
 	}
 }
+
+command: "apply-prune": {
+	task: kube: {
+		kind: "exec"
+		cmd:    "kubectl apply --all -f - --prune=true"
+		stdin:  yaml.MarshalStream(objects)
+	}
+}

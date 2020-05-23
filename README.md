@@ -122,7 +122,7 @@ Quick start:
     
     # Deploy single node
     cd deploy/single-node
-    cue apply ./...
+    cue apply-prune ./...
 
 ### nxtOS
 
