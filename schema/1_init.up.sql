@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS flows
           kafka_topic_list = 'flow-messages',
           kafka_group_name = 'clickhouse',
           kafka_format = 'Protobuf',
-          kafka_schema = './FlowMessage.proto:FlowMessage';
+          kafka_schema = './FlowMessage.proto:FlowMessage',
+          kafka_max_block_size = 1048576;
 
 CREATE TABLE IF NOT EXISTS flows_raw
 (
