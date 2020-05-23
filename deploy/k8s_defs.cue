@@ -24,6 +24,11 @@ k8s: close({
 		kind:       "ClickHouseInstallation"
 		metadata: name: Name
 	}
+	ingressroutes: [Name=_]: {
+		apiVersion: "traefik.containo.us/v1alpha1"
+		kind:       "IngressRoute"
+		metadata: name: Name
+	}
 	crds: [Name=_]: apiext_v1beta1.CustomResourceDefinition & {
 		apiVersion: "apiextensions.k8s.io/v1beta1"
 		kind:       "CustomResourceDefinition"
@@ -48,6 +53,11 @@ k8s: close({
 		apiVersion: "v1"
 		kind:       "PersistentVolumeClaim"
 		metadata: name: Name
+		spec: {
+			// Binds to local volume
+			accessModes: ["ReadWriteOnce"]
+			resources: requests: storage: "1Gi"
+		}
 	}
 	services: [Name=_]: core_v1.Service & {
 		apiVersion: "v1"
@@ -56,7 +66,7 @@ k8s: close({
 		metadata: labels: name: Name
 	}
 	statefulsets: [Name=_]: apps_v1.StatefulSet & {
-		apiVersion: "apps/v1beta1"
+		apiVersion: "apps/v1"
 		kind:       "StatefulSet"
 		metadata: name: Name
 	}

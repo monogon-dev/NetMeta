@@ -85,6 +85,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server
   --disable-cloud-controller
   --kube-scheduler-arg=address=127.0.0.1
   --kube-controller-manager-arg=address=127.0.0.1
+  --disable traefik
 " sh -s -
 
 while ! kubectl get all; do

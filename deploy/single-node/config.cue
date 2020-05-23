@@ -10,8 +10,16 @@ NetMetaConfig :: {
 
 	// ClickHouse write credentials
 	clickhouseOperatorPassword: string
+
+	// Let's Encrypt Account Email Address
+	letsencryptAccountMail: string
+
+	// Public hostname
+	publicHostname: string
+
+	// Admin password (currently used for Grafana only)
+	adminPassword: string
 }
 
-NetMetaImages :: {
+NetMetaImages ::
 	helloworld: string
-}

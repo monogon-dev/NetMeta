@@ -12,9 +12,12 @@ objectSets: [
 	k8s.deployments,
 	k8s.services,
 	k8s.configmaps,
+	k8s.statefulsets,
+	k8s.pvcs,
 
 	// CRDs
 	k8s.kafkas,
 	k8s.kafkatopics,
 	k8s.clickhouseinstallations,
+	k8s.ingressroutes,
 ]
