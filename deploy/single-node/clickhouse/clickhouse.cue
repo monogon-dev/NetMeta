@@ -12,6 +12,7 @@ k8s: clickhouseinstallations: netmeta: spec: {
 		dataVolumeClaimTemplate: "local-pv"
 		logVolumeClaimTemplate:  "local-pv"
 		serviceTemplate:         "chi-service-internal"
+		podTemplate:             "clickhouse-static"
 	}
 	configuration: {
 		settings: {
@@ -176,6 +177,13 @@ k8s: clickhouseinstallations: netmeta: spec: {
 				{name: "http", port: 8123},
 				{name: "tcp", port:  9000},
 			]
+		}]
+		podTemplates: [{
+			name: "clickhouse-static"
+			spec: containers: [{
+				name:  "clickhouse"
+				image: "yandex/clickhouse-server:20.3.9.70"
+			}]
 		}]
 	}
 }

@@ -33,7 +33,7 @@ k8s: deployments: "clickhouse-operator": {
 				}]
 				containers: [{
 					name:            "clickhouse-operator"
-					image:           "altinity/clickhouse-operator:0.9.7"
+					image:           "altinity/clickhouse-operator:0.9.9"
 					imagePullPolicy: "Always"
 					volumeMounts: [{
 						name:      "etc-clickhouse-operator-folder"
