@@ -87,7 +87,7 @@ k8s: {
 							},
 							{
 								name:  "GF_SECURITY_ADMIN_PASSWORD"
-								value: "\(netmeta.config.grafanaInitialAdminPassword)"
+								value: netmeta.config.grafanaInitialAdminPassword
 							},
 						]
 						ports: [{
