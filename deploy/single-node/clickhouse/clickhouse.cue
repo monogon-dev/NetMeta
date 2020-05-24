@@ -182,7 +182,7 @@ k8s: clickhouseinstallations: netmeta: spec: {
 			name: "clickhouse-static"
 			spec: containers: [{
 				name:  "clickhouse"
-				image: "yandex/clickhouse-server:20.3.9.70"
+				image: "yandex/clickhouse-server:20.3.10.75"
 			}]
 		}]
 	}

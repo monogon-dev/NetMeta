@@ -1,0 +1,11 @@
+SQL console:
+
+kc exec -it chi-netmeta-netmeta-0-0-0 -- clickhouse-client  -m
+
+Kafka consumer:
+
+kubectl run kafka-consumer -ti --image=strimzi/kafka:latest-kafka-2.5.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server netmeta-kafka-bootstrap:9092 --topic flow-messages
+
+CentOS 8 iptables-legacy:
+
+podman run --rm --net=host fedora:32 iptables-legacy -S
