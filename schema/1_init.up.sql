@@ -1,6 +1,6 @@
 -- See FlowMessage.proto for documentation.
 
-CREATE TABLE IF NOT EXISTS flows
+CREATE TABLE IF NOT EXISTS flows_queue
 (
     FlowType         Enum8(
         'FLOWUKNOWN' = 0,
@@ -153,4 +153,4 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS flows_raw_view TO flows_raw
 AS
 SELECT toDate(TimeReceived) AS Date,
        *
-FROM flows;
+FROM flows_queue;
