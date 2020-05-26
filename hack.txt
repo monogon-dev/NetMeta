@@ -22,3 +22,5 @@ kc exec -it chi-netmeta-netmeta-0-0-0 -- clickhouse-client -mn < schema/1_init.d
 Using kafkacat:
 kubectl run kafkacat -i --rm=true --image=confluentinc/cp-kafkacat:latest --restart=Never -- kafkacat -b netmeta-kafka-bootstrap:9092 -L
 
+goflow metrics debugging:
+curl -s [::1]:18080/metrics | grep -v ^#
