@@ -34,7 +34,7 @@ k8s: deployments: traefik: {
 
 					if netmeta.config.letsencryptMode == "staging" {
 						_letsencryptStaging: [
-							"--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory",
+							"--certificatesresolvers.publicHostnameResolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory",
 						]
 					}
 
