@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS flows_queue
 
     FlowDirection    UInt8,
 
-    SamplerAddress   FixedString(16),
+    SamplerAddress   IPv6,
 
     TimeFlowStart    UInt64,
     TimeFlowEnd      UInt64,
@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS flows_queue
     Bytes            UInt64,
     Packets          UInt64,
 
-    SrcAddr          FixedString(16),
-    DstAddr          FixedString(16),
+    SrcAddr          IPv6,
+    DstAddr          IPv6,
 
     EType            UInt16,
 
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS flows_queue
     SrcAS            UInt32,
     DstAS            UInt32,
 
-    NextHop          FixedString(16),
+    NextHop          IPv6,
     NextHopAS        UInt32,
 
     SrcNet           UInt8,
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS flows_raw
 
     FlowDirection    UInt8,
 
-    SamplerAddress   FixedString(16),
+    SamplerAddress   IPv6,
 
     TimeFlowStart    UInt64,
     TimeFlowEnd      UInt64,
@@ -101,8 +101,8 @@ CREATE TABLE IF NOT EXISTS flows_raw
     Bytes            UInt64,
     Packets          UInt64,
 
-    SrcAddr          FixedString(16),
-    DstAddr          FixedString(16),
+    SrcAddr          IPv6,
+    DstAddr          IPv6,
 
     EType            UInt16,
 
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS flows_raw
     SrcAS            UInt32,
     DstAS            UInt32,
 
-    NextHop          FixedString(16),
+    NextHop          IPv6,
     NextHopAS        UInt32,
 
     SrcNet           UInt8,
