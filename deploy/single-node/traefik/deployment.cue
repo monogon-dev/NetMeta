@@ -20,15 +20,31 @@ k8s: deployments: traefik: {
 				containers: [{
 					name:  "traefik"
 					image: "traefik:v2.2"
+
+					_letsencrypt: [...]
+					_letsencryptStaging: [...]
+
+					if netmeta.config.letsencryptMode != "off" {
+						_letsencrypt: [
+							"--certificatesresolvers.publicHostnameResolver.acme.tlschallenge",
+							"--certificatesresolvers.publicHostnameResolver.acme.email=\(netmeta.config.letsencryptAccountMail)",
+							"--certificatesresolvers.publicHostnameResolver.acme.storage=/data/acme.json",
+						]
+					}
+
+					if netmeta.config.letsencryptMode == "staging" {
+						_letsencryptStaging: [
+							"--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory",
+						]
+					}
+
 					args: [
 						"--accesslog",
 						"--entrypoints.web.Address=:80",
 						"--entrypoints.websecure.Address=:443",
 						"--providers.kubernetescrd",
-						"--certificatesresolvers.publicHostnameResolver.acme.tlschallenge",
-						"--certificatesresolvers.publicHostnameResolver.acme.email=\(netmeta.config.letsencryptAccountMail)",
-						"--certificatesresolvers.publicHostnameResolver.acme.storage=/data/acme.json",
-					]
+					] + _letsencrypt + _letsencryptStaging
+
 					ports: [{
 						name:          "web"
 						containerPort: 80

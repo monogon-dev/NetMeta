@@ -11,6 +11,12 @@ NetMetaConfig :: {
 	// ClickHouse write credentials
 	clickhouseOperatorPassword: string
 
+	// Let's Encrypt Mode
+	//  - off: self-signed certificate
+	//  - staging: staging Let's Encrypt server (recommended for testing!)
+	//  - production: production Let's Encrypt server (beware of rate limits)
+	letsencryptMode: "off" | *"staging" | "production"
+
 	// Let's Encrypt Account Email Address
 	letsencryptAccountMail: string
 
