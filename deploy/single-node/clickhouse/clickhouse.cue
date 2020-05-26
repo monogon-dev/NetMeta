@@ -174,8 +174,8 @@ k8s: clickhouseinstallations: netmeta: spec: {
 			name:         "chi-service-internal"
 			generateName: "clickhouse-{chi}"
 			spec: ports: [
-				{name: "http", port: 8123},
-				{name: "tcp", port:  9000},
+				{name: "http", port: 8123, protocol: "TCP"},
+				{name: "tcp", port:  9000, protocol: "TCP"},
 			]
 		}]
 		podTemplates: [{

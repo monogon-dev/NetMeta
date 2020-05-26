@@ -92,6 +92,7 @@ k8s: {
 						]
 						ports: [{
 							containerPort: 3000
+							protocol:      "TCP"
 							name:          "grafana"
 						}]
 						volumeMounts: [{

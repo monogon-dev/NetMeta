@@ -36,14 +36,17 @@ k8s: configmaps: "etc-clickhouse-operator-templatesd-files": {
 								ports: [
 									{
 										name:          "http"
+										protocol:      "TCP"
 										containerPort: 8123
 									},
 									{
 										name:          "client"
+										protocol:      "TCP"
 										containerPort: 9000
 									},
 									{
 										name:          "interserver"
+										protocol:      "TCP"
 										containerPort: 9009
 									},
 								]

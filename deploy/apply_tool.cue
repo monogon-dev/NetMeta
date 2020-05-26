@@ -5,7 +5,7 @@ import "encoding/yaml"
 command: apply: {
 	task: kube: {
 		kind: "exec"
-		cmd:    "kubectl apply --all -f -"
+		cmd:    "kubectl apply --server-side --force-conflicts --all -f -"
 		stdin:  yaml.MarshalStream(objects)
 	}
 }
@@ -13,7 +13,7 @@ command: apply: {
 command: "apply-prune": {
 	task: kube: {
 		kind: "exec"
-		cmd:    "kubectl apply --all -f - --prune=true"
+		cmd:    "kubectl apply --server-side --force-conflicts --all -f - --prune=true"
 		stdin:  yaml.MarshalStream(objects)
 	}
 }

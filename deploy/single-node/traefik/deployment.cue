@@ -32,9 +32,11 @@ k8s: deployments: traefik: {
 					ports: [{
 						name:          "web"
 						containerPort: 80
+						protocol:      "TCP"
 					}, {
 						name:          "websecure"
 						containerPort: 443
+						protocol:      "TCP"
 					}]
 					volumeMounts: [{
 						mountPath: "/data"
