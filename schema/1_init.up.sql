@@ -1,20 +1,79 @@
+-- See FlowMessage.proto for documentation.
+
 CREATE TABLE IF NOT EXISTS flows
 (
-    TimeReceived   UInt64,
-    TimeFlowStart  UInt64,
-    SequenceNum    UInt32,
-    SamplingRate   UInt64,
-    SamplerAddress FixedString(16),
-    SrcAddr        FixedString(16),
-    DstAddr        FixedString(16),
-    SrcAS          UInt32,
-    DstAS          UInt32,
-    EType          UInt32,
-    Proto          UInt32,
-    SrcPort        UInt32,
-    DstPort        UInt32,
-    Bytes          UInt64,
-    Packets        UInt64
+    FlowType         Enum8(
+        'FLOWUKNOWN' = 0,
+        'SFLOW_5' = 1,
+        'NETFLOW_V5' = 2,
+        'NETFLOW_V9' = 3,
+        'IPFIX' = 4
+        ),
+
+    -- Skipping SequenceNum (very high cardinality)
+
+    TimeReceived     UInt64,
+    SamplingRate     UInt64,
+
+    FlowDirection    UInt8,
+
+    SamplerAddress   FixedString(16),
+
+    TimeFlowStart    UInt64,
+    TimeFlowEnd      UInt64,
+
+    Bytes            UInt64,
+    Packets          UInt64,
+
+    SrcAddr          FixedString(16),
+    DstAddr          FixedString(16),
+
+    EType            UInt16,
+
+    Proto            UInt8,
+
+    SrcPort          UInt32,
+    DstPort          UInt32,
+
+    InIf             UInt32,
+    OutIf            UInt32,
+
+    SrcMac           UInt64,
+    DstMac           UInt64,
+
+    SrcVlan          UInt32,
+    DstVlan          UInt32,
+    VlanId           UInt32,
+
+    IngressVrfId     UInt32,
+    EgressVrfId      UInt32,
+
+    IPTos            UInt8,
+    ForwardingStatus UInt8,
+    IPTTL            UInt8,
+    TCPFlags         UInt8,
+    IcmpType         UInt8,
+    IcmpCode         UInt8,
+    IPv6FlowLabel    UInt32,
+
+    FragmentId       UInt32,
+    FragmentOffset   UInt32,
+
+    BiFlowDirection  UInt8,
+
+    SrcAS            UInt32,
+    DstAS            UInt32,
+
+    NextHop          FixedString(16),
+    NextHopAS        UInt32,
+
+    SrcNet           UInt8,
+    DstNet           UInt8
+
+    -- Skipping encapsulation data
+    -- Skipping MPLS data
+    -- Skipping PPP data
+
 ) ENGINE = Kafka()
       SETTINGS
           kafka_broker_list = 'netmeta-kafka-bootstrap:9092',
@@ -26,22 +85,66 @@ CREATE TABLE IF NOT EXISTS flows
 
 CREATE TABLE IF NOT EXISTS flows_raw
 (
-    Date           Date,
-    TimeReceived   DateTime,
-    TimeFlowStart  DateTime,
-    SequenceNum    UInt32,
-    SamplingRate   UInt64,
-    SamplerAddress FixedString(16),
-    SrcAddr        FixedString(16),
-    DstAddr        FixedString(16),
-    SrcAS          UInt32,
-    DstAS          UInt32,
-    EType          UInt32,
-    Proto          UInt32,
-    SrcPort        UInt32,
-    DstPort        UInt32,
-    Bytes          UInt64,
-    Packets        UInt64
+    -- Generated Date field for partitioning
+    Date             Date,
+
+    TimeReceived     UInt64,
+    SamplingRate     UInt64,
+
+    FlowDirection    UInt8,
+
+    SamplerAddress   FixedString(16),
+
+    TimeFlowStart    UInt64,
+    TimeFlowEnd      UInt64,
+
+    Bytes            UInt64,
+    Packets          UInt64,
+
+    SrcAddr          FixedString(16),
+    DstAddr          FixedString(16),
+
+    EType            UInt16,
+
+    Proto            UInt8,
+
+    SrcPort          UInt32,
+    DstPort          UInt32,
+
+    InIf             UInt32,
+    OutIf            UInt32,
+
+    SrcMac           UInt64,
+    DstMac           UInt64,
+
+    SrcVlan          UInt32,
+    DstVlan          UInt32,
+    VlanId           UInt32,
+
+    IngressVrfId     UInt32,
+    EgressVrfId      UInt32,
+
+    IPTos            UInt8,
+    ForwardingStatus UInt8,
+    IPTTL            UInt8,
+    TCPFlags         UInt8,
+    IcmpType         UInt8,
+    IcmpCode         UInt8,
+    IPv6FlowLabel    UInt32,
+
+    FragmentId       UInt32,
+    FragmentOffset   UInt32,
+
+    BiFlowDirection  UInt8,
+
+    SrcAS            UInt32,
+    DstAS            UInt32,
+
+    NextHop          FixedString(16),
+    NextHopAS        UInt32,
+
+    SrcNet           UInt8,
+    DstNet           UInt8
 ) ENGINE = MergeTree()
       PARTITION BY Date
       ORDER BY TimeReceived;

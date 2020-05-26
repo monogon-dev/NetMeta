@@ -14,3 +14,6 @@ kc exec netmeta-kafka-0 -c kafka -- bin/kafka-consumer-groups.sh --bootstrap-ser
 
 tcpdump pod:
 nsenter --net=/proc/$(pidof goflow)/ns/net tcpdump -i any
+
+Interactively run SQL migrations:
+kc exec -it chi-netmeta-netmeta-0-0-0 -- clickhouse-client -mn < schema/1_init.up.sql
