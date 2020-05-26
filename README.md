@@ -120,7 +120,7 @@ Quick start:
     # Build containers
     scripts/build_containers.sh
     
-    # Deploy single node
+    # Deploy single node (run twice on first deployment, https://github.com/leoluk/NetMeta/issues/8)
     cd deploy/single-node
     cue apply-prune ./...
 
