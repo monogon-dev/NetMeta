@@ -1,5 +1,5 @@
 SQL console:
-kc exec -it chi-netmeta-netmeta-0-0-0 -- clickhouse-client  -m
+kc exec -it chi-netmeta-netmeta-0-0-0 -- clickhouse-client -mn
 
 Kafka console consumer:
 kc exec netmeta-kafka-0 -c kafka -- bin/kafka-console-consumer.sh --bootstrap-server netmeta-kafka-bootstrap:9092 --topic flow-messages
