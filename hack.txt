@@ -24,3 +24,10 @@ kubectl run kafkacat -i --rm=true --image=confluentinc/cp-kafkacat:latest --rest
 
 goflow metrics debugging:
 curl -s [::1]:18080/metrics | grep -v ^#
+
+Remotely debug running goflow process:
+
+go get github.com/go-delve/delve/cmd/dlv
+cp /proc/$(pidof goflow)/exe /goflow
+go/bin/dlv --listen "10.42.0.1:2345" --headless --api-version=2 --accept-multiclient attach $(pidof goflow)
+rm /goflow
