@@ -17,5 +17,6 @@ function build() {
 cat <<EOF > deploy/single-node/images_local.cue
 NetMetaImages :: {
   helloworld: "$(build cmd/helloworld:helloworld)"
+  migrate: "$(build schema:migrate)"
 }
 EOF
