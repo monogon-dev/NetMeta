@@ -20,4 +20,5 @@ objectSets: [
 	k8s.kafkatopics,
 	k8s.clickhouseinstallations,
 	k8s.ingressroutes,
+	k8s.ingressrouteudps,
 ]

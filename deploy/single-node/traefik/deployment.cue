@@ -24,6 +24,11 @@ k8s: deployments: traefik: {
 						"--accesslog",
 						"--entrypoints.web.Address=:80",
 						"--entrypoints.websecure.Address=:443",
+						// TODO(leo): auto-generate these from IngressRouteUDP definitions
+						// (not trivial because we'd need a top-level definition visible in traefik/)
+						"--entrypoints.udp-netflow-legacy.Address=:2056/udp",
+						"--entrypoints.udp-netflow.Address=:2055/udp",
+						"--entrypoints.udp-sflow.Address=:6343/udp",
 						"--providers.kubernetescrd",
 						"--certificatesresolvers.publicHostnameResolver.acme.tlschallenge",
 						"--certificatesresolvers.publicHostnameResolver.acme.email=\(netmeta.config.letsencryptAccountMail)",

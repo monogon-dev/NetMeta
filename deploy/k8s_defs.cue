@@ -29,6 +29,11 @@ k8s: close({
 		kind:       "IngressRoute"
 		metadata: name: Name
 	}
+	ingressrouteudps: [Name=_]: {
+		apiVersion: "traefik.containo.us/v1alpha1"
+		kind:       "IngressRouteUDP"
+		metadata: name: Name
+	}
 	crds: [Name=_]: apiext_v1beta1.CustomResourceDefinition & {
 		apiVersion: "apiextensions.k8s.io/v1beta1"
 		kind:       "CustomResourceDefinition"
