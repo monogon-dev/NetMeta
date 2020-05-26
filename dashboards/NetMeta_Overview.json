@@ -59,7 +59,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1590531208565,
+  "iteration": 1590532195022,
   "links": [],
   "panels": [
     {
@@ -103,7 +103,13 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:86",
+          "alias": "1",
+          "transform": "negative-Y"
+        }
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
@@ -118,8 +124,8 @@
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT\n    $timeSeries as t,\n    sum(Packets * SamplingRate) / $interval AS Packets\nFROM $table\nWHERE $timeFilter\nGROUP BY t\nORDER BY t",
-          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     sum(Packets * SamplingRate) / 1 AS Packets FROM default.flows_raw WHERE TimeReceived BETWEEN toDateTime(1590268375) AND toDateTime(1590269431) GROUP BY t ORDER BY t",
+          "query": "SELECT\n    $timeSeries as t,\n    sum(Packets * SamplingRate) / $interval AS Packets,\n    FlowDirection\nFROM $table\nWHERE $timeFilter\nGROUP BY t, FlowDirection\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     sum(Packets * SamplingRate) / 1 AS Packets,     FlowDirection FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590528715) GROUP BY t, FlowDirection ORDER BY t",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -136,6 +142,7 @@
         "sort": 0,
         "value_type": "individual"
       },
+      "transformations": [],
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -210,7 +217,13 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:141",
+          "alias": "1",
+          "transform": "negative-Y"
+        }
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
@@ -225,8 +238,8 @@
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT\n    $timeSeries as t,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps\nFROM $table\nWHERE $timeFilter\nGROUP BY t\nORDER BY t",
-          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps FROM default.flows_raw WHERE TimeReceived BETWEEN toDateTime(1590268375) AND toDateTime(1590269431) GROUP BY t ORDER BY t",
+          "query": "SELECT\n    $timeSeries as t,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    FlowDirection\nFROM $table\nWHERE $timeFilter\nGROUP BY t, FlowDirection\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     FlowDirection FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590528863) GROUP BY t, FlowDirection ORDER BY t",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -317,7 +330,13 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:196",
+          "alias": "/.*. 1/",
+          "transform": "negative-Y"
+        }
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
@@ -332,8 +351,8 @@
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT\n    $timeSeries as t,\n    Proto,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps\nFROM $table\nWHERE $timeFilter\nGROUP BY t, Proto\nORDER BY t",
-          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     Proto,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590270130) GROUP BY t, Proto ORDER BY t",
+          "query": "SELECT\n    $timeSeries as t,\n    Proto,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    FlowDirection\nFROM $table\nWHERE $timeFilter\nGROUP BY t, Proto, FlowDirection\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     Proto,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     FlowDirection FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590528897) GROUP BY t, Proto, FlowDirection ORDER BY t",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -424,7 +443,13 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:251",
+          "alias": "/.*, 1/",
+          "transform": "negative-Y"
+        }
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
@@ -439,8 +464,8 @@
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT\n    $timeSeries as t,\n    DstPort,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps\nFROM $table\nWHERE\n    $timeFilter\n    AND DstPort IN (\n    SELECT DstPort\n    FROM $table\n    WHERE $timeFilter\n    GROUP BY DstPort\n    ORDER BY count(*) DESC\n    LIMIT 10)\nGROUP BY\n    t,\n    DstPort\nORDER BY t",
-          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     DstPort,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps FROM default.flows_raw WHERE     TimeReceived >= toDateTime(1590270507)     AND DstPort IN (     SELECT DstPort     FROM default.flows_raw     WHERE TimeReceived >= toDateTime(1590270507)     GROUP BY DstPort     ORDER BY count(*) DESC     LIMIT 10) GROUP BY     t,     DstPort ORDER BY t",
+          "query": "SELECT\n    $timeSeries as t,\n    DstPort,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    FlowDirection\nFROM $table\nWHERE\n    $timeFilter\n    AND DstPort IN (\n    SELECT DstPort\n    FROM $table\n    WHERE $timeFilter\n    GROUP BY DstPort\n    ORDER BY count(*) DESC\n    LIMIT 10)\nGROUP BY\n    t,\n    DstPort,\n    FlowDirection\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     DstPort,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     FlowDirection FROM default.flows_raw WHERE     TimeReceived >= toDateTime(1590528955)     AND DstPort IN (     SELECT DstPort     FROM default.flows_raw     WHERE TimeReceived >= toDateTime(1590528955)     GROUP BY DstPort     ORDER BY count(*) DESC     LIMIT 10) GROUP BY     t,     DstPort,     FlowDirection ORDER BY t",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -722,8 +747,8 @@
           "format": "table",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT \n  IPv4NumToString(reinterpretAsUInt32(\n  reverse(reinterpretAsFixedString(reinterpretAsUInt32(SamplerAddress))))) as SamplerAddress,\n  IPv4NumToString(reinterpretAsUInt32(reverse(reinterpretAsFixedString(reinterpretAsUInt32(SrcAddr))))) as SrcAddr,\n  IPv4NumToString(reinterpretAsUInt32(reverse(reinterpretAsFixedString(reinterpretAsUInt32(DstAddr))))) as DstAddr,\n  SrcPort,\n  DstPort,\n  Proto,\n  sum(Bytes * SamplingRate) / 1024 as Bytes\nFROM $table\nWHERE $timeFilter\nGROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, Proto\nORDER BY Bytes DESC\nLIMIT 100\n",
-          "rawQuery": "SELECT    IPv4NumToString(reinterpretAsUInt32(   reverse(reinterpretAsFixedString(reinterpretAsUInt32(SamplerAddress))))) as SamplerAddress,   IPv4NumToString(reinterpretAsUInt32(reverse(reinterpretAsFixedString(reinterpretAsUInt32(SrcAddr))))) as SrcAddr,   IPv4NumToString(reinterpretAsUInt32(reverse(reinterpretAsFixedString(reinterpretAsUInt32(DstAddr))))) as DstAddr,   SrcPort,   DstPort,   Proto,   sum(Bytes * SamplingRate) / 1024 as Bytes FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590527885) GROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, Proto ORDER BY Bytes DESC LIMIT 100",
+          "query": "SELECT \n  IPv4NumToString(reinterpretAsUInt32(\n  reverse(reinterpretAsFixedString(reinterpretAsUInt32(SamplerAddress))))) as SamplerAddress,\n  IPv4NumToString(reinterpretAsUInt32(reverse(reinterpretAsFixedString(reinterpretAsUInt32(SrcAddr))))) as SrcAddr,\n  IPv4NumToString(reinterpretAsUInt32(reverse(reinterpretAsFixedString(reinterpretAsUInt32(DstAddr))))) as DstAddr,\n  SrcPort,\n  DstPort,\n  Proto,\n  sum(Bytes * SamplingRate) / 1024 as Bytes\nFROM $table\nWHERE $timeFilter\nGROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, Proto\nORDER BY Bytes DESC\nLIMIT 20\n",
+          "rawQuery": "SELECT    IPv4NumToString(reinterpretAsUInt32(   reverse(reinterpretAsFixedString(reinterpretAsUInt32(SamplerAddress))))) as SamplerAddress,   IPv4NumToString(reinterpretAsUInt32(reverse(reinterpretAsFixedString(reinterpretAsUInt32(SrcAddr))))) as SrcAddr,   IPv4NumToString(reinterpretAsUInt32(reverse(reinterpretAsFixedString(reinterpretAsUInt32(DstAddr))))) as DstAddr,   SrcPort,   DstPort,   Proto,   sum(Bytes * SamplingRate) / 1024 as Bytes FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590528991) GROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, Proto ORDER BY Bytes DESC LIMIT 20",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -956,5 +981,5 @@
   "timezone": "",
   "title": "NetMeta Overview",
   "uid": "9Dw5dGzGk",
-  "version": 5
+  "version": 9
 }
