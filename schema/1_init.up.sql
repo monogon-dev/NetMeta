@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS flows_queue
 (
     FlowType         UInt8,
 
-    -- Skipping SequenceNum (very high cardinality)
+    SequenceNum     UInt64,
 
     TimeReceived     UInt64,
     SamplingRate     UInt64,
@@ -92,6 +92,8 @@ CREATE TABLE IF NOT EXISTS flows_raw
         'IPFIX' = 4
         ),
 
+    SequenceNum     UInt64,
+
     TimeReceived     UInt64,
     SamplingRate     UInt64,
 
@@ -151,7 +153,8 @@ CREATE TABLE IF NOT EXISTS flows_raw
     DstNet           UInt8
 ) ENGINE = MergeTree()
       PARTITION BY Date
-      ORDER BY TimeReceived;
+      ORDER BY (TimeReceived, FlowDirection, SrcAS, DstAS, SrcAddr, DstAddr)
+      TTL Date + INTERVAL 1 MONTH;
 
 -- goflow stores IP addresses as raw bytes without indicating the protocol.
 -- Normalize them to IPv6 addresses that ClickHouse understands (null prefix rather than suffix).
