@@ -28,13 +28,13 @@ package k8s
 	sessionSecret: string
 
 	// Let's Encrypt Mode
-	//  - off: self-signed certificate
+	//  - off: self-signed certificate (TODO)
 	//  - staging: staging Let's Encrypt server (recommended for testing!)
 	//  - production: production Let's Encrypt server (beware of rate limits)
 	//
 	// Switching between staging and production will not automatically
 	// delete the existing certificate - delete acme.json and restart Traefik.
-	letsencryptMode: "off" | *"staging" | "production"
+	letsencryptMode: *"staging" | "production"
 
 	// Let's Encrypt Account Email Address
 	letsencryptAccountMail: string

@@ -21,16 +21,13 @@ k8s: deployments: traefik: {
 					name:  "traefik"
 					image: "traefik:v2.2"
 
-					_letsencrypt: [...]
 					_letsencryptStaging: [...]
 
-					if netmeta.config.letsencryptMode != "off" {
-						_letsencrypt: [
-							"--certificatesresolvers.publicHostnameResolver.acme.tlschallenge",
-							"--certificatesresolvers.publicHostnameResolver.acme.email=\(netmeta.config.letsencryptAccountMail)",
-							"--certificatesresolvers.publicHostnameResolver.acme.storage=/data/acme.json",
-						]
-					}
+					_letsencrypt: [
+						"--certificatesresolvers.publicHostnameResolver.acme.tlschallenge",
+						"--certificatesresolvers.publicHostnameResolver.acme.email=\(netmeta.config.letsencryptAccountMail)",
+						"--certificatesresolvers.publicHostnameResolver.acme.storage=/data/acme.json",
+					]
 
 					if netmeta.config.letsencryptMode == "staging" {
 						_letsencryptStaging: [
