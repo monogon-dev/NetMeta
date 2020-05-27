@@ -4,6 +4,8 @@ import (
 	"encoding/yaml"
 	"crypto/sha1"
 	"encoding/hex"
+	"strings"
+	"strconv"
 )
 
 // https://github.com/grafana/grafana/blob/master/docs/sources/administration/provisioning.md
@@ -80,7 +82,51 @@ k8s: {
 						name:            "grafana"
 						image:           "grafana/grafana:7.0.0"
 						imagePullPolicy: "IfNotPresent"
+
+						_googleAuth: [...]
+
+						if netmeta.config.grafanaGoogleAuth.clientID != "" {
+							_googleAuth: [
+								{
+									name:  "GF_AUTH_GOOGLE_ENABLED"
+									value: "true"
+								},
+								{
+									name:  "GF_AUTH_GOOGLE_CLIENT_ID"
+									value: netmeta.config.grafanaGoogleAuth.clientID
+								},
+								{
+									name:  "GF_AUTH_GOOGLE_CLIENT_SECRET"
+									value: netmeta.config.grafanaGoogleAuth.clientSecret
+								},
+								{
+									name:  "GF_AUTH_GOOGLE_SCOPES"
+									value: "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"
+								},
+								{
+									name:  "GF_AUTH_GOOGLE_AUTH_URL"
+									value: "https://accounts.google.com/o/oauth2/auth"
+								},
+								{
+									name:  "GF_AUTH_GOOGLE_TOKEN_URL"
+									value: "https://accounts.google.com/o/oauth2/token"
+								},
+								{
+									name:  "GF_AUTH_GOOGLE_ALLOWED_DOMAINS"
+									value: strings.Join(netmeta.config.grafanaGoogleAuth.allowedDomains, " ")
+								},
+								{
+									name:  "GF_AUTH_GOOGLE_ALLOW_SIGN_UP"
+									value: strconv.FormatBool(netmeta.config.grafanaGoogleAuth.allowSignup)
+								},
+							]
+						}
+
 						env: [
+							{
+								name:  "GF_SERVER_ROOT_URL"
+								value: "https://\(netmeta.config.publicHostname)"
+							},
 							{
 								name:  "GF_INSTALL_PLUGINS"
 								value: "vertamedia-clickhouse-datasource 1.9.5"
@@ -89,7 +135,16 @@ k8s: {
 								name:  "GF_SECURITY_ADMIN_PASSWORD"
 								value: netmeta.config.grafanaInitialAdminPassword
 							},
-						]
+							{
+								name:  "GF_AUTH_BASIC_ENABLED"
+								value: strconv.FormatBool(netmeta.config.grafanaBasicAuth)
+							},
+							{
+								name:  "GF_AUTH_OAUTH_AUTO_LOGIN"
+								value: strconv.FormatBool(!netmeta.config.grafanaBasicAuth)
+							},
+						] + _googleAuth
+
 						ports: [{
 							containerPort: 3000
 							protocol:      "TCP"

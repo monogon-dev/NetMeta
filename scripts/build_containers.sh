@@ -15,7 +15,9 @@ function build() {
 }
 
 cat <<EOF > deploy/single-node/images_local.cue
-NetMetaImages :: {
+package k8s
+
+netmeta: images: {
   helloworld: "$(build cmd/helloworld:helloworld)"
   migrate: "$(build schema:migrate)"
 }
