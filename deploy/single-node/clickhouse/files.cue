@@ -202,7 +202,7 @@ k8s: clickhouseinstallations: netmeta: spec: configuration: files: {
 	// print('\n'.join('\t'.join((str(int(a, 16)), b)) for a, b in (x.strip().split('\t') for x in inf.strip().split('\n'))))
 
 	"EtherTypes.tsv": #"""
-    0   NULL
+    0	NULL
     2048	IPv4
     2054	ARP
     2114	Wake-on-LAN
