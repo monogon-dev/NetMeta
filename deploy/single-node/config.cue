@@ -15,6 +15,9 @@ NetMetaConfig :: {
 	//  - off: self-signed certificate
 	//  - staging: staging Let's Encrypt server (recommended for testing!)
 	//  - production: production Let's Encrypt server (beware of rate limits)
+	//
+	// Switching between staging and production will not automatically
+	// delete the existing certificate - delete acme.json and restart Traefik.
 	letsencryptMode: "off" | *"staging" | "production"
 
 	// Let's Encrypt Account Email Address
