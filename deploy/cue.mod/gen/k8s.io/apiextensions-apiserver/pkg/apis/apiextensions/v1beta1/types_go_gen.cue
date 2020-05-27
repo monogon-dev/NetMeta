@@ -11,25 +11,25 @@ import (
 )
 
 // ConversionStrategyType describes different conversion types.
-ConversionStrategyType :: string // enumConversionStrategyType
+#ConversionStrategyType: string // #enumConversionStrategyType
 
-enumConversionStrategyType ::
-	NoneConverter |
-	WebhookConverter
+#enumConversionStrategyType:
+	#NoneConverter |
+	#WebhookConverter
 
 // KubeAPIApprovedAnnotation is an annotation that must be set to create a CRD for the k8s.io, *.k8s.io, kubernetes.io, or *.kubernetes.io namespaces.
 // The value should be a link to a URL where the current spec was approved, so updates to the spec should also update the URL.
 // If the API is unapproved, you may set the annotation to a string starting with `"unapproved"`.  For instance, `"unapproved, temporarily squatting"` or `"unapproved, experimental-only"`.  This is discouraged.
-KubeAPIApprovedAnnotation :: "api-approved.kubernetes.io"
+#KubeAPIApprovedAnnotation: "api-approved.kubernetes.io"
 
 // NoneConverter is a converter that only sets apiversion of the CR and leave everything else unchanged.
-NoneConverter :: ConversionStrategyType & "None"
+#NoneConverter: #ConversionStrategyType & "None"
 
 // WebhookConverter is a converter that calls to an external webhook to convert the CR.
-WebhookConverter :: ConversionStrategyType & "Webhook"
+#WebhookConverter: #ConversionStrategyType & "Webhook"
 
 // CustomResourceDefinitionSpec describes how a user wants their resource to appear
-CustomResourceDefinitionSpec :: {
+#CustomResourceDefinitionSpec: {
 	// group is the API group of the defined custom resource.
 	// The custom resources are served under `/apis/<group>/...`.
 	// Must match the name of the CustomResourceDefinition (in the form `<names.plural>.<group>`).
@@ -44,23 +44,23 @@ CustomResourceDefinitionSpec :: {
 	version?: string @go(Version) @protobuf(2,bytes,opt)
 
 	// names specify the resource and kind names for the custom resource.
-	names: CustomResourceDefinitionNames @go(Names) @protobuf(3,bytes,opt)
+	names: #CustomResourceDefinitionNames @go(Names) @protobuf(3,bytes,opt)
 
 	// scope indicates whether the defined custom resource is cluster- or namespace-scoped.
 	// Allowed values are `Cluster` and `Namespaced`. Default is `Namespaced`.
-	scope: ResourceScope @go(Scope) @protobuf(4,bytes,opt,casttype=ResourceScope)
+	scope: #ResourceScope @go(Scope) @protobuf(4,bytes,opt,casttype=ResourceScope)
 
 	// validation describes the schema used for validation and pruning of the custom resource.
 	// If present, this validation schema is used to validate all versions.
 	// Top-level and per-version schemas are mutually exclusive.
 	// +optional
-	validation?: null | CustomResourceValidation @go(Validation,*CustomResourceValidation) @protobuf(5,bytes,opt)
+	validation?: null | #CustomResourceValidation @go(Validation,*CustomResourceValidation) @protobuf(5,bytes,opt)
 
 	// subresources specify what subresources the defined custom resource has.
 	// If present, this field configures subresources for all versions.
 	// Top-level and per-version subresources are mutually exclusive.
 	// +optional
-	subresources?: null | CustomResourceSubresources @go(Subresources,*CustomResourceSubresources) @protobuf(6,bytes,opt)
+	subresources?: null | #CustomResourceSubresources @go(Subresources,*CustomResourceSubresources) @protobuf(6,bytes,opt)
 
 	// versions is the list of all API versions of the defined custom resource.
 	// Optional if `version` is specified.
@@ -73,7 +73,7 @@ CustomResourceDefinitionSpec :: {
 	// major version, then minor version. An example sorted list of versions:
 	// v10, v2, v1, v11beta2, v10beta3, v3beta1, v12alpha1, v11alpha2, foo1, foo10.
 	// +optional
-	versions?: [...CustomResourceDefinitionVersion] @go(Versions,[]CustomResourceDefinitionVersion) @protobuf(7,bytes,rep)
+	versions?: [...#CustomResourceDefinitionVersion] @go(Versions,[]CustomResourceDefinitionVersion) @protobuf(7,bytes,rep)
 
 	// additionalPrinterColumns specifies additional columns returned in Table output.
 	// See https://kubernetes.io/docs/reference/using-api/api-concepts/#receiving-resources-as-tables for details.
@@ -81,11 +81,11 @@ CustomResourceDefinitionSpec :: {
 	// Top-level and per-version columns are mutually exclusive.
 	// If no top-level or per-version columns are specified, a single column displaying the age of the custom resource is used.
 	// +optional
-	additionalPrinterColumns?: [...CustomResourceColumnDefinition] @go(AdditionalPrinterColumns,[]CustomResourceColumnDefinition) @protobuf(8,bytes,rep)
+	additionalPrinterColumns?: [...#CustomResourceColumnDefinition] @go(AdditionalPrinterColumns,[]CustomResourceColumnDefinition) @protobuf(8,bytes,rep)
 
 	// conversion defines conversion settings for the CRD.
 	// +optional
-	conversion?: null | CustomResourceConversion @go(Conversion,*CustomResourceConversion) @protobuf(9,bytes,opt)
+	conversion?: null | #CustomResourceConversion @go(Conversion,*CustomResourceConversion) @protobuf(9,bytes,opt)
 
 	// preserveUnknownFields indicates that object fields which are not specified
 	// in the OpenAPI schema should be preserved when persisting to storage.
@@ -100,17 +100,17 @@ CustomResourceDefinitionSpec :: {
 }
 
 // CustomResourceConversion describes how to convert different versions of a CR.
-CustomResourceConversion :: {
+#CustomResourceConversion: {
 	// strategy specifies how custom resources are converted between versions. Allowed values are:
 	// - `None`: The converter only change the apiVersion and would not touch any other field in the custom resource.
 	// - `Webhook`: API Server will call to an external webhook to do the conversion. Additional information
 	//   is needed for this option. This requires spec.preserveUnknownFields to be false, and spec.conversion.webhookClientConfig to be set.
-	strategy: ConversionStrategyType @go(Strategy) @protobuf(1,bytes)
+	strategy: #ConversionStrategyType @go(Strategy) @protobuf(1,bytes)
 
 	// webhookClientConfig is the instructions for how to call the webhook if strategy is `Webhook`.
 	// Required when `strategy` is set to `Webhook`.
 	// +optional
-	webhookClientConfig?: null | WebhookClientConfig @go(WebhookClientConfig,*WebhookClientConfig) @protobuf(2,bytes)
+	webhookClientConfig?: null | #WebhookClientConfig @go(WebhookClientConfig,*WebhookClientConfig) @protobuf(2,bytes)
 
 	// conversionReviewVersions is an ordered list of preferred `ConversionReview`
 	// versions the Webhook expects. The API server will use the first version in
@@ -124,7 +124,7 @@ CustomResourceConversion :: {
 }
 
 // WebhookClientConfig contains the information to make a TLS connection with the webhook.
-WebhookClientConfig :: {
+#WebhookClientConfig: {
 	// url gives the location of the webhook, in standard URL form
 	// (`scheme://host:port/path`). Exactly one of `url` or `service`
 	// must be specified.
@@ -160,7 +160,7 @@ WebhookClientConfig :: {
 	// If the webhook is running within the cluster, then you should use `service`.
 	//
 	// +optional
-	service?: null | ServiceReference @go(Service,*ServiceReference) @protobuf(1,bytes,opt)
+	service?: null | #ServiceReference @go(Service,*ServiceReference) @protobuf(1,bytes,opt)
 
 	// caBundle is a PEM encoded CA bundle which will be used to validate the webhook's server certificate.
 	// If unspecified, system trust roots on the apiserver are used.
@@ -169,7 +169,7 @@ WebhookClientConfig :: {
 }
 
 // ServiceReference holds a reference to Service.legacy.k8s.io
-ServiceReference :: {
+#ServiceReference: {
 	// namespace is the namespace of the service.
 	// Required
 	namespace: string @go(Namespace) @protobuf(1,bytes,opt)
@@ -190,7 +190,7 @@ ServiceReference :: {
 }
 
 // CustomResourceDefinitionVersion describes a version for CRD.
-CustomResourceDefinitionVersion :: {
+#CustomResourceDefinitionVersion: {
 	// name is the version name, e.g. “v1”, “v2beta1”, etc.
 	// The custom resources are served under this version at `/apis/<group>/<version>/...` if `served` is true.
 	name: string @go(Name) @protobuf(1,bytes,opt)
@@ -206,13 +206,13 @@ CustomResourceDefinitionVersion :: {
 	// Top-level and per-version schemas are mutually exclusive.
 	// Per-version schemas must not all be set to identical values (top-level validation schema should be used instead).
 	// +optional
-	schema?: null | CustomResourceValidation @go(Schema,*CustomResourceValidation) @protobuf(4,bytes,opt)
+	schema?: null | #CustomResourceValidation @go(Schema,*CustomResourceValidation) @protobuf(4,bytes,opt)
 
 	// subresources specify what subresources this version of the defined custom resource have.
 	// Top-level and per-version subresources are mutually exclusive.
 	// Per-version subresources must not all be set to identical values (top-level subresources should be used instead).
 	// +optional
-	subresources?: null | CustomResourceSubresources @go(Subresources,*CustomResourceSubresources) @protobuf(5,bytes,opt)
+	subresources?: null | #CustomResourceSubresources @go(Subresources,*CustomResourceSubresources) @protobuf(5,bytes,opt)
 
 	// additionalPrinterColumns specifies additional columns returned in Table output.
 	// See https://kubernetes.io/docs/reference/using-api/api-concepts/#receiving-resources-as-tables for details.
@@ -220,11 +220,11 @@ CustomResourceDefinitionVersion :: {
 	// Per-version columns must not all be set to identical values (top-level columns should be used instead).
 	// If no top-level or per-version columns are specified, a single column displaying the age of the custom resource is used.
 	// +optional
-	additionalPrinterColumns?: [...CustomResourceColumnDefinition] @go(AdditionalPrinterColumns,[]CustomResourceColumnDefinition) @protobuf(6,bytes,rep)
+	additionalPrinterColumns?: [...#CustomResourceColumnDefinition] @go(AdditionalPrinterColumns,[]CustomResourceColumnDefinition) @protobuf(6,bytes,rep)
 }
 
 // CustomResourceColumnDefinition specifies a column for server side printing.
-CustomResourceColumnDefinition :: {
+#CustomResourceColumnDefinition: {
 	// name is a human readable name for the column.
 	name: string @go(Name) @protobuf(1,bytes,opt)
 
@@ -254,7 +254,7 @@ CustomResourceColumnDefinition :: {
 }
 
 // CustomResourceDefinitionNames indicates the names to serve this CustomResourceDefinition
-CustomResourceDefinitionNames :: {
+#CustomResourceDefinitionNames: {
 	// plural is the plural name of the resource to serve.
 	// The custom resources are served under `/apis/<group>/<version>/.../<plural>`.
 	// Must match the name of the CustomResourceDefinition (in the form `<names.plural>.<group>`).
@@ -287,44 +287,44 @@ CustomResourceDefinitionNames :: {
 }
 
 // ResourceScope is an enum defining the different scopes available to a custom resource
-ResourceScope :: string // enumResourceScope
+#ResourceScope: string // #enumResourceScope
 
-enumResourceScope ::
-	ClusterScoped |
-	NamespaceScoped
+#enumResourceScope:
+	#ClusterScoped |
+	#NamespaceScoped
 
-ClusterScoped ::   ResourceScope & "Cluster"
-NamespaceScoped :: ResourceScope & "Namespaced"
+#ClusterScoped:   #ResourceScope & "Cluster"
+#NamespaceScoped: #ResourceScope & "Namespaced"
 
-ConditionStatus :: string // enumConditionStatus
+#ConditionStatus: string // #enumConditionStatus
 
-enumConditionStatus ::
-	ConditionTrue |
-	ConditionFalse |
-	ConditionUnknown
+#enumConditionStatus:
+	#ConditionTrue |
+	#ConditionFalse |
+	#ConditionUnknown
 
-ConditionTrue ::    ConditionStatus & "True"
-ConditionFalse ::   ConditionStatus & "False"
-ConditionUnknown :: ConditionStatus & "Unknown"
+#ConditionTrue:    #ConditionStatus & "True"
+#ConditionFalse:   #ConditionStatus & "False"
+#ConditionUnknown: #ConditionStatus & "Unknown"
 
 // CustomResourceDefinitionConditionType is a valid value for CustomResourceDefinitionCondition.Type
-CustomResourceDefinitionConditionType :: string // enumCustomResourceDefinitionConditionType
+#CustomResourceDefinitionConditionType: string // #enumCustomResourceDefinitionConditionType
 
-enumCustomResourceDefinitionConditionType ::
-	Established |
-	NamesAccepted |
-	NonStructuralSchema |
-	Terminating |
-	KubernetesAPIApprovalPolicyConformant
+#enumCustomResourceDefinitionConditionType:
+	#Established |
+	#NamesAccepted |
+	#NonStructuralSchema |
+	#Terminating |
+	#KubernetesAPIApprovalPolicyConformant
 
 // Established means that the resource has become active. A resource is established when all names are
 // accepted without a conflict for the first time. A resource stays established until deleted, even during
 // a later NamesAccepted due to changed names. Note that not all names can be changed.
-Established :: CustomResourceDefinitionConditionType & "Established"
+#Established: #CustomResourceDefinitionConditionType & "Established"
 
 // NamesAccepted means the names chosen for this CustomResourceDefinition do not conflict with others in
 // the group and are therefore accepted.
-NamesAccepted :: CustomResourceDefinitionConditionType & "NamesAccepted"
+#NamesAccepted: #CustomResourceDefinitionConditionType & "NamesAccepted"
 
 // NonStructuralSchema means that one or more OpenAPI schema is not structural.
 //
@@ -341,29 +341,29 @@ NamesAccepted :: CustomResourceDefinitionConditionType & "NamesAccepted"
 // - read-only
 // - OpenAPI publishing
 // - webhook conversion
-NonStructuralSchema :: CustomResourceDefinitionConditionType & "NonStructuralSchema"
+#NonStructuralSchema: #CustomResourceDefinitionConditionType & "NonStructuralSchema"
 
 // Terminating means that the CustomResourceDefinition has been deleted and is cleaning up.
-Terminating :: CustomResourceDefinitionConditionType & "Terminating"
+#Terminating: #CustomResourceDefinitionConditionType & "Terminating"
 
 // KubernetesAPIApprovalPolicyConformant indicates that an API in *.k8s.io or *.kubernetes.io is or is not approved.  For CRDs
 // outside those groups, this condition will not be set.  For CRDs inside those groups, the condition will
 // be true if .metadata.annotations["api-approved.kubernetes.io"] is set to a URL, otherwise it will be false.
 // See https://github.com/kubernetes/enhancements/pull/1111 for more details.
-KubernetesAPIApprovalPolicyConformant :: CustomResourceDefinitionConditionType & "KubernetesAPIApprovalPolicyConformant"
+#KubernetesAPIApprovalPolicyConformant: #CustomResourceDefinitionConditionType & "KubernetesAPIApprovalPolicyConformant"
 
 // CustomResourceDefinitionCondition contains details for the current condition of this pod.
-CustomResourceDefinitionCondition :: {
+#CustomResourceDefinitionCondition: {
 	// type is the type of the condition. Types include Established, NamesAccepted and Terminating.
-	type: CustomResourceDefinitionConditionType @go(Type) @protobuf(1,bytes,opt,casttype=CustomResourceDefinitionConditionType)
+	type: #CustomResourceDefinitionConditionType @go(Type) @protobuf(1,bytes,opt,casttype=CustomResourceDefinitionConditionType)
 
 	// status is the status of the condition.
 	// Can be True, False, Unknown.
-	status: ConditionStatus @go(Status) @protobuf(2,bytes,opt,casttype=ConditionStatus)
+	status: #ConditionStatus @go(Status) @protobuf(2,bytes,opt,casttype=ConditionStatus)
 
 	// lastTransitionTime last time the condition transitioned from one status to another.
 	// +optional
-	lastTransitionTime?: metav1.Time @go(LastTransitionTime) @protobuf(3,bytes,opt)
+	lastTransitionTime?: metav1.#Time @go(LastTransitionTime) @protobuf(3,bytes,opt)
 
 	// reason is a unique, one-word, CamelCase reason for the condition's last transition.
 	// +optional
@@ -375,15 +375,15 @@ CustomResourceDefinitionCondition :: {
 }
 
 // CustomResourceDefinitionStatus indicates the state of the CustomResourceDefinition
-CustomResourceDefinitionStatus :: {
+#CustomResourceDefinitionStatus: {
 	// conditions indicate state for particular aspects of a CustomResourceDefinition
 	// +optional
-	conditions: [...CustomResourceDefinitionCondition] @go(Conditions,[]CustomResourceDefinitionCondition) @protobuf(1,bytes,opt)
+	conditions: [...#CustomResourceDefinitionCondition] @go(Conditions,[]CustomResourceDefinitionCondition) @protobuf(1,bytes,opt)
 
 	// acceptedNames are the names that are actually being used to serve discovery.
 	// They may be different than the names in spec.
 	// +optional
-	acceptedNames: CustomResourceDefinitionNames @go(AcceptedNames) @protobuf(2,bytes,opt)
+	acceptedNames: #CustomResourceDefinitionNames @go(AcceptedNames) @protobuf(2,bytes,opt)
 
 	// storedVersions lists all versions of CustomResources that were ever persisted. Tracking these
 	// versions allows a migration path for stored versions in etcd. The field is mutable
@@ -395,51 +395,51 @@ CustomResourceDefinitionStatus :: {
 	storedVersions: [...string] @go(StoredVersions,[]string) @protobuf(3,bytes,rep)
 }
 
-CustomResourceCleanupFinalizer :: "customresourcecleanup.apiextensions.k8s.io"
+#CustomResourceCleanupFinalizer: "customresourcecleanup.apiextensions.k8s.io"
 
 // CustomResourceDefinition represents a resource that should be exposed on the API server.  Its name MUST be in the format
 // <.spec.name>.<.spec.group>.
 // Deprecated in v1.16, planned for removal in v1.19. Use apiextensions.k8s.io/v1 CustomResourceDefinition instead.
-CustomResourceDefinition :: {
-	metav1.TypeMeta
-	metadata?: metav1.ObjectMeta @go(ObjectMeta) @protobuf(1,bytes,opt)
+#CustomResourceDefinition: {
+	metav1.#TypeMeta
+	metadata?: metav1.#ObjectMeta @go(ObjectMeta) @protobuf(1,bytes,opt)
 
 	// spec describes how the user wants the resources to appear
-	spec: CustomResourceDefinitionSpec @go(Spec) @protobuf(2,bytes,opt)
+	spec: #CustomResourceDefinitionSpec @go(Spec) @protobuf(2,bytes,opt)
 
 	// status indicates the actual state of the CustomResourceDefinition
 	// +optional
-	status?: CustomResourceDefinitionStatus @go(Status) @protobuf(3,bytes,opt)
+	status?: #CustomResourceDefinitionStatus @go(Status) @protobuf(3,bytes,opt)
 }
 
 // CustomResourceDefinitionList is a list of CustomResourceDefinition objects.
-CustomResourceDefinitionList :: {
-	metav1.TypeMeta
-	metadata?: metav1.ListMeta @go(ListMeta) @protobuf(1,bytes,opt)
+#CustomResourceDefinitionList: {
+	metav1.#TypeMeta
+	metadata?: metav1.#ListMeta @go(ListMeta) @protobuf(1,bytes,opt)
 
 	// items list individual CustomResourceDefinition objects
-	items: [...CustomResourceDefinition] @go(Items,[]CustomResourceDefinition) @protobuf(2,bytes,rep)
+	items: [...#CustomResourceDefinition] @go(Items,[]CustomResourceDefinition) @protobuf(2,bytes,rep)
 }
 
 // CustomResourceValidation is a list of validation methods for CustomResources.
-CustomResourceValidation :: {
+#CustomResourceValidation: {
 	// openAPIV3Schema is the OpenAPI v3 schema to use for validation and pruning.
 	// +optional
-	openAPIV3Schema?: null | JSONSchemaProps @go(OpenAPIV3Schema,*JSONSchemaProps) @protobuf(1,bytes,opt)
+	openAPIV3Schema?: null | #JSONSchemaProps @go(OpenAPIV3Schema,*JSONSchemaProps) @protobuf(1,bytes,opt)
 }
 
 // CustomResourceSubresources defines the status and scale subresources for CustomResources.
-CustomResourceSubresources :: {
+#CustomResourceSubresources: {
 	// status indicates the custom resource should serve a `/status` subresource.
 	// When enabled:
 	// 1. requests to the custom resource primary endpoint ignore changes to the `status` stanza of the object.
 	// 2. requests to the custom resource `/status` subresource ignore changes to anything other than the `status` stanza of the object.
 	// +optional
-	status?: null | CustomResourceSubresourceStatus @go(Status,*CustomResourceSubresourceStatus) @protobuf(1,bytes,opt)
+	status?: null | #CustomResourceSubresourceStatus @go(Status,*CustomResourceSubresourceStatus) @protobuf(1,bytes,opt)
 
 	// scale indicates the custom resource should serve a `/scale` subresource that returns an `autoscaling/v1` Scale object.
 	// +optional
-	scale?: null | CustomResourceSubresourceScale @go(Scale,*CustomResourceSubresourceScale) @protobuf(2,bytes,opt)
+	scale?: null | #CustomResourceSubresourceScale @go(Scale,*CustomResourceSubresourceScale) @protobuf(2,bytes,opt)
 }
 
 // CustomResourceSubresourceStatus defines how to serve the status subresource for CustomResources.
@@ -447,11 +447,11 @@ CustomResourceSubresources :: {
 // * exposes a /status subresource for the custom resource
 // * PUT requests to the /status subresource take a custom resource object, and ignore changes to anything except the status stanza
 // * PUT/POST/PATCH requests to the custom resource ignore changes to the status stanza
-CustomResourceSubresourceStatus :: {
+#CustomResourceSubresourceStatus: {
 }
 
 // CustomResourceSubresourceScale defines how to serve the scale subresource for CustomResources.
-CustomResourceSubresourceScale :: {
+#CustomResourceSubresourceScale: {
 	// specReplicasPath defines the JSON path inside of a custom resource that corresponds to Scale `spec.replicas`.
 	// Only JSON paths without the array notation are allowed.
 	// Must be a JSON Path under `.spec`.
@@ -479,49 +479,49 @@ CustomResourceSubresourceScale :: {
 }
 
 // ConversionReview describes a conversion request/response.
-ConversionReview :: {
-	metav1.TypeMeta
+#ConversionReview: {
+	metav1.#TypeMeta
 
 	// request describes the attributes for the conversion request.
 	// +optional
-	request?: null | ConversionRequest @go(Request,*ConversionRequest) @protobuf(1,bytes,opt)
+	request?: null | #ConversionRequest @go(Request,*ConversionRequest) @protobuf(1,bytes,opt)
 
 	// response describes the attributes for the conversion response.
 	// +optional
-	response?: null | ConversionResponse @go(Response,*ConversionResponse) @protobuf(2,bytes,opt)
+	response?: null | #ConversionResponse @go(Response,*ConversionResponse) @protobuf(2,bytes,opt)
 }
 
 // ConversionRequest describes the conversion request parameters.
-ConversionRequest :: {
+#ConversionRequest: {
 	// uid is an identifier for the individual request/response. It allows distinguishing instances of requests which are
 	// otherwise identical (parallel requests, etc).
 	// The UID is meant to track the round trip (request/response) between the Kubernetes API server and the webhook, not the user request.
 	// It is suitable for correlating log entries between the webhook and apiserver, for either auditing or debugging.
-	uid: types.UID @go(UID) @protobuf(1,bytes)
+	uid: types.#UID @go(UID) @protobuf(1,bytes)
 
 	// desiredAPIVersion is the version to convert given objects to. e.g. "myapi.example.com/v1"
 	desiredAPIVersion: string @go(DesiredAPIVersion) @protobuf(2,bytes)
 
 	// objects is the list of custom resource objects to be converted.
-	objects: [...runtime.RawExtension] @go(Objects,[]runtime.RawExtension) @protobuf(3,bytes,rep)
+	objects: [...runtime.#RawExtension] @go(Objects,[]runtime.RawExtension) @protobuf(3,bytes,rep)
 }
 
 // ConversionResponse describes a conversion response.
-ConversionResponse :: {
+#ConversionResponse: {
 	// uid is an identifier for the individual request/response.
 	// This should be copied over from the corresponding `request.uid`.
-	uid: types.UID @go(UID) @protobuf(1,bytes)
+	uid: types.#UID @go(UID) @protobuf(1,bytes)
 
 	// convertedObjects is the list of converted version of `request.objects` if the `result` is successful, otherwise empty.
 	// The webhook is expected to set `apiVersion` of these objects to the `request.desiredAPIVersion`. The list
 	// must also have the same size as the input list with the same objects in the same order (equal kind, metadata.uid, metadata.name and metadata.namespace).
 	// The webhook is allowed to mutate labels and annotations. Any other change to the metadata is silently ignored.
-	convertedObjects: [...runtime.RawExtension] @go(ConvertedObjects,[]runtime.RawExtension) @protobuf(2,bytes,rep)
+	convertedObjects: [...runtime.#RawExtension] @go(ConvertedObjects,[]runtime.RawExtension) @protobuf(2,bytes,rep)
 
 	// result contains the result of conversion with extra details if the conversion failed. `result.status` determines if
 	// the conversion failed or succeeded. The `result.status` field is required and represents the success or failure of the
 	// conversion. A successful conversion must set `result.status` to `Success`. A failed conversion must set
 	// `result.status` to `Failure` and provide more details in `result.message` and return http status 200. The `result.message`
 	// will be used to construct an error message for the end user.
-	result: metav1.Status @go(Result) @protobuf(3,bytes)
+	result: metav1.#Status @go(Result) @protobuf(3,bytes)
 }

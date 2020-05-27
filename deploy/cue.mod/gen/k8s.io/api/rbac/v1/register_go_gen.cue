@@ -4,4 +4,4 @@
 
 package v1
 
-GroupName :: "rbac.authorization.k8s.io"
+#GroupName: "rbac.authorization.k8s.io"

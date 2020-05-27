@@ -4,4 +4,4 @@
 
 package v1beta1
 
-GroupName :: "apiextensions.k8s.io"
+#GroupName: "apiextensions.k8s.io"

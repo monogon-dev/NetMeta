@@ -6,20 +6,20 @@ package v1
 
 import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-APIGroupAll ::        "*"
-ResourceAll ::        "*"
-VerbAll ::            "*"
-NonResourceAll ::     "*"
-GroupKind ::          "Group"
-ServiceAccountKind :: "ServiceAccount"
-UserKind ::           "User"
+#APIGroupAll:        "*"
+#ResourceAll:        "*"
+#VerbAll:            "*"
+#NonResourceAll:     "*"
+#GroupKind:          "Group"
+#ServiceAccountKind: "ServiceAccount"
+#UserKind:           "User"
 
 // AutoUpdateAnnotationKey is the name of an annotation which prevents reconciliation if set to "false"
-AutoUpdateAnnotationKey :: "rbac.authorization.kubernetes.io/autoupdate"
+#AutoUpdateAnnotationKey: "rbac.authorization.kubernetes.io/autoupdate"
 
 // PolicyRule holds information that describes a policy rule, but does not contain information
 // about who the rule applies to or which namespace the rule applies to.
-PolicyRule :: {
+#PolicyRule: {
 	// Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds.
 	verbs: [...string] @go(Verbs,[]string) @protobuf(1,bytes,rep)
 
@@ -45,7 +45,7 @@ PolicyRule :: {
 
 // Subject contains a reference to the object or user identities a role binding applies to.  This can either hold a direct API object reference,
 // or a value for non-objects such as user and group names.
-Subject :: {
+#Subject: {
 	// Kind of object being referenced. Values defined by this API group are "User", "Group", and "ServiceAccount".
 	// If the Authorizer does not recognized the kind value, the Authorizer should report an error.
 	kind: string @go(Kind) @protobuf(1,bytes,opt)
@@ -66,7 +66,7 @@ Subject :: {
 }
 
 // RoleRef contains information that points to the role being used
-RoleRef :: {
+#RoleRef: {
 	// APIGroup is the group for the resource being referenced
 	apiGroup: string @go(APIGroup) @protobuf(1,bytes,opt)
 
@@ -78,126 +78,126 @@ RoleRef :: {
 }
 
 // Role is a namespaced, logical grouping of PolicyRules that can be referenced as a unit by a RoleBinding.
-Role :: {
-	metav1.TypeMeta
+#Role: {
+	metav1.#TypeMeta
 
 	// Standard object's metadata.
 	// +optional
-	metadata?: metav1.ObjectMeta @go(ObjectMeta) @protobuf(1,bytes,opt)
+	metadata?: metav1.#ObjectMeta @go(ObjectMeta) @protobuf(1,bytes,opt)
 
 	// Rules holds all the PolicyRules for this Role
 	// +optional
-	rules: [...PolicyRule] @go(Rules,[]PolicyRule) @protobuf(2,bytes,rep)
+	rules: [...#PolicyRule] @go(Rules,[]PolicyRule) @protobuf(2,bytes,rep)
 }
 
 // RoleBinding references a role, but does not contain it.  It can reference a Role in the same namespace or a ClusterRole in the global namespace.
 // It adds who information via Subjects and namespace information by which namespace it exists in.  RoleBindings in a given
 // namespace only have effect in that namespace.
-RoleBinding :: {
-	metav1.TypeMeta
+#RoleBinding: {
+	metav1.#TypeMeta
 
 	// Standard object's metadata.
 	// +optional
-	metadata?: metav1.ObjectMeta @go(ObjectMeta) @protobuf(1,bytes,opt)
+	metadata?: metav1.#ObjectMeta @go(ObjectMeta) @protobuf(1,bytes,opt)
 
 	// Subjects holds references to the objects the role applies to.
 	// +optional
-	subjects?: [...Subject] @go(Subjects,[]Subject) @protobuf(2,bytes,rep)
+	subjects?: [...#Subject] @go(Subjects,[]Subject) @protobuf(2,bytes,rep)
 
 	// RoleRef can reference a Role in the current namespace or a ClusterRole in the global namespace.
 	// If the RoleRef cannot be resolved, the Authorizer must return an error.
-	roleRef: RoleRef @go(RoleRef) @protobuf(3,bytes,opt)
+	roleRef: #RoleRef @go(RoleRef) @protobuf(3,bytes,opt)
 }
 
 // RoleBindingList is a collection of RoleBindings
-RoleBindingList :: {
-	metav1.TypeMeta
+#RoleBindingList: {
+	metav1.#TypeMeta
 
 	// Standard object's metadata.
 	// +optional
-	metadata?: metav1.ListMeta @go(ListMeta) @protobuf(1,bytes,opt)
+	metadata?: metav1.#ListMeta @go(ListMeta) @protobuf(1,bytes,opt)
 
 	// Items is a list of RoleBindings
-	items: [...RoleBinding] @go(Items,[]RoleBinding) @protobuf(2,bytes,rep)
+	items: [...#RoleBinding] @go(Items,[]RoleBinding) @protobuf(2,bytes,rep)
 }
 
 // RoleList is a collection of Roles
-RoleList :: {
-	metav1.TypeMeta
+#RoleList: {
+	metav1.#TypeMeta
 
 	// Standard object's metadata.
 	// +optional
-	metadata?: metav1.ListMeta @go(ListMeta) @protobuf(1,bytes,opt)
+	metadata?: metav1.#ListMeta @go(ListMeta) @protobuf(1,bytes,opt)
 
 	// Items is a list of Roles
-	items: [...Role] @go(Items,[]Role) @protobuf(2,bytes,rep)
+	items: [...#Role] @go(Items,[]Role) @protobuf(2,bytes,rep)
 }
 
 // ClusterRole is a cluster level, logical grouping of PolicyRules that can be referenced as a unit by a RoleBinding or ClusterRoleBinding.
-ClusterRole :: {
-	metav1.TypeMeta
+#ClusterRole: {
+	metav1.#TypeMeta
 
 	// Standard object's metadata.
 	// +optional
-	metadata?: metav1.ObjectMeta @go(ObjectMeta) @protobuf(1,bytes,opt)
+	metadata?: metav1.#ObjectMeta @go(ObjectMeta) @protobuf(1,bytes,opt)
 
 	// Rules holds all the PolicyRules for this ClusterRole
 	// +optional
-	rules: [...PolicyRule] @go(Rules,[]PolicyRule) @protobuf(2,bytes,rep)
+	rules: [...#PolicyRule] @go(Rules,[]PolicyRule) @protobuf(2,bytes,rep)
 
 	// AggregationRule is an optional field that describes how to build the Rules for this ClusterRole.
 	// If AggregationRule is set, then the Rules are controller managed and direct changes to Rules will be
 	// stomped by the controller.
 	// +optional
-	aggregationRule?: null | AggregationRule @go(AggregationRule,*AggregationRule) @protobuf(3,bytes,opt)
+	aggregationRule?: null | #AggregationRule @go(AggregationRule,*AggregationRule) @protobuf(3,bytes,opt)
 }
 
 // AggregationRule describes how to locate ClusterRoles to aggregate into the ClusterRole
-AggregationRule :: {
+#AggregationRule: {
 	// ClusterRoleSelectors holds a list of selectors which will be used to find ClusterRoles and create the rules.
 	// If any of the selectors match, then the ClusterRole's permissions will be added
 	// +optional
-	clusterRoleSelectors?: [...metav1.LabelSelector] @go(ClusterRoleSelectors,[]metav1.LabelSelector) @protobuf(1,bytes,rep)
+	clusterRoleSelectors?: [...metav1.#LabelSelector] @go(ClusterRoleSelectors,[]metav1.LabelSelector) @protobuf(1,bytes,rep)
 }
 
 // ClusterRoleBinding references a ClusterRole, but not contain it.  It can reference a ClusterRole in the global namespace,
 // and adds who information via Subject.
-ClusterRoleBinding :: {
-	metav1.TypeMeta
+#ClusterRoleBinding: {
+	metav1.#TypeMeta
 
 	// Standard object's metadata.
 	// +optional
-	metadata?: metav1.ObjectMeta @go(ObjectMeta) @protobuf(1,bytes,opt)
+	metadata?: metav1.#ObjectMeta @go(ObjectMeta) @protobuf(1,bytes,opt)
 
 	// Subjects holds references to the objects the role applies to.
 	// +optional
-	subjects?: [...Subject] @go(Subjects,[]Subject) @protobuf(2,bytes,rep)
+	subjects?: [...#Subject] @go(Subjects,[]Subject) @protobuf(2,bytes,rep)
 
 	// RoleRef can only reference a ClusterRole in the global namespace.
 	// If the RoleRef cannot be resolved, the Authorizer must return an error.
-	roleRef: RoleRef @go(RoleRef) @protobuf(3,bytes,opt)
+	roleRef: #RoleRef @go(RoleRef) @protobuf(3,bytes,opt)
 }
 
 // ClusterRoleBindingList is a collection of ClusterRoleBindings
-ClusterRoleBindingList :: {
-	metav1.TypeMeta
+#ClusterRoleBindingList: {
+	metav1.#TypeMeta
 
 	// Standard object's metadata.
 	// +optional
-	metadata?: metav1.ListMeta @go(ListMeta) @protobuf(1,bytes,opt)
+	metadata?: metav1.#ListMeta @go(ListMeta) @protobuf(1,bytes,opt)
 
 	// Items is a list of ClusterRoleBindings
-	items: [...ClusterRoleBinding] @go(Items,[]ClusterRoleBinding) @protobuf(2,bytes,rep)
+	items: [...#ClusterRoleBinding] @go(Items,[]ClusterRoleBinding) @protobuf(2,bytes,rep)
 }
 
 // ClusterRoleList is a collection of ClusterRoles
-ClusterRoleList :: {
-	metav1.TypeMeta
+#ClusterRoleList: {
+	metav1.#TypeMeta
 
 	// Standard object's metadata.
 	// +optional
-	metadata?: metav1.ListMeta @go(ListMeta) @protobuf(1,bytes,opt)
+	metadata?: metav1.#ListMeta @go(ListMeta) @protobuf(1,bytes,opt)
 
 	// Items is a list of ClusterRoles
-	items: [...ClusterRole] @go(Items,[]ClusterRole) @protobuf(2,bytes,rep)
+	items: [...#ClusterRole] @go(Items,[]ClusterRole) @protobuf(2,bytes,rep)
 }

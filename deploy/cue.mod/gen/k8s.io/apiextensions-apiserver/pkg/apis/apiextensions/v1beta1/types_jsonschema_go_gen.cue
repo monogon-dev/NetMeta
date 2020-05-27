@@ -5,12 +5,12 @@
 package v1beta1
 
 // JSONSchemaProps is a JSON-Schema following Specification Draft 4 (http://json-schema.org/).
-JSONSchemaProps :: {
-	id?:          string        @go(ID) @protobuf(1,bytes,opt)
-	$schema?:     JSONSchemaURL @go(Schema) @protobuf(2,bytes,opt,name=schema)
-	$ref?:        null | string @go(Ref,*string) @protobuf(3,bytes,opt,name=ref)
-	description?: string        @go(Description) @protobuf(4,bytes,opt)
-	type?:        string        @go(Type) @protobuf(5,bytes,opt)
+#JSONSchemaProps: {
+	id?:          string         @go(ID) @protobuf(1,bytes,opt)
+	$schema?:     #JSONSchemaURL @go(Schema) @protobuf(2,bytes,opt,name=schema)
+	$ref?:        null | string  @go(Ref,*string) @protobuf(3,bytes,opt,name=ref)
+	description?: string         @go(Description) @protobuf(4,bytes,opt)
+	type?:        string         @go(Type) @protobuf(5,bytes,opt)
 
 	// format is an OpenAPI v3 format string. Unknown formats are ignored. The following formats are validated:
 	//
@@ -44,7 +44,7 @@ JSONSchemaProps :: {
 	// default is a default value for undefined object fields.
 	// Defaulting is a beta feature under the CustomResourceDefaulting feature gate.
 	// CustomResourceDefinitions with defaults must be created using the v1 (or newer) CustomResourceDefinition API.
-	default?:          null | JSON    @go(Default,*JSON) @protobuf(8,bytes,opt)
+	default?:          null | #JSON   @go(Default,*JSON) @protobuf(8,bytes,opt)
 	maximum?:          null | float64 @go(Maximum,*float64) @protobuf(9,bytes,opt)
 	exclusiveMaximum?: bool           @go(ExclusiveMaximum) @protobuf(10,bytes,opt)
 	minimum?:          null | float64 @go(Minimum,*float64) @protobuf(11,bytes,opt)
@@ -56,24 +56,24 @@ JSONSchemaProps :: {
 	minItems?:         null | int64   @go(MinItems,*int64) @protobuf(17,bytes,opt)
 	uniqueItems?:      bool           @go(UniqueItems) @protobuf(18,bytes,opt)
 	multipleOf?:       null | float64 @go(MultipleOf,*float64) @protobuf(19,bytes,opt)
-	enum?: [...JSON] @go(Enum,[]JSON) @protobuf(20,bytes,rep)
+	enum?: [...#JSON] @go(Enum,[]JSON) @protobuf(20,bytes,rep)
 	maxProperties?: null | int64 @go(MaxProperties,*int64) @protobuf(21,bytes,opt)
 	minProperties?: null | int64 @go(MinProperties,*int64) @protobuf(22,bytes,opt)
 	required?: [...string] @go(Required,[]string) @protobuf(23,bytes,rep)
-	items?: null | JSONSchemaPropsOrArray @go(Items,*JSONSchemaPropsOrArray) @protobuf(24,bytes,opt)
-	allOf?: [...JSONSchemaProps] @go(AllOf,[]JSONSchemaProps) @protobuf(25,bytes,rep)
-	oneOf?: [...JSONSchemaProps] @go(OneOf,[]JSONSchemaProps) @protobuf(26,bytes,rep)
-	anyOf?: [...JSONSchemaProps] @go(AnyOf,[]JSONSchemaProps) @protobuf(27,bytes,rep)
-	not?: null | JSONSchemaProps @go(Not,*JSONSchemaProps) @protobuf(28,bytes,opt)
-	properties?: {[string]: JSONSchemaProps} @go(Properties,map[string]JSONSchemaProps) @protobuf(29,bytes,rep)
-	additionalProperties?: null | JSONSchemaPropsOrBool @go(AdditionalProperties,*JSONSchemaPropsOrBool) @protobuf(30,bytes,opt)
-	patternProperties?: {[string]: JSONSchemaProps} @go(PatternProperties,map[string]JSONSchemaProps) @protobuf(31,bytes,rep)
-	dependencies?:    JSONSchemaDependencies       @go(Dependencies) @protobuf(32,bytes,opt)
-	additionalItems?: null | JSONSchemaPropsOrBool @go(AdditionalItems,*JSONSchemaPropsOrBool) @protobuf(33,bytes,opt)
-	definitions?:     JSONSchemaDefinitions        @go(Definitions) @protobuf(34,bytes,opt)
-	externalDocs?:    null | ExternalDocumentation @go(ExternalDocs,*ExternalDocumentation) @protobuf(35,bytes,opt)
-	example?:         null | JSON                  @go(Example,*JSON) @protobuf(36,bytes,opt)
-	nullable?:        bool                         @go(Nullable) @protobuf(37,bytes,opt)
+	items?: null | #JSONSchemaPropsOrArray @go(Items,*JSONSchemaPropsOrArray) @protobuf(24,bytes,opt)
+	allOf?: [...#JSONSchemaProps] @go(AllOf,[]JSONSchemaProps) @protobuf(25,bytes,rep)
+	oneOf?: [...#JSONSchemaProps] @go(OneOf,[]JSONSchemaProps) @protobuf(26,bytes,rep)
+	anyOf?: [...#JSONSchemaProps] @go(AnyOf,[]JSONSchemaProps) @protobuf(27,bytes,rep)
+	not?: null | #JSONSchemaProps @go(Not,*JSONSchemaProps) @protobuf(28,bytes,opt)
+	properties?: {[string]: #JSONSchemaProps} @go(Properties,map[string]JSONSchemaProps) @protobuf(29,bytes,rep)
+	additionalProperties?: null | #JSONSchemaPropsOrBool @go(AdditionalProperties,*JSONSchemaPropsOrBool) @protobuf(30,bytes,opt)
+	patternProperties?: {[string]: #JSONSchemaProps} @go(PatternProperties,map[string]JSONSchemaProps) @protobuf(31,bytes,rep)
+	dependencies?:    #JSONSchemaDependencies       @go(Dependencies) @protobuf(32,bytes,opt)
+	additionalItems?: null | #JSONSchemaPropsOrBool @go(AdditionalItems,*JSONSchemaPropsOrBool) @protobuf(33,bytes,opt)
+	definitions?:     #JSONSchemaDefinitions        @go(Definitions) @protobuf(34,bytes,opt)
+	externalDocs?:    null | #ExternalDocumentation @go(ExternalDocs,*ExternalDocumentation) @protobuf(35,bytes,opt)
+	example?:         null | #JSON                  @go(Example,*JSON) @protobuf(36,bytes,opt)
+	nullable?:        bool                          @go(Nullable) @protobuf(37,bytes,opt)
 
 	// x-kubernetes-preserve-unknown-fields stops the API server
 	// decoding step from pruning fields which are not specified
@@ -153,30 +153,30 @@ JSONSchemaProps :: {
 
 // JSON represents any valid JSON value.
 // These types are supported: bool, int64, float64, string, []interface{}, map[string]interface{} and nil.
-JSON :: _
+#JSON: _
 
 // JSONSchemaURL represents a schema url.
-JSONSchemaURL :: string
+#JSONSchemaURL: string
 
 // JSONSchemaPropsOrArray represents a value that can either be a JSONSchemaProps
 // or an array of JSONSchemaProps. Mainly here for serialization purposes.
-JSONSchemaPropsOrArray :: _
+#JSONSchemaPropsOrArray: _
 
 // JSONSchemaPropsOrBool represents JSONSchemaProps or a boolean value.
 // Defaults to true for the boolean property.
-JSONSchemaPropsOrBool :: _
+#JSONSchemaPropsOrBool: _
 
 // JSONSchemaDependencies represent a dependencies property.
-JSONSchemaDependencies :: [string]: JSONSchemaPropsOrStringArray
+#JSONSchemaDependencies: {[string]: #JSONSchemaPropsOrStringArray}
 
 // JSONSchemaPropsOrStringArray represents a JSONSchemaProps or a string array.
-JSONSchemaPropsOrStringArray :: _
+#JSONSchemaPropsOrStringArray: _
 
 // JSONSchemaDefinitions contains the models explicitly defined in this spec.
-JSONSchemaDefinitions :: [string]: JSONSchemaProps
+#JSONSchemaDefinitions: {[string]: #JSONSchemaProps}
 
 // ExternalDocumentation allows referencing an external resource for extended documentation.
-ExternalDocumentation :: {
+#ExternalDocumentation: {
 	description?: string @go(Description) @protobuf(1,bytes,opt)
 	url?:         string @go(URL) @protobuf(2,bytes,opt)
 }
