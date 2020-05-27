@@ -1,4 +1,53 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_NETMETA_CLICKHOUSE",
+      "label": "NetMeta ClickHouse",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "vertamedia-clickhouse-datasource",
+      "pluginName": "ClickHouse"
+    },
+    {
+      "name": "VAR_ADHOC_QUERY_FILTER",
+      "type": "constant",
+      "label": "adhoc_query_filter",
+      "value": "SELECT database, table, name, type FROM system.columns WHERE table='flows_raw' ORDER BY database, table",
+      "description": ""
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "7.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "vertamedia-clickhouse-datasource",
+      "name": "ClickHouse",
+      "version": "1.9.5"
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -14,17 +63,96 @@
   },
   "editable": true,
   "gnetId": null,
-  "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1590537355017,
+  "graphTooltip": 1,
+  "id": null,
+  "iteration": 1590596114783,
   "links": [],
   "panels": [
+    {
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 0,
+        "y": 0
+      },
+      "id": 24,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "values": true
+        }
+      },
+      "pluginVersion": "7.0.0",
+      "targets": [
+        {
+          "database": "default",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeColDataType": "FlowReceived",
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "format": "table",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT count()\nFROM $table\nWHERE 1\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)",
+          "rawQuery": "SELECT count() FROM default.flows_raw WHERE 1                    ",
+          "refId": "A",
+          "round": "0s",
+          "table": "flows_raw",
+          "tableLoading": false
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Total Flows Stored",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "id": 16,
+      "panels": [],
+      "title": "Traffic Statistics",
+      "type": "row"
+    },
     {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "NetMeta ClickHouse",
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -37,7 +165,7 @@
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 4
       },
       "hiddenSeries": false,
       "id": 2,
@@ -63,7 +191,7 @@
       "seriesOverrides": [
         {
           "$$hashKey": "object:86",
-          "alias": "1",
+          "alias": "out",
           "transform": "negative-Y"
         }
       ],
@@ -81,8 +209,8 @@
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT\n    $timeSeries as t,\n    sum(Packets * SamplingRate) / $interval AS Packets,\n    FlowDirection\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY t, FlowDirection\nORDER BY t",
-          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     sum(Packets * SamplingRate) / 1 AS Packets,     FlowDirection FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590535828)                 GROUP BY t, FlowDirection ORDER BY t",
+          "query": "SELECT\n    $timeSeries as t,\n    sum(Packets * SamplingRate) / $interval AS Packets,\n    if(FlowDirection == 1, 'out', 'in') AS FlowDirection\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY t, FlowDirection\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     sum(Packets * SamplingRate) / 1 AS Packets,     if(FlowDirection == 1, 'out', 'in') AS FlowDirection FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590586086)    AND SamplerAddress = toIPv6('::85.190.150.169')                  GROUP BY t, FlowDirection ORDER BY t",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -138,7 +266,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "NetMeta ClickHouse",
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -151,7 +279,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 4
       },
       "hiddenSeries": false,
       "id": 4,
@@ -177,7 +305,7 @@
       "seriesOverrides": [
         {
           "$$hashKey": "object:141",
-          "alias": "1",
+          "alias": "out",
           "transform": "negative-Y"
         }
       ],
@@ -195,8 +323,8 @@
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT\n    $timeSeries as t,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    FlowDirection\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY t, FlowDirection\nORDER BY t",
-          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     FlowDirection FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590535833)                 GROUP BY t, FlowDirection ORDER BY t",
+          "query": "SELECT\n    $timeSeries as t,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    if(FlowDirection == 1, 'out', 'in') AS FlowDirection\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY t, FlowDirection\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     if(FlowDirection == 1, 'out', 'in') AS FlowDirection FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590586091)    AND SamplerAddress = toIPv6('::85.190.150.169')                  GROUP BY t, FlowDirection ORDER BY t",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -251,7 +379,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "NetMeta ClickHouse",
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -264,7 +392,7 @@
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 12
+        "y": 16
       },
       "hiddenSeries": false,
       "id": 8,
@@ -290,7 +418,7 @@
       "seriesOverrides": [
         {
           "$$hashKey": "object:196",
-          "alias": "/.*. 1/",
+          "alias": "/, out/",
           "transform": "negative-Y"
         }
       ],
@@ -308,8 +436,8 @@
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT\n    $timeSeries as t,\n    Proto,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    FlowDirection\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY t, Proto, FlowDirection\nORDER BY t",
-          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     Proto,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     FlowDirection FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590535880)                 GROUP BY t, Proto, FlowDirection ORDER BY t",
+          "query": "SELECT\n    $timeSeries as t,\n    Proto,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    if(FlowDirection == 1, 'out', 'in') AS FlowDirection\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY t, Proto, FlowDirection\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     Proto,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     if(FlowDirection == 1, 'out', 'in') AS FlowDirection FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590586104)    AND SamplerAddress = toIPv6('::85.190.150.169')                  GROUP BY t, Proto, FlowDirection ORDER BY t",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -364,7 +492,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "NetMeta ClickHouse",
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -377,7 +505,687 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 12
+        "y": 16
+      },
+      "hiddenSeries": false,
+      "id": 28,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:196",
+          "alias": "/, out/",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "database": "default",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeColDataType": "TimeReceived",
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT\n    $timeSeries as t,\n    '0x' || hex(EType) AS EType,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    if(FlowDirection == 1, 'out', 'in') AS FlowDirection\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY t, EType, FlowDirection\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 60) * 60) * 1000 as t,     '0x' || hex(EType) AS EType,     sum(Bytes * SamplingRate) * 8 / 60 AS Bps,     if(FlowDirection == 1, 'out', 'in') AS FlowDirection FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590509504)                     GROUP BY t, EType, FlowDirection ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "flows_raw",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Ethernet Type",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:639",
+          "format": "bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:640",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 28
+      },
+      "hiddenSeries": false,
+      "id": 11,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "database": "default",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeColDataType": "TimeReceived",
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT\n    $timeSeries as t,\n    count(*) / $interval AS Flows,\n    SamplerAddress\nFROM $table\nWHERE\n    $timeFilter\n    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n    $conditionalTest(AND $extra, $extra)\n\nGROUP BY\n    t, SamplerAddress\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     count(*) / 1 AS Flows,     SamplerAddress FROM default.flows_raw WHERE     TimeReceived >= toDateTime(1590586121)      AND SamplerAddress = toIPv6('::85.190.150.169')                           GROUP BY     t, SamplerAddress ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "flows_raw",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Raw Flows/s Per Host",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:639",
+          "format": "pps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:640",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 28
+      },
+      "hiddenSeries": false,
+      "id": 12,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "database": "default",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeColDataType": "TimeReceived",
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT\n    $timeSeries as t,\n    NextHop,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY t, NextHop\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     NextHop,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590586125)    AND SamplerAddress = toIPv6('::85.190.150.169')                  GROUP BY t, NextHop ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "flows_raw",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Traffic per Next Hop",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:639",
+          "format": "bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:640",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 40
+      },
+      "hiddenSeries": false,
+      "id": 13,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:257",
+          "alias": "/, out/",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "database": "default",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeColDataType": "TimeReceived",
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT\n    $timeSeries as t,\n    SamplerAddress,\n    InIf,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    if(FlowDirection == 1, 'out', 'in') AS FlowDirection\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY t, SamplerAddress, InIf, FlowDirection\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     SamplerAddress,     InIf,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     if(FlowDirection == 1, 'out', 'in') AS FlowDirection FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590586129)    AND SamplerAddress = toIPv6('::85.190.150.169')                  GROUP BY t, SamplerAddress, InIf, FlowDirection ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "flows_raw",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Traffic per Ingress Interface",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:639",
+          "format": "bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:640",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 40
+      },
+      "hiddenSeries": false,
+      "id": 14,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:257",
+          "alias": "/, out/",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "database": "default",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeColDataType": "TimeReceived",
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT\n    $timeSeries as t,\n    SamplerAddress,\n    OutIf,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    if(FlowDirection == 1, 'out', 'in') AS FlowDirection\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY t, SamplerAddress, OutIf, FlowDirection\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     SamplerAddress,     OutIf,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     if(FlowDirection == 1, 'out', 'in') AS FlowDirection FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590586137)    AND SamplerAddress = toIPv6('::85.190.150.169')                  GROUP BY t, SamplerAddress, OutIf, FlowDirection ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "flows_raw",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Traffic per Egress Interface",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:639",
+          "format": "bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:640",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 52
+      },
+      "id": 27,
+      "panels": [],
+      "title": "TopK Protocol Graphs (expensive)",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 53
+      },
+      "hiddenSeries": false,
+      "id": 29,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:251",
+          "alias": "/, out/",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "database": "default",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeColDataType": "TimeReceived",
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT\n    $timeSeries as t,\n    SrcPort,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    if(FlowDirection == 1, 'out', 'in') AS FlowDirection\nFROM $table\nWHERE\n    $timeFilter\n    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n    AND SrcPort IN (\n    SELECT SrcPort\n    FROM $table\n    WHERE $timeFilter\n    GROUP BY SrcPort\n    ORDER BY count(*) DESC\n    LIMIT 10)\n    $conditionalTest(AND $extra, $extra)\n\nGROUP BY\n    t,\n    SrcPort,\n    FlowDirection\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     SrcPort,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     if(FlowDirection == 1, 'out', 'in') AS FlowDirection FROM default.flows_raw WHERE     TimeReceived BETWEEN toDateTime(1590589695) AND toDateTime(1590590256)                             AND SrcPort IN (     SELECT SrcPort     FROM default.flows_raw     WHERE TimeReceived BETWEEN toDateTime(1590589695) AND toDateTime(1590590256)     GROUP BY SrcPort     ORDER BY count(*) DESC     LIMIT 10)        GROUP BY     t,     SrcPort,     FlowDirection ORDER BY t",
+          "refId": "A",
+          "round": "0s",
+          "table": "flows_raw",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top 10 Source Ports",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:639",
+          "format": "bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:640",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 53
       },
       "hiddenSeries": false,
       "id": 9,
@@ -403,7 +1211,7 @@
       "seriesOverrides": [
         {
           "$$hashKey": "object:251",
-          "alias": "/.*, 1/",
+          "alias": "/, out/",
           "transform": "negative-Y"
         }
       ],
@@ -421,8 +1229,8 @@
           "format": "time_series",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT\n    $timeSeries as t,\n    DstPort,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    FlowDirection\nFROM $table\nWHERE\n    $timeFilter\n    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n    AND DstPort IN (\n    SELECT DstPort\n    FROM $table\n    WHERE $timeFilter\n    GROUP BY DstPort\n    ORDER BY count(*) DESC\n    LIMIT 10)\n    $conditionalTest(AND $extra, $extra)\n\nGROUP BY\n    t,\n    DstPort,\n    FlowDirection\nORDER BY t",
-          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     DstPort,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     FlowDirection FROM default.flows_raw WHERE     TimeReceived >= toDateTime(1590535873)                       AND DstPort IN (     SELECT DstPort     FROM default.flows_raw     WHERE TimeReceived >= toDateTime(1590535873)     GROUP BY DstPort     ORDER BY count(*) DESC     LIMIT 10)        GROUP BY     t,     DstPort,     FlowDirection ORDER BY t",
+          "query": "SELECT\n    $timeSeries as t,\n    DstPort,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    if(FlowDirection == 1, 'out', 'in') AS FlowDirection\nFROM $table\nWHERE\n    $timeFilter\n    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n    AND DstPort IN (\n    SELECT DstPort\n    FROM $table\n    WHERE $timeFilter\n    GROUP BY DstPort\n    ORDER BY count(*) DESC\n    LIMIT 10)\n    $conditionalTest(AND $extra, $extra)\n\nGROUP BY\n    t,\n    DstPort,\n    FlowDirection\nORDER BY t",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     DstPort,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     if(FlowDirection == 1, 'out', 'in') AS FlowDirection FROM default.flows_raw WHERE     TimeReceived >= toDateTime(1590588644)                             AND DstPort IN (     SELECT DstPort     FROM default.flows_raw     WHERE TimeReceived >= toDateTime(1590588644)     GROUP BY DstPort     ORDER BY count(*) DESC     LIMIT 10)        GROUP BY     t,     DstPort,     FlowDirection ORDER BY t",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -473,7 +1281,21 @@
       }
     },
     {
-      "datasource": "NetMeta ClickHouse",
+      "collapsed": false,
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 65
+      },
+      "id": 18,
+      "panels": [],
+      "title": "Top Flows / Hosts (expensive)",
+      "type": "row"
+    },
+    {
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -513,6 +1335,10 @@
               },
               {
                 "id": "max"
+              },
+              {
+                "id": "custom.width",
+                "value": null
               }
             ]
           }
@@ -522,9 +1348,9 @@
         "h": 14,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 66
       },
-      "id": 3,
+      "id": 7,
       "options": {
         "showHeader": true
       },
@@ -540,8 +1366,8 @@
           "format": "table",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT \n  SamplerAddress,\n  DstAddr,\n  sum(Bytes * SamplingRate) / 1024 as Bytes\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY SamplerAddress, DstAddr\nORDER BY Bytes DESC\nLIMIT 100\n",
-          "rawQuery": "SELECT    SamplerAddress,   DstAddr,   sum(Bytes * SamplingRate) / 1024 as Bytes FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590535889)                 GROUP BY SamplerAddress, DstAddr ORDER BY Bytes DESC LIMIT 100",
+          "query": "SELECT \n  SamplerAddress,\n  SrcAddr,\n  sum(Bytes * SamplingRate) / 1024 as Bytes\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY SamplerAddress, SrcAddr\nORDER BY Bytes DESC\nLIMIT 100\n",
+          "rawQuery": "SELECT    SamplerAddress,   SrcAddr,   sum(Bytes * SamplingRate) / 1024 as Bytes FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590586148)    AND SamplerAddress = toIPv6('::85.190.150.169')                  GROUP BY SamplerAddress, SrcAddr ORDER BY Bytes DESC LIMIT 100",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -550,12 +1376,12 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Top Destination IPs",
+      "title": "Top Source IPs",
       "transformations": [],
       "type": "table"
     },
     {
-      "datasource": "NetMeta ClickHouse",
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -604,9 +1430,9 @@
         "h": 14,
         "w": 12,
         "x": 12,
-        "y": 24
+        "y": 66
       },
-      "id": 7,
+      "id": 3,
       "options": {
         "showHeader": true
       },
@@ -622,8 +1448,8 @@
           "format": "table",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT \n  SamplerAddress,\n  SrcAddr,\n  sum(Bytes * SamplingRate) / 1024 as Bytes\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY SamplerAddress, SrcAddr\nORDER BY Bytes DESC\nLIMIT 100\n",
-          "rawQuery": "SELECT    SamplerAddress,   SrcAddr,   sum(Bytes * SamplingRate) / 1024 as Bytes FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590535896)                 GROUP BY SamplerAddress, SrcAddr ORDER BY Bytes DESC LIMIT 100",
+          "query": "SELECT \n  SamplerAddress,\n  DstAddr,\n  sum(Bytes * SamplingRate) / 1024 as Bytes\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY SamplerAddress, DstAddr\nORDER BY Bytes DESC\nLIMIT 100\n",
+          "rawQuery": "SELECT    SamplerAddress,   DstAddr,   sum(Bytes * SamplingRate) / 1024 as Bytes FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590586144)    AND SamplerAddress = toIPv6('::85.190.150.169')                  GROUP BY SamplerAddress, DstAddr ORDER BY Bytes DESC LIMIT 100",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -632,12 +1458,12 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Top Source IPs",
+      "title": "Top Destination IPs",
       "transformations": [],
       "type": "table"
     },
     {
-      "datasource": "NetMeta ClickHouse",
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -686,7 +1512,7 @@
         "h": 12,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 80
       },
       "id": 10,
       "options": {
@@ -704,8 +1530,8 @@
           "format": "table",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT \n  SamplerAddress,\n  SrcAddr,\n  DstAddr,\n  SrcPort,\n  DstPort,\n  Proto,\n  sum(Bytes * SamplingRate) / 1024 as Bytes\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, Proto\nORDER BY Bytes DESC\nLIMIT 20\n",
-          "rawQuery": "SELECT    SamplerAddress,   SrcAddr,   DstAddr,   SrcPort,   DstPort,   Proto,   sum(Bytes * SamplingRate) / 1024 as Bytes FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590535903)                 GROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, Proto ORDER BY Bytes DESC LIMIT 20",
+          "query": "SELECT \n  SamplerAddress,\n  SrcAddr,\n  DstAddr,\n  SrcPort,\n  DstPort,\n  Proto,\n  sum(Bytes * SamplingRate) / 1024 as Bytes\nFROM $table\nWHERE $timeFilter\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, Proto\nORDER BY Bytes DESC\nLIMIT 20\n",
+          "rawQuery": "SELECT    SamplerAddress,   SrcAddr,   DstAddr,   SrcPort,   DstPort,   Proto,   sum(Bytes * SamplingRate) / 1024 as Bytes FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590586152)    AND SamplerAddress = toIPv6('::85.190.150.169')                  GROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, Proto ORDER BY Bytes DESC LIMIT 20",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -719,7 +1545,21 @@
       "type": "table"
     },
     {
-      "datasource": "NetMeta ClickHouse",
+      "collapsed": false,
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 92
+      },
+      "id": 20,
+      "panels": [],
+      "title": "Origin AS Stats",
+      "type": "row"
+    },
+    {
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -768,7 +1608,7 @@
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 50
+        "y": 93
       },
       "id": 5,
       "options": {
@@ -786,8 +1626,8 @@
           "format": "table",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT \n  SrcAS,\n  sum(Bytes * SamplingRate) / 1024 as Bytes\nFROM $table\nWHERE $timeFilter AND FlowDirection = 0\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY SrcAS\nORDER BY Bytes DESC\nLIMIT 100\n",
-          "rawQuery": "SELECT    SrcAS,   sum(Bytes * SamplingRate) / 1024 as Bytes FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590535940) AND FlowDirection = 0                 GROUP BY SrcAS ORDER BY Bytes DESC LIMIT 100",
+          "query": "SELECT \n  SrcAS,\n  sum(Bytes * SamplingRate) / 1024 as Bytes\nFROM $table\nWHERE $timeFilter AND FlowDirection = 0\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY SrcAS\nORDER BY Bytes DESC\nLIMIT 100\n",
+          "rawQuery": "SELECT    SrcAS,   sum(Bytes * SamplingRate) / 1024 as Bytes FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590586169) AND FlowDirection = 0    AND SamplerAddress = toIPv6('::85.190.150.169')                  GROUP BY SrcAS ORDER BY Bytes DESC LIMIT 100",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -801,7 +1641,7 @@
       "type": "table"
     },
     {
-      "datasource": "NetMeta ClickHouse",
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -850,7 +1690,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 50
+        "y": 93
       },
       "id": 6,
       "options": {
@@ -868,8 +1708,8 @@
           "format": "table",
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
-          "query": "SELECT \n  DstAS,\n  sum(Bytes * SamplingRate) / 1024 as Bytes\nFROM $table\nWHERE $timeFilter AND FlowDirection = 1\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY DstAS\nORDER BY Bytes DESC\nLIMIT 100\n",
-          "rawQuery": "SELECT    DstAS,   sum(Bytes * SamplingRate) / 1024 as Bytes FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590535957) AND FlowDirection = 1                 GROUP BY DstAS ORDER BY Bytes DESC LIMIT 100",
+          "query": "SELECT \n  DstAS,\n  sum(Bytes * SamplingRate) / 1024 as Bytes\nFROM $table\nWHERE $timeFilter AND FlowDirection = 1\n  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n  $conditionalTest(AND $extra, $extra)\nGROUP BY DstAS\nORDER BY Bytes DESC\nLIMIT 101",
+          "rawQuery": "SELECT    DstAS,   sum(Bytes * SamplingRate) / 1024 as Bytes FROM default.flows_raw WHERE TimeReceived >= toDateTime(1590586174) AND FlowDirection = 1    AND SamplerAddress = toIPv6('::85.190.150.169')                  GROUP BY DstAS ORDER BY Bytes DESC LIMIT 101",
           "refId": "A",
           "round": "0s",
           "table": "flows_raw",
@@ -881,6 +1721,220 @@
       "title": "Top Destination ASNs",
       "transformations": [],
       "type": "table"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 105
+      },
+      "hiddenSeries": false,
+      "id": 25,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "database": "default",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeColDataType": "TimeReceived",
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT\n    $timeSeries as t,\n    SrcAS,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps\nFROM $table\nWHERE\n    $timeFilter\n    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n    AND SrcAS IN (\n    SELECT SrcAS\n    FROM $table\n    WHERE $timeFilter AND FlowDirection = 0\n    GROUP BY SrcAS\n    ORDER BY count(*) DESC\n    LIMIT 10)\n    $conditionalTest(AND $extra, $extra)\nGROUP BY\n    t,\n    SrcAS\nORDER BY t, Bps",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     SrcAS,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps FROM default.flows_raw WHERE     TimeReceived BETWEEN toDateTime(1590589695) AND toDateTime(1590590256)                             AND SrcAS IN (     SELECT SrcAS     FROM default.flows_raw     WHERE TimeReceived BETWEEN toDateTime(1590589695) AND toDateTime(1590590256) AND FlowDirection = 0     GROUP BY SrcAS     ORDER BY count(*) DESC     LIMIT 10)       GROUP BY     t,     SrcAS ORDER BY t, Bps",
+          "refId": "A",
+          "round": "0s",
+          "table": "flows_raw",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top 10 Source ASN",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:639",
+          "format": "bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:640",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_NETMETA_CLICKHOUSE}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 105
+      },
+      "hiddenSeries": false,
+      "id": 30,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "database": "default",
+          "dateColDataType": "",
+          "dateLoading": false,
+          "dateTimeColDataType": "TimeReceived",
+          "dateTimeType": "DATETIME",
+          "datetimeLoading": false,
+          "format": "time_series",
+          "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+          "intervalFactor": 1,
+          "query": "SELECT\n    $timeSeries as t,\n    DstAS,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps\nFROM $table\nWHERE\n    $timeFilter\n    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n    AND DstAS IN (\n    SELECT DstAS\n    FROM $table\n    WHERE $timeFilter AND FlowDirection = 1\n    GROUP BY DstAS\n    ORDER BY count(*) DESC\n    LIMIT 10)\n    $conditionalTest(AND $extra, $extra)\nGROUP BY\n    t,\n    DstAS\nORDER BY t, Bps",
+          "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     DstAS,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps FROM default.flows_raw WHERE     TimeReceived BETWEEN toDateTime(1590589695) AND toDateTime(1590590256)                             AND DstAS IN (     SELECT DstAS     FROM default.flows_raw     WHERE TimeReceived BETWEEN toDateTime(1590589695) AND toDateTime(1590590256) AND FlowDirection = 1     GROUP BY DstAS     ORDER BY count(*) DESC     LIMIT 10)       GROUP BY     t,     DstAS ORDER BY t, Bps",
+          "refId": "A",
+          "round": "0s",
+          "table": "flows_raw",
+          "tableLoading": false
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top 10 Destination ASN",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:639",
+          "format": "bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:640",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
   "refresh": false,
@@ -891,23 +1945,43 @@
     "list": [
       {
         "current": {
-          "selected": false,
-          "text": "SELECT database, table, name, type FROM system.columns WHERE table='flows_raw' ORDER BY database, table",
-          "value": "SELECT database, table, name, type FROM system.columns WHERE table='flows_raw' ORDER BY database, table"
+          "value": "${VAR_ADHOC_QUERY_FILTER}",
+          "text": "${VAR_ADHOC_QUERY_FILTER}"
         },
         "hide": 2,
         "label": null,
         "name": "adhoc_query_filter",
         "options": [
           {
-            "selected": true,
-            "text": "SELECT database, table, name, type FROM system.columns WHERE table='flows_raw' ORDER BY database, table",
-            "value": "SELECT database, table, name, type FROM system.columns WHERE table='flows_raw' ORDER BY database, table"
+            "value": "${VAR_ADHOC_QUERY_FILTER}",
+            "text": "${VAR_ADHOC_QUERY_FILTER}"
           }
         ],
-        "query": "SELECT database, table, name, type FROM system.columns WHERE table='flows_raw' ORDER BY database, table",
+        "query": "${VAR_ADHOC_QUERY_FILTER}",
         "skipUrlSync": false,
         "type": "constant"
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_NETMETA_CLICKHOUSE}",
+        "definition": "SELECT DISTINCT IPv6NumToString(SamplerAddress) FROM flows_raw",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Source",
+        "multi": false,
+        "name": "sampler",
+        "options": [],
+        "query": "SELECT DISTINCT IPv6NumToString(SamplerAddress) FROM flows_raw",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       },
       {
         "datasource": "NetMeta ClickHouse",
@@ -929,9 +2003,9 @@
         "name": "srcIP",
         "options": [
           {
-            "selected": true,
-            "text": "",
-            "value": ""
+            "selected": false,
+            "text": "::95.156.239.2",
+            "value": "::95.156.239.2"
           }
         ],
         "query": "",
@@ -940,7 +2014,7 @@
       },
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "",
           "value": ""
         },
@@ -960,7 +2034,7 @@
       },
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "",
           "value": ""
         },
@@ -980,7 +2054,7 @@
       },
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "",
           "value": ""
         },
@@ -1001,7 +2075,7 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
@@ -1020,5 +2094,5 @@
   "timezone": "",
   "title": "NetMeta Overview",
   "uid": "9Dw5dGzGk",
-  "version": 14
+  "version": 53
 }
