@@ -24,6 +24,9 @@ package k8s
 	// ClickHouse write credentials
 	clickhouseOperatorPassword: string
 
+	// Session secret for Prometheus and Grafana
+	sessionSecret: string
+
 	// Let's Encrypt Mode
 	//  - off: self-signed certificate
 	//  - staging: staging Let's Encrypt server (recommended for testing!)
@@ -51,6 +54,9 @@ package k8s
 
 	// Optional: configure GSuite authentication
 	grafanaGoogleAuth: #GoogleAuth
+
+	// Default org role for new Grafana users
+	grafanaDefaultRole: string | *"Viewer"
 }
 
 #NetMetaImages: {

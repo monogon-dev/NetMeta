@@ -143,6 +143,30 @@ k8s: {
 								name:  "GF_AUTH_OAUTH_AUTO_LOGIN"
 								value: strconv.FormatBool(!netmeta.config.grafanaBasicAuth)
 							},
+							{
+								name:  "GF_SECURITY_SECRET_KEY"
+								value: netmeta.config.sessionSecret
+							},
+							{
+								name:  "GF_SECURITY_DISABLE_GRAVATAR"
+								value: "true"
+							},
+							{
+								name:  "GF_SECURITY_COOKIE_SECURE"
+								value: "true"
+							},
+							{
+								name:  "GF_SECURITY_STRICT_TRANSPORT_SECURITY"
+								value: "true"
+							},
+							{
+								name:  "GF_USERS_AUTO_ASSIGN_ORG_ROLE"
+								value: netmeta.config.grafanaDefaultRole
+							},
+							{
+								name:  "GF_ANALYTICS_CHECK_FOR_UPDATES"
+								value: "false"
+							},
 						] + _googleAuth
 
 						ports: [{
