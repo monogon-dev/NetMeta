@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS flows_raw
     DstNet           UInt8
 ) ENGINE = MergeTree()
       PARTITION BY Date
-      ORDER BY (TimeReceived, FlowDirection, SrcAS, DstAS, SrcAddr, DstAddr)
+      ORDER BY (TimeReceived, FlowDirection, SamplerAddress, SrcAS, DstAS, SrcAddr, DstAddr)
       TTL Date + INTERVAL 1 MONTH;
 
 -- goflow stores IP addresses as raw bytes without indicating the protocol.
