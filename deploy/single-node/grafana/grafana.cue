@@ -152,6 +152,10 @@ k8s: {
 								value: "true"
 							},
 							{
+								name:  "GF_SESSION_COOKIE_SECURE"
+								value: "true"
+							},
+							{
 								name:  "GF_SECURITY_COOKIE_SECURE"
 								value: "true"
 							},
