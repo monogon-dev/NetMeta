@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 )
 
-config = netmeta.config
+let config = netmeta.config
 
 k8s: clickhouseinstallations: netmeta: spec: {
 	defaults: templates: {

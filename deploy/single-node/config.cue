@@ -1,6 +1,6 @@
 package k8s
 
-NetMetaConfig :: {
+#NetMetaConfig: {
 	// Size of the goflow sFlow/IPFIX ingestion queue. Keeping
 	// a larger queue allows for backprocessing of longer periods of historical data.
 	goflowTopicRetention: *1_000_000_000 | int // GB
@@ -30,6 +30,6 @@ NetMetaConfig :: {
 	// (after the first deployment, it can only be changed within Grafana)
 	grafanaInitialAdminPassword: string
 }
-
-NetMetaImages ::
+#NetMetaImages: {
 	helloworld: string
+}

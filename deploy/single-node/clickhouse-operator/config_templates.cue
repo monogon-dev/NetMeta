@@ -9,7 +9,7 @@ k8s: configmaps: "etc-clickhouse-operator-templatesd-files": {
 	metadata: labels: app: "clickhouse-operator"
 	data: {
 		"001-templates.json.example": json.Marshal(_installation_template)
-		_installation_template = {
+		let _installation_template = {
 			apiVersion: "clickhouse.altinity.com/v1"
 			kind:       "ClickHouseInstallationTemplate"
 			metadata: name: "01-default-volumeclaimtemplate"
@@ -58,7 +58,7 @@ k8s: configmaps: "etc-clickhouse-operator-templatesd-files": {
 		}
 
 		"default-pod-template.yaml.example": yaml.Marshal(_pod_template)
-		_pod_template = {
+		let _pod_template = {
 			apiVersion: "clickhouse.altinity.com/v1"
 			kind:       "ClickHouseInstallationTemplate"
 			metadata: name: "default-oneperhost-pod-template"
@@ -69,7 +69,7 @@ k8s: configmaps: "etc-clickhouse-operator-templatesd-files": {
 		}
 
 		"default-storage-template.yaml.example": yaml.Marshal(_storage_template)
-		_storage_template = {
+		let _storage_template = {
 			apiVersion: "clickhouse.altinity.com/v1"
 			kind:       "ClickHouseInstallationTemplate"
 			metadata: name: "default-storage-template-2Gi"

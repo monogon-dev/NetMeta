@@ -7,7 +7,7 @@ import (
 )
 
 // https://github.com/grafana/grafana/blob/master/docs/sources/administration/provisioning.md
-DatasourceConfig :: {
+#DatasourceConfig: {
 	apiVersion: 1
 	datasources: [...{
 		name:      string
@@ -23,7 +23,7 @@ DatasourceConfig :: {
 }
 
 // Default prometheus config
-datasource_config: DatasourceConfig & {
+datasource_config: #DatasourceConfig & {
 	datasources: [
 		{
 			name: "Local Prometheus"
