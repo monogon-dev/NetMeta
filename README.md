@@ -12,6 +12,8 @@ It captures, aggregates and analyzes events from a variety of data sources:
 * Linux conntrack (soon)
 * Web server logs (soon)
 * Scamper traces (soon)
+* GCP VPC Flow Logs (soon)
+* AWS VPC Flow Logs (soon)
 
 <img src="https://i.imgur.com/gboWSxV.png" width="550px" alt="Graph showing top destination IPs" />
 
