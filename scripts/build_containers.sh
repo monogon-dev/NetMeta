@@ -11,7 +11,7 @@ function build() {
   local target=$1
 
   bazel build //${target}.tar
-  ctr images import --digests bazel-bin/${target/:/\//}.tar 1>&2
+  k3s ctr images import --digests bazel-bin/${target/:/\//}.tar 1>&2
 
   crictl inspecti bazel/${target} 2>&1 | jq -r .status.repoDigests[0]
 }

@@ -90,7 +90,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.18.2+k3s1" INSTALL_K3S_EX
   --disable traefik
 " sh -s -
 
-while ! kubectl get all; do
+while ! k3s kubectl get all; do
   echo "Waiting for k3s..."
   systemctl status k3s.service
   sleep 5

@@ -65,7 +65,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": null,
-  "iteration": 1590614612250,
+  "iteration": 1590614612253,
   "links": [],
   "panels": [
     {
@@ -397,11 +397,17 @@
       "hiddenSeries": false,
       "id": 8,
       "legend": {
+        "alignAsTable": false,
         "avg": false,
         "current": false,
+        "hideEmpty": false,
+        "hideZero": false,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": true,
+        "sort": "current",
+        "sortDesc": true,
         "total": false,
         "values": false
       },
@@ -1895,6 +1901,234 @@
             "align": false,
             "alignLevel": null
           }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_NETMETA_CLICKHOUSE}",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {}
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 12,
+            "w": 12,
+            "x": 0,
+            "y": 102
+          },
+          "hiddenSeries": false,
+          "id": 33,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "$$hashKey": "object:251",
+              "alias": "/, out/",
+              "transform": "negative-Y"
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "database": "default",
+              "dateColDataType": "",
+              "dateLoading": false,
+              "dateTimeColDataType": "TimeReceived",
+              "dateTimeType": "DATETIME",
+              "datetimeLoading": false,
+              "format": "time_series",
+              "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+              "intervalFactor": 1,
+              "query": "SELECT\n    $timeSeries as t,\n    SrcAddr,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    if(FlowDirection == 1, 'out', 'in') AS FlowDirection\nFROM $table\nWHERE\n    $timeFilter\n    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n    AND SrcAddr IN (\n    SELECT SrcAddr\n    FROM $table\n    WHERE $timeFilter AND $adhoc\n    GROUP BY SrcAddr\n    ORDER BY sum(Bytes) DESC\n    LIMIT 10)\n    $conditionalTest(AND $extra, $extra)\nGROUP BY\n    t,\n    SrcAddr, \n    FlowDirection\nORDER BY t",
+              "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     SrcAddr,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     if(FlowDirection == 1, 'out', 'in') AS FlowDirection FROM default.flows_raw WHERE     TimeReceived >= toDateTime(1590614910)                             AND SrcAddr IN (     SELECT SrcAddr     FROM default.flows_raw     WHERE TimeReceived >= toDateTime(1590614910) AND 1     GROUP BY SrcAddr     ORDER BY sum(Bytes) DESC     LIMIT 10)       GROUP BY     t,     SrcAddr,      FlowDirection ORDER BY t",
+              "refId": "A",
+              "round": "0s",
+              "table": "flows_raw",
+              "tableLoading": false
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Top 10 Source IPs",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "transformations": [],
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:639",
+              "format": "bps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:640",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "${DS_NETMETA_CLICKHOUSE}",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {}
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 12,
+            "w": 12,
+            "x": 12,
+            "y": 102
+          },
+          "hiddenSeries": false,
+          "id": 34,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+            {
+              "$$hashKey": "object:251",
+              "alias": "/, out/",
+              "transform": "negative-Y"
+            }
+          ],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "database": "default",
+              "dateColDataType": "",
+              "dateLoading": false,
+              "dateTimeColDataType": "TimeReceived",
+              "dateTimeType": "DATETIME",
+              "datetimeLoading": false,
+              "format": "time_series",
+              "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
+              "intervalFactor": 1,
+              "query": "SELECT\n    $timeSeries as t,\n    DstAddr,\n    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,\n    if(FlowDirection == 1, 'out', 'in') AS FlowDirection\nFROM $table\nWHERE\n    $timeFilter\n    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)\n    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)\n    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)\n    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)\n    AND DstAddr IN (\n    SELECT DstAddr\n    FROM $table\n    WHERE $timeFilter AND $adhoc\n    GROUP BY DstAddr\n    ORDER BY sum(Bytes) DESC\n    LIMIT 10)\n    $conditionalTest(AND $extra, $extra)\nGROUP BY\n    t,\n    DstAddr, \n    FlowDirection\nORDER BY t",
+              "rawQuery": "SELECT     (intDiv(toUInt32(TimeReceived), 1) * 1) * 1000 as t,     DstAddr,     sum(Bytes * SamplingRate) * 8 / 1 AS Bps,     if(FlowDirection == 1, 'out', 'in') AS FlowDirection FROM default.flows_raw WHERE     TimeReceived >= toDateTime(1590614957)                             AND DstAddr IN (     SELECT DstAddr     FROM default.flows_raw     WHERE TimeReceived >= toDateTime(1590614957) AND 1     GROUP BY DstAddr     ORDER BY sum(Bytes) DESC     LIMIT 10)       GROUP BY     t,     DstAddr,      FlowDirection ORDER BY t",
+              "refId": "A",
+              "round": "0s",
+              "table": "flows_raw",
+              "tableLoading": false
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Top 10 Destination IPs",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "transformations": [],
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:639",
+              "format": "bps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:640",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
         }
       ],
       "title": "Traffic Details (expensive)",
@@ -2304,8 +2538,8 @@
     ]
   },
   "time": {
-    "from": "2020-05-26T23:23:52.146Z",
-    "to": "2020-05-27T20:18:39.086Z"
+    "from": "now-30m",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -2323,5 +2557,5 @@
   "timezone": "",
   "title": "NetMeta Overview",
   "uid": "9Dw5dGzGk",
-  "version": 79
+  "version": 83
 }
