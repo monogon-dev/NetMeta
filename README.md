@@ -120,9 +120,44 @@ Quick start:
     # Build containers
     scripts/build_containers.sh
     
+    # Edit config file (see below)
+    
     # Deploy single node (run twice on first deployment, https://github.com/leoluk/NetMeta/issues/8)
     cd deploy/single-node
     cue apply-prune ./...
+
+#### Configuration
+
+NetMeta expects a config file at `deploy/single-node/config_local.cue`. Check 
+[config.cue](deploy/single-node/config.cue) for all available settings.
+
+Minimal config for a working installation:
+
+    package k8s
+    
+    netmeta: config: {
+        grafanaInitialAdminPassword: "<generate and paste secret here>"
+        clickhouseOperatorPassword:  "<generate and paste secret here>"
+        sessionSecret:               "<generate and paste secret here>"
+    
+        publicHostname: "flowmon.example.com"
+    
+        letsencryptMode:        "production"
+        letsencryptAccountMail: "letsencrypt@example.com"
+    }
+
+If you use GSuite, configure authentication:
+
+    grafanaGoogleAuth: {
+        clientID:     "[...].apps.googleusercontent.com"
+        clientSecret: "[...]"
+        allowedDomains: ["corp.example"]
+    }
+
+    // Include this if all users should be granted Editor permission.
+    // Otherwise, you'll have to grant permissions manually.
+    grafanaDefaultRole: "Editor"
+
 
 ### nxtOS
 
