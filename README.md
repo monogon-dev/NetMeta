@@ -114,7 +114,7 @@ Install build dependencies on Debian Buster:
     apt install -y protobuf-compiler jq gcc
 
 SELinux has to be disabled for volume mounts to work properly since there's no SELinux support
-in CRI (https://github.com/leoluk/NetMeta/issues/27). There's is no substantial advantage to
+in CRI (https://github.com/leoluk/NetMeta/issues/27). There's no substantial advantage to
 SELinux on a single-purpose host, since individual services are already sandboxed by the container runtime.
 There are, however, open PRs upstream that will add SELinux compatibility in the future.
 
