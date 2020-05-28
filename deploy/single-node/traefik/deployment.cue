@@ -37,18 +37,18 @@ k8s: deployments: traefik: {
 
 					args: [
 						"--accesslog",
-						"--entrypoints.web.Address=:80",
-						"--entrypoints.websecure.Address=:443",
+						"--entrypoints.web.Address=:\(netmeta.config.ports.http)",
+						"--entrypoints.websecure.Address=:\(netmeta.config.ports.https)",
 						"--providers.kubernetescrd",
 					] + _letsencrypt + _letsencryptStaging
 
 					ports: [{
 						name:          "web"
-						containerPort: 80
+						containerPort: netmeta.config.ports.http
 						protocol:      "TCP"
 					}, {
 						name:          "websecure"
-						containerPort: 443
+						containerPort: netmeta.config.ports.https
 						protocol:      "TCP"
 					}]
 					volumeMounts: [{

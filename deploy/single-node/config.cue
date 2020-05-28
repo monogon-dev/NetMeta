@@ -13,6 +13,19 @@ package k8s
 	allowSignup: bool | *true
 }
 
+#Ports: {
+	// Frontend (HTTP is redirected to HTTPS)
+	http:  int | *80
+	https: int | *443
+
+	// Netflow/IPFIX
+	netflow: int | *2055
+	// NetFlow V5
+	netflowLegacy: int | *2056
+	// sFlow
+	sflow: int | *6343
+}
+
 #NetMetaConfig: {
 	// Size of the goflow sFlow/IPFIX ingestion queue. Keeping
 	// a larger queue allows for backprocessing of longer periods of historical data.
@@ -26,6 +39,9 @@ package k8s
 
 	// Session secret for Prometheus and Grafana
 	sessionSecret: string
+
+	// External ports
+	ports: #Ports
 
 	// Let's Encrypt Mode
 	//  - off: self-signed certificate (TODO)
