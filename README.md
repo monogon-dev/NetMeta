@@ -57,7 +57,8 @@ Of course, pre-aggregation means that we lose data about the individual packets.
 If possible, we recommend using sFlow. For a 10 Gbps link, a typical sampling rate is 1:2000.
 A worst-case flood at line rate would generate 7kpps of sFlow samples.
 
-If Netflow/IPFIX is used, make sure to pick an appropriate sampling rate and flow table size for worst-case workloads. There are many different implementations that perform very differently - refer to vendor documentation for specifics.
+If Netflow/IPFIX is used, make sure to pick an appropriate sampling rate and flow table size for worst-case workloads. 
+There are many different implementations that perform very differently - refer to vendor documentation for specifics.
 
 ### API Stability
 
@@ -167,9 +168,13 @@ Stay tuned - NetMeta will be a first-class citizen on our nxtOS Kubernetes clust
 
 ### Kubernetes
 
-NetMeta works on any Kubernetes cluster that supports LoadBalancer and Ingress objects and can provision storage. It's up to you to carefully read the deployment code and cluster role assigments to make sure it works with your cluster. Note that we use two operators, which require cluster-admin permissions since CRDs are global ([Strimzi](https://strimzi.io/docs/master) for Kafka and [clickhouse-operator](https://github.com/Altinity/clickhouse-operator)).
+NetMeta works on any Kubernetes cluster that supports LoadBalancer and Ingress objects and can provision storage. 
+It's up to you to carefully read the deployment code and cluster role assigments to make sure it works with your cluster.
+Note that we use two operators, which require cluster-admin permissions since CRDs are global 
+([Strimzi](https://strimzi.io/docs/master) for Kafka and [clickhouse-operator](https://github.com/Altinity/clickhouse-operator)).
 
-All pieces of NetMeta are installed into a single namespace. By default, this is ``default``, which is probably not what you want. You can change the target namespace in the deployment config.
+All pieces of NetMeta are installed into a single namespace. By default, this is ``default``, which is probably not what you want.
+You can change the target namespace in the deployment config.
 
 Please contact us if you need help porting NetMeta to an existing k8s cluster.
 
