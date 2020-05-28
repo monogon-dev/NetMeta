@@ -20,7 +20,7 @@ k8s: deployments: goflow: {
 							"-kafka.brokers=netmeta-kafka-bootstrap:9092",
 							"-proto.fixedlen=true",
 							"-loglevel=debug",
-							"-metrics.addr=[::1]:18080",
+							"-metrics.addr=127.0.0.1:18080",
 							"-nf.port=\(netmeta.config.ports.netflow)",
 							"-nfl.port=\(netmeta.config.ports.netflowLegacy)",
 							"-sflow.port=\(netmeta.config.ports.sflow)",
