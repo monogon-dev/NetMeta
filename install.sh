@@ -36,6 +36,8 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin
+
 ARCH=amd64
 GO=1.14.2
 
