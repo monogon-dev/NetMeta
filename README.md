@@ -161,6 +161,36 @@ If you use GSuite, configure authentication:
     // Otherwise, you'll have to grant permissions manually.
     grafanaDefaultRole: "Editor"
 
+#### Firewall config
+
+We recommend a host- or network-level firewall to restrict access to the server running NetMeta.
+
+The following ports are exposed by default:
+
+| Port     -| Description                                                | Recommendation |
+|-----------|------------------------------------------------------------|----------------|
+| 80/tcp    | Frontend web server (redirects to HTTPS)                   | Allow for users
+| 443/tcp   | Frontend web server                                        | Allow for users
+| 2055/udp  | NetFlow / IPFIX                                            | Restrict to device IPs
+| 2056/udp  | NetFlow v5                                                 | Restrict to device IPs
+| 6343/udp  | sFlow                                                      | Restrict to device IPs
+| 6443/tcp  | k8s master API                                             | Block, unless you need it for external monitoring
+| 10250/tcp | k8s kubelet metrics                                        | Block, unless you need it for external monitoring
+
+Service ports can be changed in the node configuration (see above).
+
+All services except for NetFlow/IPFIX/sFlow are authenticated. 
+
+The flow collection protocols have
+no authentication and are vulnerable to DoS and flow data spoofing - we recommend you restrict them to internal networks.
+
+You also need to allow internal traffic on the host:
+
+```
+iptables -I INPUT -i cni0 -j ACCEPT
+iptables -I FORWARD -i cni0 -j ACCEPT
+iptables -I OUTPUT -o cni0 -j ACCEPT
+```
 
 ### nxtOS
 
