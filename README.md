@@ -4,6 +4,9 @@
 
 NetMeta is a scalable network observability toolkit optimized for performance.
 
+Flows are not pre-aggregated and stored with one second resolution. This allows for 
+queries in arbitrary dimensions with high-fidelity graphs.
+
 It captures, aggregates and analyzes events from a variety of data sources:
 
 * sFlow
@@ -187,6 +190,9 @@ The following ports are exposed by default:
 Service ports can be changed in the node configuration (see above).
 
 All services except for NetFlow/IPFIX/sFlow are authenticated. 
+
+If you disable public access to the frontend web server, Let's Encrypt certificate provisioning won't
+work and you'll have to configure a static SSL certificate.
 
 The flow collection protocols have
 no authentication and are vulnerable to DoS and flow data spoofing - we recommend you restrict them to internal networks.
