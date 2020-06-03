@@ -22,6 +22,9 @@ It captures, aggregates and analyzes events from a variety of data sources:
 
 <img src="https://i.imgur.com/W5HnvR6.png" width="550px" alt="Graph showing source code histogram" />
 
+Sampling rate is detected automatically. Different devices with different sampling rates can be mixed.
+IPv6 is fully supported throughout the stack.
+
 NetMeta is powered by a number of great open source projects like ClickHouse, 
 Kafka, goflow, Strimzi, clickhouse-operator, Kubernetes, and k3s.
 
@@ -207,6 +210,37 @@ iptables -I INPUT -i cni0 -j ACCEPT
 iptables -I FORWARD -i cni0 -j ACCEPT
 iptables -I OUTPUT -o cni0 -j ACCEPT
 ```
+
+### Host sFlow collector
+
+We recommend [hsflowd](https://github.com/sflow/host-sflow) for host-based flow collection.
+
+Example /etc/hsflowd.conf config:
+
+    sflow {
+      collector { ip=flowmon.example.com udpport=6343 }
+      nflog { group = 5  probability = 0.0025 }
+    }
+
+You need to create iptables (or nftables) rules that send samples to hsflowd's nflog group.
+An example config for plain iptables looks like this:
+
+    # hsflowd sampling. Probability needs to match /etc/hsflowd.conf (it will be used to calculate sampling rate).
+    
+    MOD_STATISTIC="-m statistic --mode random --probability 0.0025"
+    NFLOG_CONFIG="--nflog-group 5 --nflog-prefix SFLOW"
+    INTERFACE=eno1
+    
+    iptables -t raw -I PREROUTING -i $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
+    iptables -t nat -I POSTROUTING -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
+    iptables -t nat -I OUTPUT -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
+    ip6tables -t raw -I PREROUTING  -i $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
+    ip6tables -t nat -I POSTROUTING -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
+    ip6tables -t nat -I OUTPUT -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
+ 
+
+For Linux hosts, there's a custom agent on the roadmap that directly pushes to Kafka and avoid the sFlow detour.
+In the meantime, hsflowd is your best bet for collecting samples from a host.
 
 ### nxtOS
 
