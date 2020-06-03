@@ -138,6 +138,9 @@ Quick start:
     # Deploy single node (run twice on first deployment, https://github.com/leoluk/NetMeta/issues/8)
     cd deploy/single-node
     cue apply-prune ./...
+    
+    # Apply SQL migrations (work in progress - will be automated in the future)
+    kubectl exec -it chi-netmeta-netmeta-0-0-0 -- clickhouse-client -mn < schema/1_init.up.sql
 
 #### Configuration
 
@@ -155,7 +158,7 @@ Minimal config for a working installation:
     
         publicHostname: "flowmon.example.com"
     
-        letsencryptMode:        "production"
+        letsencryptMode:        "staging"  // change to "production" later
         letsencryptAccountMail: "letsencrypt@example.com"
     }
 
@@ -177,7 +180,7 @@ We recommend a host- or network-level firewall to restrict access to the server 
 
 The following ports are exposed by default:
 
-| Port     -| Description                                                | Recommendation |
+| Port      | Description                                                | Recommendation |
 |-----------|------------------------------------------------------------|----------------|
 | 80/tcp    | Frontend web server (redirects to HTTPS)                   | Allow for users
 | 443/tcp   | Frontend web server                                        | Allow for users
