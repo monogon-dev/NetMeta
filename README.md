@@ -172,6 +172,9 @@ netmeta: config: {
 }
 ```
 
+You can run `./example-config.sh > deploy/single-node/config_local.cue` to generate a config template
+with generated random values. 
+
 If you use GSuite, configure authentication:
 
 ```yaml
