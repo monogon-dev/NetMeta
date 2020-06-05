@@ -256,7 +256,8 @@ An example config for plain iptables looks like this:
     ip6tables -t nat -I OUTPUT -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
  
 
-For Linux hosts, there's a custom agent on the roadmap that directly pushes to Kafka and avoid the sFlow detour.
+For Linux hosts, there's a custom agent on the roadmap that directly pushes to Kafka to avoid the sFlow detour
+and get better data that includes the flow direction.
 In the meantime, hsflowd is your best bet for collecting samples from a host.
 
 ### nxtOS
