@@ -50,16 +50,24 @@ k8s: clickhouseinstallations: netmeta: spec: {
 		serviceTemplates: [{
 			name:         "chi-service-internal"
 			generateName: "clickhouse-{chi}"
+			metadata: creationTimestamp: null
 			spec: ports: [
-				{name: "http", port: 8123, protocol: "TCP"},
-				{name: "tcp", port:  9000, protocol: "TCP"},
+				{name: "http", port: 8123, targetPort: port, protocol: "TCP"},
+				{name: "tcp", port:  9000, targetPort: port, protocol: "TCP"},
 			]
 		}]
 		podTemplates: [{
-			name: "clickhouse-static"
+			name:            "clickhouse-static"
+			distribution:    ""
+			podDistribution: null
+			zone: {
+				key:    ""
+				values: null
+			}
 			spec: containers: [{
 				name:  "clickhouse"
 				image: "yandex/clickhouse-server:20.3.10.75"
+				resources: {}
 			}]
 		}]
 	}
