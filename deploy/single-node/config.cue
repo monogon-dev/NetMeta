@@ -26,6 +26,15 @@ package k8s
 	sflow: int | *6343
 }
 
+#InterfaceMap: {
+	// Router source address (IPv6 or pseudo-IPv4 mapped address like ::100.0.0.1)
+	device: string
+	// Numeric interface Index (often known as the "SNMP ID")
+	idx: uint
+	// Human-readable interface description to show in the frontend
+	description: string
+}
+
 #NetMetaConfig: {
 	// Size of the goflow sFlow/IPFIX ingestion queue. Keeping
 	// a larger queue allows for backprocessing of longer periods of historical data.
@@ -73,6 +82,9 @@ package k8s
 
 	// Default org role for new Grafana users
 	grafanaDefaultRole: string | *"Viewer"
+
+	// List of router interfaces to resolve to names
+	interfaceMap: [...#InterfaceMap]
 }
 
 #NetMetaImages: {

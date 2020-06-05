@@ -22,7 +22,7 @@ k8s: clickhouseinstallations: netmeta: spec: configuration: files: {
                     <attribute>
                         <name>Name</name>
                         <type>String</type>
-                        <null_value>0</null_value>
+                        <null_value />
                     </attribute>
                 </structure>
             </dictionary>
@@ -279,7 +279,7 @@ k8s: clickhouseinstallations: netmeta: spec: configuration: files: {
                 <attribute>
                     <name>Name</name>
                     <type>String</type>
-                    <null_value>0</null_value>
+                    <null_value />
                 </attribute>
             </structure>
         </dictionary>
