@@ -110,10 +110,12 @@ Install build dependencies on RHEL/CentOS 7:
     
 Install build dependencies on RHEL/CentOS 8 and Fedora:
 
-    dnf install -y python3 jq "@Development Tools"
-    
-    # TODO(leo): ugh - figure out how to convince Bazel to use the python3 binary
-    ln -s /usr/bin/python3 /usr/local/bin/python
+```bash
+dnf install -y python3 jq "@Development Tools"
+
+# TODO(leo): ugh - figure out how to convince Bazel to use the python3 binary
+ln -s /usr/bin/python3 /usr/local/bin/python
+```
 
 Install build dependencies on Debian Buster:
     
@@ -128,22 +130,24 @@ We will eventually provide pre-built images, for now, the build dependencies are
 
 Quick start:
 
-    git clone https://github.com/leoluk/NetMeta && cd NetMeta
-    
-    # Install dependencies
-    ./install.sh
-    
-    # Build containers
-    scripts/build_containers.sh
-    
-    # Edit config file (see below)
-    
-    # Deploy single node (run twice on first deployment, https://github.com/leoluk/NetMeta/issues/8)
-    cd deploy/single-node
-    cue apply-prune ./...
-    
-    # Apply SQL migrations (work in progress - will be automated in the future)
-    kubectl exec -it chi-netmeta-netmeta-0-0-0 -- clickhouse-client -mn < schema/1_init.up.sql
+```bash
+git clone https://github.com/leoluk/NetMeta && cd NetMeta
+
+# Install dependencies
+./install.sh
+
+# Build containers
+scripts/build_containers.sh
+
+# Edit config file (see below)
+
+# Deploy single node (run twice on first deployment, https://github.com/leoluk/NetMeta/issues/8)
+cd deploy/single-node
+cue apply-prune ./...
+
+# Apply SQL migrations (work in progress - will be automated in the future)
+kubectl exec -it chi-netmeta-netmeta-0-0-0 -- clickhouse-client -mn < schema/1_init.up.sql
+```
 
 #### Configuration
 
@@ -152,45 +156,51 @@ NetMeta expects a config file at `deploy/single-node/config_local.cue`. Check
 
 Minimal config for a working installation:
 
-    package k8s
-    
-    netmeta: config: {
-        grafanaInitialAdminPassword: "<generate and paste secret here>"
-        clickhouseOperatorPassword:  "<generate and paste secret here>"
-        sessionSecret:               "<generate and paste secret here>"
-    
-        publicHostname: "flowmon.example.com"
-    
-        letsencryptMode:        "staging"  // change to "production" later
-        letsencryptAccountMail: "letsencrypt@example.com"
-    }
+```yaml
+package k8s
+
+netmeta: config: {
+    grafanaInitialAdminPassword: "<generate and paste secret here>"
+    clickhouseOperatorPassword:  "<generate and paste secret here>"
+    sessionSecret:               "<generate and paste secret here>"
+
+    publicHostname: "flowmon.example.com"
+
+    letsencryptMode:        "staging"  // change to "production" later
+    letsencryptAccountMail: "letsencrypt@example.com"
+}
+```
 
 If you use GSuite, configure authentication:
 
-    netmeta: config: {
-        [...]
-    
-        grafanaGoogleAuth: {
-            clientID:     "[...].apps.googleusercontent.com"
-            clientSecret: "[...]"
-            allowedDomains: ["corp.example"]
-        }
-    
-        // Include this if all users should be granted Editor permission.
-        // Otherwise, you'll have to grant permissions manually.
-        grafanaDefaultRole: "Editor"
+```yaml
+netmeta: config: {
+    [...]
+
+    grafanaGoogleAuth: {
+        clientID:     "[...].apps.googleusercontent.com"
+        clientSecret: "[...]"
+        allowedDomains: ["corp.example"]
     }
+
+    // Include this if all users should be granted Editor permission.
+    // Otherwise, you'll have to grant permissions manually.
+    grafanaDefaultRole: "Editor"
+}
+```
 
 You can manually resolve numeric interface IDs (also known as "SNMP ID") to human-readable interface names:
 
-    netmeta: config: {
-        [...]
-        
-        interfaceMap: [
-            {device: "::100.0.0.1", idx: 858, description:  "TRANSIT-ABC"},
-            {device: "::100.0.0.1", idx: 1126, description: "PEERING-YOLO-COLO"},
-        ]
-    }
+```yaml
+netmeta: config: {
+    [...]
+
+    interfaceMap: [
+        {device: "::100.0.0.1", idx: 858, description:  "TRANSIT-ABC"},
+        {device: "::100.0.0.1", idx: 1126, description: "PEERING-YOLO-COLO"},
+    ]
+}
+```
 
 After changing the configuration, run `cue apply-prune ./...` in deploy/single-node to apply it.
 
@@ -242,19 +252,20 @@ Example /etc/hsflowd.conf config:
 You need to create iptables (or nftables) rules that send samples to hsflowd's nflog group.
 An example config for plain iptables looks like this:
 
-    # hsflowd sampling. Probability needs to match /etc/hsflowd.conf (it will be used to calculate sampling rate).
-    
-    MOD_STATISTIC="-m statistic --mode random --probability 0.0025"
-    NFLOG_CONFIG="--nflog-group 5 --nflog-prefix SFLOW"
-    INTERFACE=eno1
-    
-    iptables -t raw -I PREROUTING -i $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
-    iptables -t nat -I POSTROUTING -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
-    iptables -t nat -I OUTPUT -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
-    ip6tables -t raw -I PREROUTING  -i $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
-    ip6tables -t nat -I POSTROUTING -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
-    ip6tables -t nat -I OUTPUT -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
- 
+```bash
+# hsflowd sampling. Probability needs to match /etc/hsflowd.conf (it will be used to calculate sampling rate).
+
+MOD_STATISTIC="-m statistic --mode random --probability 0.0025"
+NFLOG_CONFIG="--nflog-group 5 --nflog-prefix SFLOW"
+INTERFACE=eno1
+
+iptables -t raw -I PREROUTING -i $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
+iptables -t nat -I POSTROUTING -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
+iptables -t nat -I OUTPUT -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
+ip6tables -t raw -I PREROUTING  -i $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
+ip6tables -t nat -I POSTROUTING -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
+ip6tables -t nat -I OUTPUT -o $INTERFACE -j NFLOG $MOD_STATISTIC $NFLOG_CONFIG
+```
 
 For Linux hosts, there's a custom agent on the roadmap that directly pushes to Kafka to avoid the sFlow detour
 and get better data that includes the flow direction.
