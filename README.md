@@ -18,9 +18,10 @@ It captures, aggregates and analyzes events from a variety of data sources:
 * GCP VPC Flow Logs (soon)
 * AWS VPC Flow Logs (soon)
 
-<img src="https://i.imgur.com/gboWSxV.png" width="550px" alt="Graph showing top destination IPs" />
 
-<img src="https://i.imgur.com/W5HnvR6.png" width="550px" alt="Graph showing source code histogram" />
+<img src="https://i.imgur.com/kl2ThBc.png" width="550px" alt="" />
+<img src="https://i.imgur.com/59y1D1b.png" width="550px" alt="" />
+<img src="https://i.imgur.com/lt0LFqh.png" width="550px" alt="" />
 
 Sampling rate is detected automatically. Different devices with different sampling rates can be mixed.
 IPv6 is fully supported throughout the stack.
