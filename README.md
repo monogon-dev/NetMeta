@@ -192,7 +192,7 @@ You can manually resolve numeric interface IDs (also known as "SNMP ID") to huma
         ]
     }
 
-After changing the configuration, run `cue apply-prune ./...` in deploy/single-node to apply them.
+After changing the configuration, run `cue apply-prune ./...` in deploy/single-node to apply it.
 
 #### Firewall config
 
