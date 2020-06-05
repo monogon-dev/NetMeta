@@ -172,7 +172,6 @@
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
           "query": "SELECT\n    initial_user,\n    initial_query_id,\n    elapsed,\n    read_rows,\n    read_bytes,\n    total_rows_approx,\n    written_rows,\n    written_bytes,\n    memory_usage,\n    peak_memory_usage,\n    query,\n    read_rows / total_rows_approx AS read_progress,\n    written_rows / total_rows_approx AS write_progress\nFROM system.processes",
-          "rawQuery": "SELECT     initial_user,     initial_query_id,     elapsed,     read_rows,     read_bytes,     total_rows_approx,     written_rows,     written_bytes,     memory_usage,     peak_memory_usage,     query,     read_rows / total_rows_approx AS read_progress,     written_rows / total_rows_approx AS write_progress FROM system.processes",
           "refId": "A",
           "round": "0s"
         }
@@ -302,7 +301,6 @@
           "formattedQuery": "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t",
           "intervalFactor": 1,
           "query": "SELECT\n    event_time,\n    user,\n    query_id,\n    query_duration_ms,\n    read_rows,\n    read_bytes,\n    written_rows,\n    written_bytes,\n    memory_usage / 1024 AS memory_usage,\n    query,\n    exception\nFROM system.query_log\nWHERE type = 'QueryFinish' AND query NOT LIKE '%FROM system.%'\nORDER BY event_time DESC\nLIMIT 100",
-          "rawQuery": "SELECT     event_time,     user,     query_id,     query_duration_ms,     read_rows,     read_bytes,     written_rows,     written_bytes,     memory_usage / 1024 AS memory_usage,     query,     exception FROM system.query_log WHERE type = 'QueryFinish' AND query NOT LIKE '%FROM system.%' ORDER BY event_time DESC LIMIT 100",
           "refId": "A",
           "round": "0s"
         }
