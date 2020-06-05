@@ -167,15 +167,32 @@ Minimal config for a working installation:
 
 If you use GSuite, configure authentication:
 
-    grafanaGoogleAuth: {
-        clientID:     "[...].apps.googleusercontent.com"
-        clientSecret: "[...]"
-        allowedDomains: ["corp.example"]
+    netmeta: config: {
+        [...]
+    
+        grafanaGoogleAuth: {
+            clientID:     "[...].apps.googleusercontent.com"
+            clientSecret: "[...]"
+            allowedDomains: ["corp.example"]
+        }
+    
+        // Include this if all users should be granted Editor permission.
+        // Otherwise, you'll have to grant permissions manually.
+        grafanaDefaultRole: "Editor"
     }
 
-    // Include this if all users should be granted Editor permission.
-    // Otherwise, you'll have to grant permissions manually.
-    grafanaDefaultRole: "Editor"
+You can manually resolve numeric interface IDs (also known as "SNMP ID") to human-readable interface names:
+
+    netmeta: config: {
+        [...]
+        
+        interfaceMap: [
+            {device: "::100.0.0.1", idx: 858, description:  "TRANSIT-ABC"},
+            {device: "::100.0.0.1", idx: 1126, description: "PEERING-YOLO-COLO"},
+        ]
+    }
+
+After changing the configuration, run `cue apply-prune ./...` in deploy/single-node to apply them.
 
 #### Firewall config
 
