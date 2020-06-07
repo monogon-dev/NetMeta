@@ -208,6 +208,9 @@ netmeta: config: {
 
 After changing the configuration, run `cue apply-prune ./...` in deploy/single-node to apply it.
 
+If you receive an `incomplete value` error, it means that one or more required values are missing.
+Run `cue eval -c ./...` to figure out which ones.
+
 #### Firewall config
 
 We recommend a host- or network-level firewall to restrict access to the server running NetMeta.
