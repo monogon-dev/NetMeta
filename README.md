@@ -151,6 +151,13 @@ cue apply-prune ./...
 kubectl exec -it chi-netmeta-netmeta-0-0-0 -- clickhouse-client -mn < schema/1_init.up.sql
 ```
 
+Common errors during deployment:
+
+- A local firewall blocks internal traffic and prevents pods from starting (see below).
+- Missing required fields in the config (`incomplete value`, see below).
+- It may take a few minutes for the cluster to converge, especially if downloads are slow.
+  It's normal for goflow to be in a `crashloopbackoff` state while it waits for Kafka to exist.
+
 #### Configuration
 
 NetMeta expects a config file at `deploy/single-node/config_local.cue`. Check 
