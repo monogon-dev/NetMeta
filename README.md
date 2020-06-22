@@ -118,9 +118,9 @@ dnf install -y python3 jq "@Development Tools"
 ln -s /usr/bin/python3 /usr/local/bin/python
 ```
 
-Install build dependencies on Debian Buster:
+Install build dependencies on Debian Buster and Ubuntu 18.04:
     
-    apt install -y protobuf-compiler jq gcc
+    apt install -y jq gcc git gcc python
 
 SELinux has to be disabled for volume mounts to work properly since there's no SELinux support
 in CRI (https://github.com/leoluk/NetMeta/issues/27). There's no substantial advantage to

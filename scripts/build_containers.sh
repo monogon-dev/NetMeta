@@ -3,7 +3,7 @@
 # This bypasses the need for a local registry for development, similar to the trickery minikube does.
 set -euo pipefail
 
-export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
 
 # TODO(leo): replace with a Bazel rule
 
