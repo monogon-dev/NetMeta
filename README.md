@@ -147,6 +147,7 @@ cd deploy/single-node
 cue apply-prune ./...
 
 # Apply SQL migrations (work in progress - will be automated in the future)
+# Wait for all pods to be running first (kubectl get pod -w).
 kubectl exec -it chi-netmeta-netmeta-0-0-0 -- clickhouse-client -mn < schema/1_init.up.sql
 ```
 
@@ -244,6 +245,35 @@ iptables -I INPUT -i cni0 -j ACCEPT
 iptables -I FORWARD -i cni0 -j ACCEPT
 iptables -I OUTPUT -o cni0 -j ACCEPT
 ```
+
+##### firewalld example config
+
+This assumes a default firewalld config with "public" as your default zone.
+
+Allow public access to Grafana:
+
+    firewall-cmd --permanent --zone=public --add-service=http
+    firewall-cmd --permanent --zone=public --add-service=https
+
+Allow access to flow collector for source IP ranges:
+
+    firewall-cmd --permanent --new-zone=flowsources
+    firewall-cmd --permanent --zone=flowsources --add-port=2055/udp
+    firewall-cmd --permanent --zone=flowsources --add-port=2056/udp
+    firewall-cmd --permanent --zone=flowsources --add-port=6343/udp
+    
+    firewall-cmd --permanent --add-source=100.1.1.1/22 --zone=flowsources
+    [...]
+
+Create a new zone for the cni0 interface and allow internal traffic:
+
+    firewall-cmd --permanent --new-zone=cni
+    firewall-cmd --permanent --add-interface=cni0 --zone=cni
+    firewall-cmd --permanent --zone=cni --set-target=ACCEPT
+    
+Reload config:
+
+    firewall-cmd --reload
 
 ### Host sFlow collector
 
