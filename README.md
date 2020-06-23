@@ -118,6 +118,11 @@ dnf install -y python3 jq "@Development Tools"
 ln -s /usr/bin/python3 /usr/local/bin/python
 ```
 
+On Fedora >= 32, disable cgroupsv2, which is [not yet supported by k3s](https://github.com/rancher/k3s/issues/900):
+
+    grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
+    reboot
+
 Install build dependencies on Debian Buster and Ubuntu 18.04:
     
     apt install -y jq gcc git gcc python
