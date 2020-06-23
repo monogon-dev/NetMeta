@@ -4,6 +4,7 @@
 rm -rf /usr/local/go
 rm /etc/profile.d/local_go.sh
 rm /usr/local/bin/cue
+rm /usr/local/bin/bazel
 
 k3s-uninstall.sh
 
