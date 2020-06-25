@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS flows_raw
 ) ENGINE = MergeTree()
       PARTITION BY Date
       ORDER BY (TimeReceived, FlowDirection, SamplerAddress, SrcAS, DstAS, SrcAddr, DstAddr)
-      TTL Date + INTERVAL 1 MONTH;
+      TTL Date + INTERVAL 1 WEEK;
 
 -- goflow stores IP addresses as raw bytes without indicating the protocol.
 -- Normalize them to IPv6 addresses that ClickHouse understands (null prefix rather than suffix).
