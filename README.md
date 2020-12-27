@@ -125,7 +125,7 @@ On Fedora >= 32, disable cgroupsv2, which is [not yet supported by k3s](https://
 
 Install build dependencies on Debian Buster and Ubuntu 18.04:
     
-    apt install -y jq gcc git gcc python
+    apt install -y jq gcc git gcc python curl
 
 SELinux has to be disabled for volume mounts to work properly since there's no SELinux support
 in CRI (https://github.com/leoluk/NetMeta/issues/27). There's no substantial advantage to
