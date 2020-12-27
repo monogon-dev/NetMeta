@@ -71,12 +71,6 @@ GO=1.14.6
   go build -o /usr/local/bin/bazel github.com/bazelbuild/bazelisk
 )
 
-# SELinux policies for k3s
-if rpm -q libselinux-utils; then
-  yum install -y container-selinux selinux-policy-base
-  ! rpm -i https://rpm.rancher.io/k3s-selinux-0.1.1-rc1.el7.noarch.rpm
-fi
-
 # Install k3s. k3s is a minimal Kubernetes distribution we use to deploy the various pieces of NetMeta.
 #
 # We do not want to expose any unnecessary public services since users might disregard documentation
