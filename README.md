@@ -127,11 +127,6 @@ Install build dependencies on Debian Buster and Ubuntu 18.04:
     
     apt install -y jq gcc git gcc python curl
 
-SELinux has to be disabled for volume mounts to work properly since there's no SELinux support
-in CRI (https://github.com/leoluk/NetMeta/issues/27). There's no substantial advantage to
-SELinux on a single-purpose host, since individual services are already sandboxed by the container runtime.
-There are, however, open PRs upstream that will add SELinux compatibility in the future.
-
 We will eventually provide pre-built images, for now, the build dependencies are always required.
 
 Quick start:
