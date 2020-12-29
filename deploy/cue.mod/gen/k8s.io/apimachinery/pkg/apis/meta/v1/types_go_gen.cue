@@ -14,8 +14,8 @@
 package v1
 
 import (
-	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // TypeMeta describes an individual object in an API response or request
