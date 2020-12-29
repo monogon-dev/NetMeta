@@ -2,10 +2,15 @@ package k8s
 
 import (
 	"encoding/yaml"
+	"encoding/json"
 	"crypto/sha1"
 	"encoding/hex"
 	"strings"
 	"strconv"
+
+	// Dashboards
+	dashboard_overview "github.com/leoluk/NetMeta/deploy/dashboards/netmeta_overview"
+	dashboard_queries "github.com/leoluk/NetMeta/deploy/dashboards/clickhouse_queries"
 )
 
 // https://github.com/grafana/grafana/blob/master/docs/sources/administration/provisioning.md
@@ -21,6 +26,30 @@ import (
 		basicAuth: *false | bool
 		secureJsonData?: password: string
 		jsonData: {...}
+	}]
+}
+
+// https://github.com/grafana/grafana/blob/master/docs/sources/administration/provisioning.md
+#DashboardConfig: {
+	apiVersion: 1
+	providers: [...{
+		name: string
+
+		ordId: uint | *1
+
+		folder?:    string
+		folderUid?: string
+
+		type: "file"
+
+		disableDeletion: *true | bool
+		allowUiUpdates:  *true | bool
+
+		updateIntervalSeconds: uint | *1
+
+		options: path: string
+
+		options: foldersFromFilesStructure: true
 	}]
 }
 
@@ -48,10 +77,27 @@ datasource_config: #DatasourceConfig & {
 	]
 }
 
+dashboards_config: #DashboardConfig & {
+	providers: [
+		{
+			name:   "NetMeta Dashboards"
+			folder: "NetMeta"
+			options: path: "/var/lib/grafana/dashboards"
+		},
+	]
+}
+
 k8s: {
 	pvcs: "grafana-data-claim": {}
 
 	configmaps: "grafana-datasources": data: "datasources.yaml": yaml.Marshal(datasource_config)
+	configmaps: "grafana-dashboards": data: "dashboards.yaml":   yaml.Marshal(dashboards_config)
+
+	// Generated dashboards
+	configmaps: "grafana-dashboards-data": data: {
+		"netmeta_overview.json":   json.Marshal(dashboard_overview)
+		"clickhouse_queries.json": json.Marshal(dashboard_queries)
+	}
 
 	services: grafana: spec: {
 		ports: [{
@@ -178,23 +224,45 @@ k8s: {
 							protocol:      "TCP"
 							name:          "grafana"
 						}]
-						volumeMounts: [{
-							mountPath: "/var/lib/grafana"
-							name:      "grafana-data"
-						}, {
-							mountPath: "/etc/grafana/provisioning/datasources"
-							name:      "grafana-datasources"
-						}]
+						volumeMounts: [
+							{
+								mountPath: "/var/lib/grafana"
+								name:      "grafana-data"
+							},
+							{
+								mountPath: "/etc/grafana/provisioning/datasources"
+								name:      "grafana-datasources"
+							},
+							{
+								mountPath: "/etc/grafana/provisioning/dashboards"
+								name:      "grafana-dashboards"
+							},
+							{
+								mountPath: "/var/lib/grafana/dashboards"
+								name:      "grafana-dashboards-data"
+							},
+						]
 					},
 				]
 				restartPolicy: "Always"
-				volumes: [{
-					name: "grafana-datasources"
-					configMap: name: "grafana-datasources"
-				}, {
-					name: "grafana-data"
-					persistentVolumeClaim: claimName: "grafana-data-claim"
-				}]
+				volumes: [
+					{
+						name: "grafana-datasources"
+						configMap: name: "grafana-datasources"
+					},
+					{
+						name: "grafana-dashboards"
+						configMap: name: "grafana-dashboards"
+					},
+					{
+						name: "grafana-dashboards-data"
+						configMap: name: "grafana-dashboards-data"
+					},
+					{
+						name: "grafana-data"
+						persistentVolumeClaim: claimName: "grafana-data-claim"
+					},
+				]
 			}
 		}
 	}

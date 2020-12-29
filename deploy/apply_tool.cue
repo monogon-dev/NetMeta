@@ -26,3 +26,18 @@ command: "apply-prune": {
 		stdin: yaml.MarshalStream(preObjects + objects)
 	}
 }
+
+// Applies configmaps only
+command: "apply-cm": {
+	task: apply: {
+		kind: "exec"
+		cmd:  "k3s kubectl apply --server-side --force-conflicts --all -f -"
+		_objects: [ for v in [k8s.configmaps] for x in v {x}]
+		stdin:  yaml.MarshalStream(_objects)
+		stdout: string
+	}
+	task: applyDisplay: {
+		kind: "print"
+		text: task.apply.stdout
+	}
+}
