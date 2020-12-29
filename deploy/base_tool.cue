@@ -1,9 +1,9 @@
 package k8s
 
-objects: [ x for v in objectSets for x in v ]
+objects: [ for v in objectSets for x in v {x}]
 
 objectSets: [
-  // Regular stuff
+	// Regular stuff
 	k8s.crds,
 	k8s.clusterrolebindings,
 	k8s.clusterroles,
