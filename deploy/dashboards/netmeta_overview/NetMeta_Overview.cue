@@ -1,5 +1,19 @@
 package netmeta_overview
 
+_genericFilterWithoutHost: """
+	$conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
+	$conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
+	$conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
+	$conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
+	$conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
+	$conditionalTest(AND ($extra), $extra)
+	"""
+
+_genericFilter: """
+\(_genericFilterWithoutHost)
+$conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
+"""
+
 annotations: list: [{
 	builtIn:    1
 	datasource: "-- Grafana --"
@@ -60,24 +74,17 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "table"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT count()
 			FROM $table
 			WHERE $timeFilter
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilter)
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	timeFrom:  null
 	timeShift: null
@@ -131,7 +138,6 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "table"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
 		query:               "select sum(bytes_on_disk) from system.parts"
 		refId:               "A"
@@ -190,7 +196,6 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "table"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
 		query: """
 			SELECT count()
@@ -253,7 +258,6 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "table"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
 		query:               "select (toUnixTimestamp(now()) - TimeReceived) from flows_raw order by TimeReceived limit 1"
 		refId:               "A"
@@ -335,29 +339,22 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    sum(Packets * SamplingRate) / $interval AS Packets,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
 			FROM $table
 			WHERE $timeFilter
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilter)
 			GROUP BY t, FlowDirection
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -456,29 +453,22 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
 			FROM $table
 			WHERE $timeFilter
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilter)
 			GROUP BY t, FlowDirection
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -582,9 +572,8 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || ' (' || toString(Proto) || ')' AS Proto,
@@ -592,20 +581,14 @@ panels: [{
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
 			FROM $table
 			WHERE $timeFilter
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilter)
 			GROUP BY t, Proto, FlowDirection
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -703,9 +686,8 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    dictGetString('EtherTypes', 'Name', toUInt64(EType)) || ' (' || hex(EType) || ')' AS EType,
@@ -713,20 +695,14 @@ panels: [{
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
 			FROM $table
 			WHERE $timeFilter
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilter)
 			GROUP BY t, EType, FlowDirection
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -820,9 +796,8 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    count(*) / $interval AS Flows,
@@ -830,21 +805,15 @@ panels: [{
 			FROM $table
 			WHERE
 			    $timeFilter
-			    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			    $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			    $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			    $conditionalTest(AND ($extra), $extra)
+			    \(_genericFilter)
 			GROUP BY
 			    t, SamplerAddress
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -938,29 +907,22 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    NextHop,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps
 			FROM $table
 			WHERE $timeFilter AND NextHop != toIPv6('::')
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilter)
 			GROUP BY t, NextHop
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -1058,9 +1020,8 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    SamplerAddress,
@@ -1069,20 +1030,14 @@ panels: [{
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
 			FROM $table
 			WHERE $timeFilter
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilter)
 			GROUP BY t, SamplerAddress, InIf, FlowDirection
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -1180,9 +1135,8 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    SamplerAddress,
@@ -1191,20 +1145,14 @@ panels: [{
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
 			FROM $table
 			WHERE $timeFilter
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilter)
 			GROUP BY t, SamplerAddress, OutIf, FlowDirection
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -1313,30 +1261,23 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "table"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
-			SELECT 
+		query:               """
+			SELECT
 			  SrcAS,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
 			FROM $table
 			WHERE $timeFilter AND FlowDirection = 0
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilter)
 			GROUP BY SrcAS
 			ORDER BY Bytes DESC
 			LIMIT 100
 
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	timeFrom:  null
 	timeShift: null
@@ -1398,29 +1339,22 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "table"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
-			SELECT 
+		query:               """
+			SELECT
 			  DstAS,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
 			FROM $table
 			WHERE $timeFilter AND FlowDirection = 1
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilter)
 			GROUP BY DstAS
 			ORDER BY Bytes DESC
 			LIMIT 101
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	timeFrom:  null
 	timeShift: null
@@ -1479,9 +1413,8 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    SrcAS,
@@ -1499,13 +1432,7 @@ panels: [{
 			    SELECT SrcAS
 			    FROM $table
 			    WHERE $timeFilter AND FlowDirection = 0 AND $adhoc
-			      $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			      $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			      $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			      $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			      $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			      $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			      $conditionalTest(AND ($extra), $extra)
+			      \(_genericFilter)
 			    GROUP BY SrcAS
 			    ORDER BY count(*) DESC
 			    LIMIT 10)
@@ -1515,10 +1442,10 @@ panels: [{
 			    SrcAS
 			ORDER BY t, Bps
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -1611,9 +1538,8 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    DstAS,
@@ -1621,35 +1547,24 @@ panels: [{
 			FROM $table
 			WHERE
 			    $timeFilter AND FlowDirection = 1
-			    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			    $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			    $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
+			    \(_genericFilter)
 			    AND DstAS IN (
 			    SELECT DstAS
 			    FROM $table
 			    WHERE $timeFilter AND FlowDirection = 1 AND $adhoc
-			      $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			      $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			      $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			      $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			      $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			      $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
+			      \(_genericFilter)
 			    GROUP BY DstAS
 			    ORDER BY count(*) DESC
 			    LIMIT 10)
-			    $conditionalTest(AND ($extra), $extra)
 			GROUP BY
 			    t,
 			    DstAS
 			ORDER BY t, Bps
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -1759,36 +1674,29 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
-			    
+
 			    arrayStringConcat(
 			      arrayMap(
 			        x -> dictGetString('TCPFlags', 'Name', toUInt64(x)), bitmaskToArray(TCPFlags))
 			      , '-')
 			    || ' (' || toString(TCPFlags) || ')' AS TCPFlags,
-			    
+
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
 			FROM $table
 			WHERE $timeFilter AND Proto = 6
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilter)
 			GROUP BY t, TCPFlags, FlowDirection
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -1885,9 +1793,8 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    VlanId,
@@ -1895,20 +1802,14 @@ panels: [{
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
 			FROM $table
 			WHERE $timeFilter
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilter)
 			GROUP BY t, VlanId, FlowDirection
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -2005,9 +1906,8 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    SrcPort,
@@ -2017,37 +1917,26 @@ panels: [{
 			FROM $table
 			WHERE
 			    $timeFilter
-			    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			    $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			    $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
+			    \(_genericFilter)
 			    AND SrcPort IN (
 			    SELECT SrcPort
 			    FROM $table
 			    WHERE $timeFilter AND $adhoc
-			      $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			      $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			      $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			      $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			      $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			      $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
+			      \(_genericFilter)
 			    GROUP BY SrcPort
 			    ORDER BY count(*) DESC
 			    LIMIT 10)
-			    $conditionalTest(AND ($extra), $extra)
 			GROUP BY
 			    t,
 			    Proto,
-			    SrcPort, 
+			    SrcPort,
 			    FlowDirection
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -2145,39 +2034,26 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
-			    DstPort, 
+			    DstPort,
 			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS Proto,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
 			FROM $table
 			WHERE
 			    $timeFilter
-			    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			    $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			    $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
+			    \(_genericFilter)
 			    AND DstPort IN (
 			    SELECT DstPort
 			    FROM $table
 			    WHERE $timeFilter AND $adhoc
-			      $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			      $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			      $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			      $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			      $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			      $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			      $conditionalTest(AND ($extra), $extra)
+			    \(_genericFilter)
 			    GROUP BY DstPort
 			    ORDER BY count(*) DESC
 			    LIMIT 10)
-			    $conditionalTest(AND ($extra), $extra)
 			GROUP BY
 			    t,
 			    Proto,
@@ -2185,10 +2061,10 @@ panels: [{
 			    FlowDirection
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -2285,9 +2161,8 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    SrcAddr,
@@ -2296,37 +2171,25 @@ panels: [{
 			FROM $table
 			WHERE
 			    $timeFilter
-			    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			    $conditionalTest(AND DstAddr = toIPv6('$hostIP'), $hostIP)
-			    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			    $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
+			    \(_genericFilter)
 			    AND SrcAddr IN (
 			    SELECT SrcAddr
 			    FROM $table
 			    WHERE $timeFilter AND $adhoc
-			      $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			      $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			      $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			      $conditionalTest(AND DstAddr = toIPv6('$hostIP'), $hostIP)
-			      $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			      $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			      $conditionalTest(AND ($extra), $extra)
+			      \(_genericFilter)
 			    GROUP BY SrcAddr
 			    ORDER BY sum(Bytes) DESC
 			    LIMIT 10)
-			    $conditionalTest(AND ($extra), $extra)
 			GROUP BY
 			    t,
-			    SrcAddr, 
+			    SrcAddr,
 			    FlowDirection
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -2424,9 +2287,8 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "time_series"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
+		query:               """
 			SELECT
 			    $timeSeries as t,
 			    DstAddr,
@@ -2435,37 +2297,25 @@ panels: [{
 			FROM $table
 			WHERE
 			    $timeFilter
-			    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			    $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-			    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			    $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
+			    \(_genericFilter)
 			    AND DstAddr IN (
 			    SELECT DstAddr
 			    FROM $table
 			    WHERE $timeFilter AND $adhoc
-			      $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			      $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			      $conditionalTest(AND SrcAddr = toIPv6('$hostIP'), $hostIP)
-			      $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			      $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			      $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			      $conditionalTest(AND ($extra), $extra)
+			      \(_genericFilter)
 			    GROUP BY DstAddr
 			    ORDER BY sum(Bytes) DESC
 			    LIMIT 10)
-			    $conditionalTest(AND ($extra), $extra)
 			GROUP BY
 			    t,
-			    DstAddr, 
+			    DstAddr,
 			    FlowDirection
 			ORDER BY t
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	thresholds: []
 	timeFrom: null
@@ -2578,31 +2428,24 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "table"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
-			SELECT 
+		query:               """
+			SELECT
 			  SamplerAddress,
 			  SrcAddr,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
 			FROM $table
 			WHERE $timeFilter
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$hostIP'), $hostIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilterWithoutHost)
+			$conditionalTest(AND DstAddr = toIPv6('$hostIP'), $hostIP)
 			GROUP BY SamplerAddress, SrcAddr
 			ORDER BY Bytes DESC
 			LIMIT 20
-
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	timeFrom:  null
 	timeShift: null
@@ -2664,31 +2507,25 @@ panels: [{
 		dateTimeType:        "DATETIME"
 		datetimeLoading:     false
 		format:              "table"
-		formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 		intervalFactor:      1
-		query: """
-			SELECT 
+		query:               """
+			SELECT
 			  SamplerAddress,
 			  DstAddr,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
 			FROM $table
 			WHERE $timeFilter
-			  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-			  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-			  $conditionalTest(AND SrcAddr = toIPv6('$hostIP'), $hostIP)
-			  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-			  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-			  $conditionalTest(AND ($extra), $extra)
+			\(_genericFilterWithoutHost)
+			$conditionalTest(AND SrcAddr = toIPv6('$hostIP'), $hostIP)
 			GROUP BY SamplerAddress, DstAddr
 			ORDER BY Bytes DESC
 			LIMIT 20
 
 			"""
-		refId:        "A"
-		round:        "0s"
-		table:        "flows_raw"
-		tableLoading: false
+		refId:               "A"
+		round:               "0s"
+		table:               "flows_raw"
+		tableLoading:        false
 	}]
 	timeFrom:  null
 	timeShift: null
@@ -2759,10 +2596,9 @@ panels: [{
 			dateTimeType:        "DATETIME"
 			datetimeLoading:     false
 			format:              "table"
-			formattedQuery:      "SELECT $timeSeries as t, count() FROM $table WHERE $timeFilter GROUP BY t ORDER BY t"
 			intervalFactor:      1
-			query: """
-				SELECT 
+			query:               """
+				SELECT
 				  SamplerAddress,
 				  SrcAddr,
 				  DstAddr,
@@ -2772,22 +2608,16 @@ panels: [{
 				  sum(Bytes * SamplingRate) / 1024 as Bytes
 				FROM $table
 				WHERE $timeFilter
-				  $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
-				  $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
-				  $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
-				  $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
-				  $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-				  $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
-				  $conditionalTest(AND ($extra), $extra)
+				\(_genericFilter)
 				GROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, Proto
 				ORDER BY Bytes DESC
 				LIMIT 20
 
 				"""
-			refId:        "A"
-			round:        "0s"
-			table:        "flows_raw"
-			tableLoading: false
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
 		}]
 		timeFrom:  null
 		timeShift: null
@@ -2986,4 +2816,3 @@ timepicker: refresh_intervals: ["10s", "30s", "1m", "5m", "15m", "30m", "1h", "2
 timezone: ""
 title:    "NetMeta Overview"
 uid:      "9Dw5dGzGk"
-version:  9
