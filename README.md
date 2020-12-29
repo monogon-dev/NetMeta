@@ -142,9 +142,9 @@ scripts/build_containers.sh
 
 # Edit config file (see below)
 
-# Deploy single node (run twice on first deployment, https://github.com/leoluk/NetMeta/issues/8)
+# Deploy single node
 cd deploy/single-node
-cue apply-prune ./...
+cue apply ./...
 
 # Apply SQL migrations (work in progress - will be automated in the future)
 # Wait for all pods to be running first (kubectl get pod -w).

@@ -4,7 +4,6 @@ objects: [ for v in objectSets for x in v {x}]
 
 objectSets: [
 	// Regular stuff
-	k8s.crds,
 	k8s.clusterrolebindings,
 	k8s.clusterroles,
 	k8s.rolebindings,
@@ -22,3 +21,8 @@ objectSets: [
 	k8s.ingressroutes,
 	k8s.ingressrouteudps,
 ]
+
+// Prerequisite objects to apply first, in a separate kubectl call.
+preObjects: [ for v in [
+	k8s.crds,
+] for x in v {x}]
