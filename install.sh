@@ -67,8 +67,8 @@ GO=1.15.6
 
 (
   cd third_party/tools
-  go build -o /usr/local/bin/cue cuelang.org/go/cmd/cue
-  go build -o /usr/local/bin/bazel github.com/bazelbuild/bazelisk
+  go build -mod=readonly -o /usr/local/bin/cue cuelang.org/go/cmd/cue
+  go build -mod=readonly -o /usr/local/bin/bazel github.com/bazelbuild/bazelisk
 )
 
 # Install k3s. k3s is a minimal Kubernetes distribution we use to deploy the various pieces of NetMeta.
