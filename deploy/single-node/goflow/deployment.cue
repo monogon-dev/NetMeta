@@ -14,7 +14,7 @@ k8s: deployments: goflow: {
 				containers: [
 					{
 						name:  "goflow"
-						image: "cloudflare/goflow:v3.4.2"
+						image: "docker.io/cloudflare/goflow:v3.4.2@sha256:dc78fadb655a60d2a46ff772d3db38d6d8af4817c2244b1671ac4fe7e0302b6f"
 						command: [
 							"./goflow",
 							"-kafka.brokers=netmeta-kafka-bootstrap:9092",

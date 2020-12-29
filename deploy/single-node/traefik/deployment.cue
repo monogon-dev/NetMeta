@@ -19,7 +19,7 @@ k8s: deployments: traefik: {
 				serviceAccountName: "traefik-ingress-controller"
 				containers: [{
 					name:  "traefik"
-					image: "traefik:v2.2"
+					image: "docker.io/traefik:v2.3.6@sha256:03e2149c3a844ca9543edd2a7a8cd0e4a1a9afb543486ad99e737323eb5c25f2"
 
 					_letsencryptStaging: [...]
 

@@ -66,7 +66,7 @@ k8s: clickhouseinstallations: netmeta: spec: {
 			}
 			spec: containers: [{
 				name:  "clickhouse"
-				image: "yandex/clickhouse-server:20.3.10.75"
+				image: "docker.io/yandex/clickhouse-server:20.3.10.75@sha256:2302716e901205f288e8bbdb4795db7323066b146a2d42c7f36a1ba1c20a5666"
 				resources: {}
 			}]
 		}]

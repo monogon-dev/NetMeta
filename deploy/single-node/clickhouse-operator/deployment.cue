@@ -33,7 +33,7 @@ k8s: deployments: "clickhouse-operator": {
 				}]
 				containers: [{
 					name:            "clickhouse-operator"
-					image:           "altinity/clickhouse-operator:0.9.9"
+					image:           "docker.io/altinity/clickhouse-operator:0.9.9@sha256:08f2a6b0a2102e4599fe816f9f26e0f43eba1b1cd8b6b72df5534f89ce648071"
 					imagePullPolicy: "Always"
 					volumeMounts: [{
 						name:      "etc-clickhouse-operator-folder"
@@ -101,7 +101,7 @@ k8s: deployments: "clickhouse-operator": {
 					}]
 				}, {
 					name:            "metrics-exporter"
-					image:           "altinity/metrics-exporter:0.9.7"
+					image:           "docker.io/altinity/metrics-exporter:0.9.7@sha256:876010545d56a9fc705b2006b73f2bcd39c3afe73cc3aa2f78c9ac34d0b58b09"
 					imagePullPolicy: "Always"
 					volumeMounts: [{
 						name:      "etc-clickhouse-operator-folder"

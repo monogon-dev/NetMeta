@@ -80,7 +80,7 @@ k8s: {
 				containers: [
 					{
 						name:            "grafana"
-						image:           "grafana/grafana:7.3.6"
+						image:           "docker.io/grafana/grafana:7.3.6@sha256:05bc2b08de2a6cd6260937dc174cc4bdfada29cc7dd13c73e638caad32d26b3e"
 						imagePullPolicy: "IfNotPresent"
 
 						_googleAuth: [...]
