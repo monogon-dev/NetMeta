@@ -41,7 +41,7 @@ package k8s
 	// resulting in misleading rendering when zooming in (spikes at multiples of the flow export resolution).
 	//
 	// For IPFIX, set minInterval to 2× the minimum flow timeout on the network device.
-	minInterval?: string
+	minInterval: string | null | *null
 }
 
 #NetMetaConfig: {
@@ -62,7 +62,7 @@ package k8s
 	ports: #Ports
 
 	// Dashboard display config - these settings only affect rendering of the Grafana dashboards.
-	dashboardDisplay?: #DashboardDisplayConfig
+	dashboardDisplay: #DashboardDisplayConfig
 
 	// Let's Encrypt Mode
 	//  - off: self-signed certificate (TODO)

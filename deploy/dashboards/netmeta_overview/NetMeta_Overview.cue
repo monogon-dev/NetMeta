@@ -2,7 +2,7 @@ package netmeta_overview
 
 #Config: {
 	// Minimum interval for all panels
-	interval: string
+	interval: string | null
 }
 
 _genericFilterWithoutHost: """
