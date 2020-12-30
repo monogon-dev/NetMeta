@@ -2703,57 +2703,55 @@ panels: [{
 		x: 0
 		y: 133
 	}
-	id: 41
-	panels: []
-	title: "Heatmaps (may induce spontaneous browser combustion)"
-	type:  "row"
-}, {
-	cards: {
-		cardPadding: 0
-		cardRound:   0
-	}
-	color: {
-		cardColor:   "#b4ff00"
-		colorScale:  "sqrt"
-		colorScheme: "interpolateTurbo"
-		exponent:    0.5
-		max:         null
-		min:         null
-		mode:        "spectrum"
-	}
-	dataFormat: "timeseries"
-	datasource: "NetMeta ClickHouse"
-	fieldConfig: {
-		defaults: {
-			custom: {}
-			links: []
+	id:       41
+	interval: null
+	panels: [{
+		cards: {
+			cardPadding: 0
+			cardRound:   0
 		}
-		overrides: []
-	}
-	gridPos: {
-		h: 12
-		w: 12
-		x: 0
-		y: 134
-	}
-	heatmap: {}
-	hideZeroBuckets: true
-	highlightCards:  true
-	id:              45
-	interval:        null
-	legend: show: false
-	pluginVersion:   "7.3.6"
-	reverseYBuckets: false
-	targets: [{
-		database:            "default"
-		dateColDataType:     ""
-		dateLoading:         false
-		dateTimeColDataType: "TimeReceived"
-		dateTimeType:        "DATETIME"
-		datetimeLoading:     false
-		format:              "time_series"
-		intervalFactor:      1
-		query:               """
+		color: {
+			cardColor:   "#b4ff00"
+			colorScale:  "sqrt"
+			colorScheme: "interpolateTurbo"
+			exponent:    0.5
+			max:         null
+			min:         null
+			mode:        "spectrum"
+		}
+		dataFormat: "timeseries"
+		datasource: "NetMeta ClickHouse"
+		fieldConfig: {
+			defaults: {
+				custom: {}
+				links: []
+			}
+			overrides: []
+		}
+		gridPos: {
+			h: 12
+			w: 12
+			x: 0
+			y: 134
+		}
+		heatmap: {}
+		hideZeroBuckets: true
+		highlightCards:  true
+		id:              45
+		interval:        null
+		legend: show: false
+		pluginVersion:   "7.3.6"
+		reverseYBuckets: false
+		targets: [{
+			database:            "default"
+			dateColDataType:     ""
+			dateLoading:         false
+			dateTimeColDataType: "TimeReceived"
+			dateTimeType:        "DATETIME"
+			datetimeLoading:     false
+			format:              "time_series"
+			intervalFactor:      1
+			query:               """
 			SELECT
 			    $timeSeries as t,
 			    any(IPTTL)
@@ -2763,80 +2761,80 @@ panels: [{
 			GROUP BY t, IPTTL
 			ORDER BY t
 			"""
-		refId:               "A"
-		round:               "0s"
-		table:               "flows_raw"
-		tableLoading:        false
-	}]
-	timeFrom:  null
-	timeShift: null
-	title:     "IP TTL"
-	tooltip: {
-		show:          true
-		showHistogram: true
-	}
-	type: "heatmap"
-	xAxis: show: true
-	xBucketNumber: 300
-	xBucketSize:   ""
-	yAxis: {
-		decimals:    null
-		format:      "short"
-		logBase:     1
-		max:         null
-		min:         null
-		show:        true
-		splitFactor: null
-	}
-	yBucketBound:  "auto"
-	yBucketNumber: 100
-	yBucketSize:   null
-}, {
-	cards: {
-		cardPadding: 0
-		cardRound:   0
-	}
-	color: {
-		cardColor:   "#b4ff00"
-		colorScale:  "sqrt"
-		colorScheme: "interpolateTurbo"
-		exponent:    0.5
-		min:         null
-		mode:        "spectrum"
-	}
-	dataFormat: "timeseries"
-	datasource: "NetMeta ClickHouse"
-	fieldConfig: {
-		defaults: {
-			custom: {}
-			links: []
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
+		}]
+		timeFrom:  null
+		timeShift: null
+		title:     "IP TTL"
+		tooltip: {
+			show:          true
+			showHistogram: true
 		}
-		overrides: []
-	}
-	gridPos: {
-		h: 12
-		w: 12
-		x: 12
-		y: 134
-	}
-	heatmap: {}
-	hideZeroBuckets: true
-	highlightCards:  true
-	id:              46
-	interval:        null
-	legend: show: false
-	pluginVersion:   "7.3.6"
-	reverseYBuckets: false
-	targets: [{
-		database:            "default"
-		dateColDataType:     ""
-		dateLoading:         false
-		dateTimeColDataType: "TimeReceived"
-		dateTimeType:        "DATETIME"
-		datetimeLoading:     false
-		format:              "time_series"
-		intervalFactor:      1
-		query:               """
+		type: "heatmap"
+		xAxis: show: true
+		xBucketNumber: 300
+		xBucketSize:   ""
+		yAxis: {
+			decimals:    null
+			format:      "short"
+			logBase:     1
+			max:         null
+			min:         null
+			show:        true
+			splitFactor: null
+		}
+		yBucketBound:  "auto"
+		yBucketNumber: 100
+		yBucketSize:   null
+	}, {
+		cards: {
+			cardPadding: 0
+			cardRound:   0
+		}
+		color: {
+			cardColor:   "#b4ff00"
+			colorScale:  "sqrt"
+			colorScheme: "interpolateTurbo"
+			exponent:    0.5
+			min:         null
+			mode:        "spectrum"
+		}
+		dataFormat: "timeseries"
+		datasource: "NetMeta ClickHouse"
+		fieldConfig: {
+			defaults: {
+				custom: {}
+				links: []
+			}
+			overrides: []
+		}
+		gridPos: {
+			h: 12
+			w: 12
+			x: 12
+			y: 134
+		}
+		heatmap: {}
+		hideZeroBuckets: true
+		highlightCards:  true
+		id:              46
+		interval:        null
+		legend: show: false
+		pluginVersion:   "7.3.6"
+		reverseYBuckets: false
+		targets: [{
+			database:            "default"
+			dateColDataType:     ""
+			dateLoading:         false
+			dateTimeColDataType: "TimeReceived"
+			dateTimeType:        "DATETIME"
+			datetimeLoading:     false
+			format:              "time_series"
+			intervalFactor:      1
+			query:               """
 			SELECT
 			    $timeSeries as t,
 			    any(Bytes)
@@ -2846,80 +2844,80 @@ panels: [{
 			GROUP BY t, Bytes
 			ORDER BY t
 			"""
-		refId:               "A"
-		round:               "0s"
-		table:               "flows_raw"
-		tableLoading:        false
-	}]
-	timeFrom:  null
-	timeShift: null
-	title:     "Packet Size (Bytes)"
-	tooltip: {
-		show:          true
-		showHistogram: true
-	}
-	type: "heatmap"
-	xAxis: show: true
-	xBucketNumber: 300
-	xBucketSize:   ""
-	yAxis: {
-		decimals:    null
-		format:      "short"
-		logBase:     1
-		max:         null
-		min:         null
-		show:        true
-		splitFactor: null
-	}
-	yBucketBound:  "auto"
-	yBucketNumber: 100
-	yBucketSize:   null
-}, {
-	cards: {
-		cardPadding: 0
-		cardRound:   0
-	}
-	color: {
-		cardColor:   "#b4ff00"
-		colorScale:  "sqrt"
-		colorScheme: "interpolateTurbo"
-		exponent:    0.5
-		min:         null
-		mode:        "spectrum"
-	}
-	dataFormat: "timeseries"
-	datasource: "NetMeta ClickHouse"
-	fieldConfig: {
-		defaults: {
-			custom: {}
-			links: []
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
+		}]
+		timeFrom:  null
+		timeShift: null
+		title:     "Packet Size (Bytes)"
+		tooltip: {
+			show:          true
+			showHistogram: true
 		}
-		overrides: []
-	}
-	gridPos: {
-		h: 12
-		w: 12
-		x: 0
-		y: 146
-	}
-	heatmap: {}
-	hideZeroBuckets: true
-	highlightCards:  true
-	id:              47
-	interval:        null
-	legend: show: false
-	pluginVersion:   "7.3.6"
-	reverseYBuckets: false
-	targets: [{
-		database:            "default"
-		dateColDataType:     ""
-		dateLoading:         false
-		dateTimeColDataType: "TimeReceived"
-		dateTimeType:        "DATETIME"
-		datetimeLoading:     false
-		format:              "time_series"
-		intervalFactor:      1
-		query:               """
+		type: "heatmap"
+		xAxis: show: true
+		xBucketNumber: 300
+		xBucketSize:   ""
+		yAxis: {
+			decimals:    null
+			format:      "short"
+			logBase:     1
+			max:         null
+			min:         null
+			show:        true
+			splitFactor: null
+		}
+		yBucketBound:  "auto"
+		yBucketNumber: 100
+		yBucketSize:   null
+	}, {
+		cards: {
+			cardPadding: 0
+			cardRound:   0
+		}
+		color: {
+			cardColor:   "#b4ff00"
+			colorScale:  "sqrt"
+			colorScheme: "interpolateTurbo"
+			exponent:    0.5
+			min:         null
+			mode:        "spectrum"
+		}
+		dataFormat: "timeseries"
+		datasource: "NetMeta ClickHouse"
+		fieldConfig: {
+			defaults: {
+				custom: {}
+				links: []
+			}
+			overrides: []
+		}
+		gridPos: {
+			h: 12
+			w: 12
+			x: 0
+			y: 146
+		}
+		heatmap: {}
+		hideZeroBuckets: true
+		highlightCards:  true
+		id:              47
+		interval:        null
+		legend: show: false
+		pluginVersion:   "7.3.6"
+		reverseYBuckets: false
+		targets: [{
+			database:            "default"
+			dateColDataType:     ""
+			dateLoading:         false
+			dateTimeColDataType: "TimeReceived"
+			dateTimeType:        "DATETIME"
+			datetimeLoading:     false
+			format:              "time_series"
+			intervalFactor:      1
+			query:               """
 			SELECT
 			    $timeSeries as t,
 			    any(SrcPort)
@@ -2929,80 +2927,80 @@ panels: [{
 			GROUP BY t, SrcPort
 			ORDER BY t
 			"""
-		refId:               "A"
-		round:               "0s"
-		table:               "flows_raw"
-		tableLoading:        false
-	}]
-	timeFrom:  null
-	timeShift: null
-	title:     "Source Port"
-	tooltip: {
-		show:          true
-		showHistogram: true
-	}
-	type: "heatmap"
-	xAxis: show: true
-	xBucketNumber: 300
-	xBucketSize:   ""
-	yAxis: {
-		decimals:    null
-		format:      "short"
-		logBase:     1
-		max:         null
-		min:         null
-		show:        true
-		splitFactor: null
-	}
-	yBucketBound:  "auto"
-	yBucketNumber: 100
-	yBucketSize:   null
-}, {
-	cards: {
-		cardPadding: 0
-		cardRound:   0
-	}
-	color: {
-		cardColor:   "#b4ff00"
-		colorScale:  "sqrt"
-		colorScheme: "interpolateTurbo"
-		exponent:    0.5
-		min:         null
-		mode:        "spectrum"
-	}
-	dataFormat: "timeseries"
-	datasource: "NetMeta ClickHouse"
-	fieldConfig: {
-		defaults: {
-			custom: {}
-			links: []
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
+		}]
+		timeFrom:  null
+		timeShift: null
+		title:     "Source Port"
+		tooltip: {
+			show:          true
+			showHistogram: true
 		}
-		overrides: []
-	}
-	gridPos: {
-		h: 12
-		w: 12
-		x: 12
-		y: 146
-	}
-	heatmap: {}
-	hideZeroBuckets: true
-	highlightCards:  true
-	id:              48
-	interval:        null
-	legend: show: false
-	pluginVersion:   "7.3.6"
-	reverseYBuckets: false
-	targets: [{
-		database:            "default"
-		dateColDataType:     ""
-		dateLoading:         false
-		dateTimeColDataType: "TimeReceived"
-		dateTimeType:        "DATETIME"
-		datetimeLoading:     false
-		format:              "time_series"
-		intervalFactor:      1
-		query:               """
+		type: "heatmap"
+		xAxis: show: true
+		xBucketNumber: 300
+		xBucketSize:   ""
+		yAxis: {
+			decimals:    null
+			format:      "short"
+			logBase:     1
+			max:         null
+			min:         null
+			show:        true
+			splitFactor: null
+		}
+		yBucketBound:  "auto"
+		yBucketNumber: 100
+		yBucketSize:   null
+	}, {
+		cards: {
+			cardPadding: 0
+			cardRound:   0
+		}
+		color: {
+			cardColor:   "#b4ff00"
+			colorScale:  "sqrt"
+			colorScheme: "interpolateTurbo"
+			exponent:    0.5
+			min:         null
+			mode:        "spectrum"
+		}
+		dataFormat: "timeseries"
+		datasource: "NetMeta ClickHouse"
+		fieldConfig: {
+			defaults: {
+				custom: {}
+				links: []
+			}
+			overrides: []
+		}
+		gridPos: {
+			h: 12
+			w: 12
+			x: 12
+			y: 146
+		}
+		heatmap: {}
+		hideZeroBuckets: true
+		highlightCards:  true
+		id:              48
+		interval:        null
+		legend: show: false
+		pluginVersion:   "7.3.6"
+		reverseYBuckets: false
+		targets: [{
+			database:            "default"
+			dateColDataType:     ""
+			dateLoading:         false
+			dateTimeColDataType: "TimeReceived"
+			dateTimeType:        "DATETIME"
+			datetimeLoading:     false
+			format:              "time_series"
+			intervalFactor:      1
+			query:               """
 			SELECT
 			    $timeSeries as t,
 			    any(DstPort)
@@ -3012,34 +3010,37 @@ panels: [{
 			GROUP BY t, DstPort
 			ORDER BY t
 			"""
-		refId:               "A"
-		round:               "0s"
-		table:               "flows_raw"
-		tableLoading:        false
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
+		}]
+		timeFrom:  null
+		timeShift: null
+		title:     "Destination Port"
+		tooltip: {
+			show:          true
+			showHistogram: true
+		}
+		type: "heatmap"
+		xAxis: show: true
+		xBucketNumber: 300
+		xBucketSize:   ""
+		yAxis: {
+			decimals:    null
+			format:      "short"
+			logBase:     1
+			max:         null
+			min:         null
+			show:        true
+			splitFactor: null
+		}
+		yBucketBound:  "auto"
+		yBucketNumber: 100
+		yBucketSize:   null
 	}]
-	timeFrom:  null
-	timeShift: null
-	title:     "Destination Port"
-	tooltip: {
-		show:          true
-		showHistogram: true
-	}
-	type: "heatmap"
-	xAxis: show: true
-	xBucketNumber: 300
-	xBucketSize:   ""
-	yAxis: {
-		decimals:    null
-		format:      "short"
-		logBase:     1
-		max:         null
-		min:         null
-		show:        true
-		splitFactor: null
-	}
-	yBucketBound:  "auto"
-	yBucketNumber: 100
-	yBucketSize:   null
+	title: "Heatmaps (may induce spontaneous browser combustion)"
+	type:  "row"
 }]
 refresh:       false
 schemaVersion: 26
