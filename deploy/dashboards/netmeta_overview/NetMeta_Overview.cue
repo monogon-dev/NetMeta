@@ -161,6 +161,32 @@ panels: [{
 	title:     "Disk Usage"
 	type:      "stat"
 }, {
+	datasource: "-- Grafana --"
+	fieldConfig: {
+		defaults: custom: {}
+		overrides: []
+	}
+	gridPos: {
+		h: 3
+		w: 5
+		x: 19
+		y: 0
+	}
+	id: 44
+	options: {
+		content: "This dashboard is provisioned automatically and will be overwritten when you update NetMeta. If you want to make persistent changes, please create a copy."
+		mode:    "markdown"
+	}
+	pluginVersion: "7.3.6"
+	targets: [{
+		queryType: "randomWalk"
+		refId:     "A"
+	}]
+	timeFrom:  null
+	timeShift: null
+	title:     "This is a preprovisioned dashboard"
+	type:      "text"
+}, {
 	datasource: "NetMeta ClickHouse"
 	fieldConfig: {
 		defaults: {
@@ -280,6 +306,36 @@ panels: [{
 	timeShift: null
 	title:     "Effective Retention"
 	type:      "stat"
+}, {
+	datasource: "-- Grafana --"
+	fieldConfig: {
+		defaults: custom: {}
+		overrides: []
+	}
+	gridPos: {
+		h: 3
+		w: 5
+		x: 19
+		y: 3
+	}
+	id: 43
+	options: {
+		content: """
+			For questions, bug reports or feature requests please refer to https://github.com/leoluk/NetMeta or send a mail to netmeta@leoluk.de
+
+			Contributions are very welcome!
+			"""
+		mode: "markdown"
+	}
+	pluginVersion: "7.3.6"
+	targets: [{
+		queryType: "randomWalk"
+		refId:     "A"
+	}]
+	timeFrom:  null
+	timeShift: null
+	title:     "Contact and Support"
+	type:      "text"
 }, {
 	collapsed:  false
 	datasource: "NetMeta ClickHouse"
