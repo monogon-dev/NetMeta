@@ -67,6 +67,10 @@ A worst-case flood at line rate would generate 7kpps of sFlow samples.
 If Netflow/IPFIX is used, make sure to pick an appropriate sampling rate and flow table size for worst-case workloads. 
 There are many different implementations that perform very differently - refer to vendor documentation for specifics.
 
+Depending on your aggregation interval, you may want to set a minimum display interval in the NetMeta config:
+
+    dashboardDisplay: minInterval: "15s"
+
 ### API Stability
 
 NetMeta is alpha software and subject to change. It exposes the following APIs:

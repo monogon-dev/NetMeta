@@ -35,6 +35,15 @@ package k8s
 	description: string
 }
 
+#DashboardDisplayConfig: {
+	// Minimum interval for all panels. By default, there's no minimum interval and the interval goes all the way down
+	// to minimum resolution (1s). For IPFIX, the minimum flow export interval may be a large multiple of that,
+	// resulting in misleading rendering when zooming in (spikes at multiples of the flow export resolution).
+	//
+	// For IPFIX, set minInterval to 2× the minimum flow timeout on the network device.
+	minInterval?: string
+}
+
 #NetMetaConfig: {
 	// Size of the goflow sFlow/IPFIX ingestion queue. Keeping
 	// a larger queue allows for backprocessing of longer periods of historical data.
@@ -51,6 +60,9 @@ package k8s
 
 	// External ports
 	ports: #Ports
+
+	// Dashboard display config - these settings only affect rendering of the Grafana dashboards.
+	dashboardDisplay?: #DashboardDisplayConfig
 
 	// Let's Encrypt Mode
 	//  - off: self-signed certificate (TODO)

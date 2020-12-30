@@ -95,8 +95,13 @@ k8s: {
 
 	// Generated dashboards
 	configmaps: "grafana-dashboards-data": data: {
-		"netmeta_overview.json":   json.Marshal(dashboard_overview)
-		"clickhouse_queries.json": json.Marshal(dashboard_queries)
+		_dashboard_overview: dashboard_overview & {
+			#Config: {
+				interval: netmeta.config.dashboardDisplay.minInterval
+			}
+		}
+		"netmeta_overview.json":   json.Indent(json.Marshal(_dashboard_overview), "", " ")
+		"clickhouse_queries.json": json.Indent(json.Marshal(dashboard_queries), "", " ")
 	}
 
 	services: grafana: spec: {

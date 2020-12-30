@@ -1,5 +1,10 @@
 package netmeta_overview
 
+#Config: {
+	// Minimum interval for all panels
+	interval: string
+}
+
 _genericFilterWithoutHost: """
 	$conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
 	$conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
@@ -13,6 +18,12 @@ _genericFilter: """
 \(_genericFilterWithoutHost)
 $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
 """
+
+panels: [
+	...{
+		interval: #Config.interval
+	},
+]
 
 annotations: list: [{
 	builtIn:    1
