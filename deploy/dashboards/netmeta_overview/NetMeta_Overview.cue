@@ -1673,7 +1673,7 @@ panels: [{
 		alignLevel: null
 	}
 }, {
-	collapsed:  false
+	collapsed:  true
 	datasource: "NetMeta ClickHouse"
 	gridPos: {
 		h: 1
@@ -1681,68 +1681,66 @@ panels: [{
 		x: 0
 		y: 80
 	}
-	id: 27
-	panels: []
-	title: "Traffic Details (expensive)"
-	type:  "row"
-}, {
-	aliasColors: {}
-	bars:       false
-	dashLength: 10
-	dashes:     false
-	datasource: "NetMeta ClickHouse"
-	fieldConfig: {
-		defaults: {
-			custom: {}
-			links: []
+	id:       27
+	interval: null
+	panels: [{
+		aliasColors: {}
+		bars:       false
+		dashLength: 10
+		dashes:     false
+		datasource: "NetMeta ClickHouse"
+		fieldConfig: {
+			defaults: {
+				custom: {}
+				links: []
+			}
+			overrides: []
 		}
-		overrides: []
-	}
-	fill:         1
-	fillGradient: 0
-	gridPos: {
-		h: 12
-		w: 12
-		x: 0
-		y: 81
-	}
-	hiddenSeries: false
-	id:           31
-	legend: {
-		avg:     false
-		current: false
-		max:     false
-		min:     false
-		show:    true
-		total:   false
-		values:  false
-	}
-	lines:         true
-	linewidth:     1
-	nullPointMode: "null"
-	percentage:    false
-	pluginVersion: "7.3.6"
-	pointradius:   2
-	points:        false
-	renderer:      "flot"
-	seriesOverrides: [{
-		$$hashKey: "object:196"
-		alias:     "/, out/"
-		transform: "negative-Y"
-	}]
-	spaceLength: 10
-	stack:       false
-	steppedLine: false
-	targets: [{
-		database:            "default"
-		dateColDataType:     ""
-		dateLoading:         false
-		dateTimeColDataType: "TimeReceived"
-		dateTimeType:        "DATETIME"
-		datetimeLoading:     false
-		format:              "time_series"
-		intervalFactor:      1
-		query:               """
+		fill:         1
+		fillGradient: 0
+		gridPos: {
+			h: 12
+			w: 12
+			x: 0
+			y: 81
+		}
+		hiddenSeries: false
+		id:           31
+		legend: {
+			avg:     false
+			current: false
+			max:     false
+			min:     false
+			show:    true
+			total:   false
+			values:  false
+		}
+		lines:         true
+		linewidth:     1
+		nullPointMode: "null"
+		percentage:    false
+		pluginVersion: "7.3.6"
+		pointradius:   2
+		points:        false
+		renderer:      "flot"
+		seriesOverrides: [{
+			$$hashKey: "object:196"
+			alias:     "/, out/"
+			transform: "negative-Y"
+		}]
+		spaceLength: 10
+		stack:       false
+		steppedLine: false
+		targets: [{
+			database:            "default"
+			dateColDataType:     ""
+			dateLoading:         false
+			dateTimeColDataType: "TimeReceived"
+			dateTimeType:        "DATETIME"
+			datetimeLoading:     false
+			format:              "time_series"
+			intervalFactor:      1
+			query:               """
 			SELECT
 			    $timeSeries as t,
 
@@ -1760,108 +1758,108 @@ panels: [{
 			GROUP BY t, TCPFlags, FlowDirection
 			ORDER BY t
 			"""
-		refId:               "A"
-		round:               "0s"
-		table:               "flows_raw"
-		tableLoading:        false
-	}]
-	thresholds: []
-	timeFrom: null
-	timeRegions: []
-	timeShift: null
-	title:     "TCP Flags"
-	tooltip: {
-		shared:     true
-		sort:       0
-		value_type: "individual"
-	}
-	type: "graph"
-	xaxis: {
-		buckets: null
-		mode:    "time"
-		name:    null
-		show:    true
-		values: []
-	}
-	yaxes: [{
-		$$hashKey: "object:639"
-		format:    "bps"
-		label:     null
-		logBase:   1
-		max:       null
-		min:       null
-		show:      true
-	}, {
-		$$hashKey: "object:640"
-		format:    "short"
-		label:     null
-		logBase:   1
-		max:       null
-		min:       null
-		show:      true
-	}]
-	yaxis: {
-		align:      false
-		alignLevel: null
-	}
-}, {
-	aliasColors: {}
-	bars:       false
-	dashLength: 10
-	dashes:     false
-	datasource: "NetMeta ClickHouse"
-	fieldConfig: {
-		defaults: {
-			custom: {}
-			links: []
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
+		}]
+		thresholds: []
+		timeFrom: null
+		timeRegions: []
+		timeShift: null
+		title:     "TCP Flags"
+		tooltip: {
+			shared:     true
+			sort:       0
+			value_type: "individual"
 		}
-		overrides: []
-	}
-	fill:         1
-	fillGradient: 0
-	gridPos: {
-		h: 12
-		w: 12
-		x: 12
-		y: 81
-	}
-	hiddenSeries: false
-	id:           32
-	legend: {
-		avg:     false
-		current: false
-		max:     false
-		min:     false
-		show:    true
-		total:   false
-		values:  false
-	}
-	lines:         true
-	linewidth:     1
-	nullPointMode: "null"
-	percentage:    false
-	pluginVersion: "7.3.6"
-	pointradius:   2
-	points:        false
-	renderer:      "flot"
-	seriesOverrides: [{
-		$$hashKey: "object:196"
-		alias:     "/, out/"
-		transform: "negative-Y"
-	}]
-	spaceLength: 10
-	stack:       false
-	steppedLine: false
-	targets: [{
-		database:            "default"
-		dateColDataType:     ""
-		dateLoading:         false
-		dateTimeColDataType: "TimeReceived"
-		dateTimeType:        "DATETIME"
-		datetimeLoading:     false
-		format:              "time_series"
-		intervalFactor:      1
-		query:               """
+		type: "graph"
+		xaxis: {
+			buckets: null
+			mode:    "time"
+			name:    null
+			show:    true
+			values: []
+		}
+		yaxes: [{
+			$$hashKey: "object:639"
+			format:    "bps"
+			label:     null
+			logBase:   1
+			max:       null
+			min:       null
+			show:      true
+		}, {
+			$$hashKey: "object:640"
+			format:    "short"
+			label:     null
+			logBase:   1
+			max:       null
+			min:       null
+			show:      true
+		}]
+		yaxis: {
+			align:      false
+			alignLevel: null
+		}
+	}, {
+		aliasColors: {}
+		bars:       false
+		dashLength: 10
+		dashes:     false
+		datasource: "NetMeta ClickHouse"
+		fieldConfig: {
+			defaults: {
+				custom: {}
+				links: []
+			}
+			overrides: []
+		}
+		fill:         1
+		fillGradient: 0
+		gridPos: {
+			h: 12
+			w: 12
+			x: 12
+			y: 81
+		}
+		hiddenSeries: false
+		id:           32
+		legend: {
+			avg:     false
+			current: false
+			max:     false
+			min:     false
+			show:    true
+			total:   false
+			values:  false
+		}
+		lines:         true
+		linewidth:     1
+		nullPointMode: "null"
+		percentage:    false
+		pluginVersion: "7.3.6"
+		pointradius:   2
+		points:        false
+		renderer:      "flot"
+		seriesOverrides: [{
+			$$hashKey: "object:196"
+			alias:     "/, out/"
+			transform: "negative-Y"
+		}]
+		spaceLength: 10
+		stack:       false
+		steppedLine: false
+		targets: [{
+			database:            "default"
+			dateColDataType:     ""
+			dateLoading:         false
+			dateTimeColDataType: "TimeReceived"
+			dateTimeType:        "DATETIME"
+			datetimeLoading:     false
+			format:              "time_series"
+			intervalFactor:      1
+			query:               """
 			SELECT
 			    $timeSeries as t,
 			    VlanId,
@@ -1873,108 +1871,108 @@ panels: [{
 			GROUP BY t, VlanId, FlowDirection
 			ORDER BY t
 			"""
-		refId:               "A"
-		round:               "0s"
-		table:               "flows_raw"
-		tableLoading:        false
-	}]
-	thresholds: []
-	timeFrom: null
-	timeRegions: []
-	timeShift: null
-	title:     "VLAN ID"
-	tooltip: {
-		shared:     true
-		sort:       0
-		value_type: "individual"
-	}
-	type: "graph"
-	xaxis: {
-		buckets: null
-		mode:    "time"
-		name:    null
-		show:    true
-		values: []
-	}
-	yaxes: [{
-		$$hashKey: "object:639"
-		format:    "bps"
-		label:     null
-		logBase:   1
-		max:       null
-		min:       null
-		show:      true
-	}, {
-		$$hashKey: "object:640"
-		format:    "short"
-		label:     null
-		logBase:   1
-		max:       null
-		min:       null
-		show:      true
-	}]
-	yaxis: {
-		align:      false
-		alignLevel: null
-	}
-}, {
-	aliasColors: {}
-	bars:       false
-	dashLength: 10
-	dashes:     false
-	datasource: "NetMeta ClickHouse"
-	fieldConfig: {
-		defaults: {
-			custom: {}
-			links: []
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
+		}]
+		thresholds: []
+		timeFrom: null
+		timeRegions: []
+		timeShift: null
+		title:     "VLAN ID"
+		tooltip: {
+			shared:     true
+			sort:       0
+			value_type: "individual"
 		}
-		overrides: []
-	}
-	fill:         1
-	fillGradient: 0
-	gridPos: {
-		h: 12
-		w: 12
-		x: 0
-		y: 93
-	}
-	hiddenSeries: false
-	id:           29
-	legend: {
-		avg:     false
-		current: false
-		max:     false
-		min:     false
-		show:    true
-		total:   false
-		values:  false
-	}
-	lines:         true
-	linewidth:     1
-	nullPointMode: "null"
-	percentage:    false
-	pluginVersion: "7.3.6"
-	pointradius:   2
-	points:        false
-	renderer:      "flot"
-	seriesOverrides: [{
-		$$hashKey: "object:251"
-		alias:     "/, out/"
-		transform: "negative-Y"
-	}]
-	spaceLength: 10
-	stack:       false
-	steppedLine: false
-	targets: [{
-		database:            "default"
-		dateColDataType:     ""
-		dateLoading:         false
-		dateTimeColDataType: "TimeReceived"
-		dateTimeType:        "DATETIME"
-		datetimeLoading:     false
-		format:              "time_series"
-		intervalFactor:      1
-		query:               """
+		type: "graph"
+		xaxis: {
+			buckets: null
+			mode:    "time"
+			name:    null
+			show:    true
+			values: []
+		}
+		yaxes: [{
+			$$hashKey: "object:639"
+			format:    "bps"
+			label:     null
+			logBase:   1
+			max:       null
+			min:       null
+			show:      true
+		}, {
+			$$hashKey: "object:640"
+			format:    "short"
+			label:     null
+			logBase:   1
+			max:       null
+			min:       null
+			show:      true
+		}]
+		yaxis: {
+			align:      false
+			alignLevel: null
+		}
+	}, {
+		aliasColors: {}
+		bars:       false
+		dashLength: 10
+		dashes:     false
+		datasource: "NetMeta ClickHouse"
+		fieldConfig: {
+			defaults: {
+				custom: {}
+				links: []
+			}
+			overrides: []
+		}
+		fill:         1
+		fillGradient: 0
+		gridPos: {
+			h: 12
+			w: 12
+			x: 0
+			y: 93
+		}
+		hiddenSeries: false
+		id:           29
+		legend: {
+			avg:     false
+			current: false
+			max:     false
+			min:     false
+			show:    true
+			total:   false
+			values:  false
+		}
+		lines:         true
+		linewidth:     1
+		nullPointMode: "null"
+		percentage:    false
+		pluginVersion: "7.3.6"
+		pointradius:   2
+		points:        false
+		renderer:      "flot"
+		seriesOverrides: [{
+			$$hashKey: "object:251"
+			alias:     "/, out/"
+			transform: "negative-Y"
+		}]
+		spaceLength: 10
+		stack:       false
+		steppedLine: false
+		targets: [{
+			database:            "default"
+			dateColDataType:     ""
+			dateLoading:         false
+			dateTimeColDataType: "TimeReceived"
+			dateTimeType:        "DATETIME"
+			datetimeLoading:     false
+			format:              "time_series"
+			intervalFactor:      1
+			query:               """
 			SELECT
 			    $timeSeries as t,
 			    SrcPort,
@@ -2000,109 +1998,109 @@ panels: [{
 			    FlowDirection
 			ORDER BY t
 			"""
-		refId:               "A"
-		round:               "0s"
-		table:               "flows_raw"
-		tableLoading:        false
-	}]
-	thresholds: []
-	timeFrom: null
-	timeRegions: []
-	timeShift: null
-	title:     "Top 10 Source Ports"
-	tooltip: {
-		shared:     true
-		sort:       0
-		value_type: "individual"
-	}
-	transformations: []
-	type: "graph"
-	xaxis: {
-		buckets: null
-		mode:    "time"
-		name:    null
-		show:    true
-		values: []
-	}
-	yaxes: [{
-		$$hashKey: "object:639"
-		format:    "bps"
-		label:     null
-		logBase:   1
-		max:       null
-		min:       null
-		show:      true
-	}, {
-		$$hashKey: "object:640"
-		format:    "short"
-		label:     null
-		logBase:   1
-		max:       null
-		min:       null
-		show:      true
-	}]
-	yaxis: {
-		align:      false
-		alignLevel: null
-	}
-}, {
-	aliasColors: {}
-	bars:       false
-	dashLength: 10
-	dashes:     false
-	datasource: "NetMeta ClickHouse"
-	fieldConfig: {
-		defaults: {
-			custom: {}
-			links: []
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
+		}]
+		thresholds: []
+		timeFrom: null
+		timeRegions: []
+		timeShift: null
+		title:     "Top 10 Source Ports"
+		tooltip: {
+			shared:     true
+			sort:       0
+			value_type: "individual"
 		}
-		overrides: []
-	}
-	fill:         1
-	fillGradient: 0
-	gridPos: {
-		h: 12
-		w: 12
-		x: 12
-		y: 93
-	}
-	hiddenSeries: false
-	id:           9
-	legend: {
-		avg:     false
-		current: false
-		max:     false
-		min:     false
-		show:    true
-		total:   false
-		values:  false
-	}
-	lines:         true
-	linewidth:     1
-	nullPointMode: "null"
-	percentage:    false
-	pluginVersion: "7.3.6"
-	pointradius:   2
-	points:        false
-	renderer:      "flot"
-	seriesOverrides: [{
-		$$hashKey: "object:251"
-		alias:     "/, out/"
-		transform: "negative-Y"
-	}]
-	spaceLength: 10
-	stack:       false
-	steppedLine: false
-	targets: [{
-		database:            "default"
-		dateColDataType:     ""
-		dateLoading:         false
-		dateTimeColDataType: "TimeReceived"
-		dateTimeType:        "DATETIME"
-		datetimeLoading:     false
-		format:              "time_series"
-		intervalFactor:      1
-		query:               """
+		transformations: []
+		type: "graph"
+		xaxis: {
+			buckets: null
+			mode:    "time"
+			name:    null
+			show:    true
+			values: []
+		}
+		yaxes: [{
+			$$hashKey: "object:639"
+			format:    "bps"
+			label:     null
+			logBase:   1
+			max:       null
+			min:       null
+			show:      true
+		}, {
+			$$hashKey: "object:640"
+			format:    "short"
+			label:     null
+			logBase:   1
+			max:       null
+			min:       null
+			show:      true
+		}]
+		yaxis: {
+			align:      false
+			alignLevel: null
+		}
+	}, {
+		aliasColors: {}
+		bars:       false
+		dashLength: 10
+		dashes:     false
+		datasource: "NetMeta ClickHouse"
+		fieldConfig: {
+			defaults: {
+				custom: {}
+				links: []
+			}
+			overrides: []
+		}
+		fill:         1
+		fillGradient: 0
+		gridPos: {
+			h: 12
+			w: 12
+			x: 12
+			y: 93
+		}
+		hiddenSeries: false
+		id:           9
+		legend: {
+			avg:     false
+			current: false
+			max:     false
+			min:     false
+			show:    true
+			total:   false
+			values:  false
+		}
+		lines:         true
+		linewidth:     1
+		nullPointMode: "null"
+		percentage:    false
+		pluginVersion: "7.3.6"
+		pointradius:   2
+		points:        false
+		renderer:      "flot"
+		seriesOverrides: [{
+			$$hashKey: "object:251"
+			alias:     "/, out/"
+			transform: "negative-Y"
+		}]
+		spaceLength: 10
+		stack:       false
+		steppedLine: false
+		targets: [{
+			database:            "default"
+			dateColDataType:     ""
+			dateLoading:         false
+			dateTimeColDataType: "TimeReceived"
+			dateTimeType:        "DATETIME"
+			datetimeLoading:     false
+			format:              "time_series"
+			intervalFactor:      1
+			query:               """
 			SELECT
 			    $timeSeries as t,
 			    DstPort,
@@ -2128,108 +2126,108 @@ panels: [{
 			    FlowDirection
 			ORDER BY t
 			"""
-		refId:               "A"
-		round:               "0s"
-		table:               "flows_raw"
-		tableLoading:        false
-	}]
-	thresholds: []
-	timeFrom: null
-	timeRegions: []
-	timeShift: null
-	title:     "Top 10 Destination Ports"
-	tooltip: {
-		shared:     true
-		sort:       0
-		value_type: "individual"
-	}
-	type: "graph"
-	xaxis: {
-		buckets: null
-		mode:    "time"
-		name:    null
-		show:    true
-		values: []
-	}
-	yaxes: [{
-		$$hashKey: "object:639"
-		format:    "bps"
-		label:     null
-		logBase:   1
-		max:       null
-		min:       null
-		show:      true
-	}, {
-		$$hashKey: "object:640"
-		format:    "short"
-		label:     null
-		logBase:   1
-		max:       null
-		min:       null
-		show:      true
-	}]
-	yaxis: {
-		align:      false
-		alignLevel: null
-	}
-}, {
-	aliasColors: {}
-	bars:       false
-	dashLength: 10
-	dashes:     false
-	datasource: "NetMeta ClickHouse"
-	fieldConfig: {
-		defaults: {
-			custom: {}
-			links: []
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
+		}]
+		thresholds: []
+		timeFrom: null
+		timeRegions: []
+		timeShift: null
+		title:     "Top 10 Destination Ports"
+		tooltip: {
+			shared:     true
+			sort:       0
+			value_type: "individual"
 		}
-		overrides: []
-	}
-	fill:         1
-	fillGradient: 0
-	gridPos: {
-		h: 12
-		w: 12
-		x: 0
-		y: 105
-	}
-	hiddenSeries: false
-	id:           33
-	legend: {
-		avg:     false
-		current: false
-		max:     false
-		min:     false
-		show:    true
-		total:   false
-		values:  false
-	}
-	lines:         true
-	linewidth:     1
-	nullPointMode: "null"
-	percentage:    false
-	pluginVersion: "7.3.6"
-	pointradius:   2
-	points:        false
-	renderer:      "flot"
-	seriesOverrides: [{
-		$$hashKey: "object:251"
-		alias:     "/, out/"
-		transform: "negative-Y"
-	}]
-	spaceLength: 10
-	stack:       false
-	steppedLine: false
-	targets: [{
-		database:            "default"
-		dateColDataType:     ""
-		dateLoading:         false
-		dateTimeColDataType: "TimeReceived"
-		dateTimeType:        "DATETIME"
-		datetimeLoading:     false
-		format:              "time_series"
-		intervalFactor:      1
-		query:               """
+		type: "graph"
+		xaxis: {
+			buckets: null
+			mode:    "time"
+			name:    null
+			show:    true
+			values: []
+		}
+		yaxes: [{
+			$$hashKey: "object:639"
+			format:    "bps"
+			label:     null
+			logBase:   1
+			max:       null
+			min:       null
+			show:      true
+		}, {
+			$$hashKey: "object:640"
+			format:    "short"
+			label:     null
+			logBase:   1
+			max:       null
+			min:       null
+			show:      true
+		}]
+		yaxis: {
+			align:      false
+			alignLevel: null
+		}
+	}, {
+		aliasColors: {}
+		bars:       false
+		dashLength: 10
+		dashes:     false
+		datasource: "NetMeta ClickHouse"
+		fieldConfig: {
+			defaults: {
+				custom: {}
+				links: []
+			}
+			overrides: []
+		}
+		fill:         1
+		fillGradient: 0
+		gridPos: {
+			h: 12
+			w: 12
+			x: 0
+			y: 105
+		}
+		hiddenSeries: false
+		id:           33
+		legend: {
+			avg:     false
+			current: false
+			max:     false
+			min:     false
+			show:    true
+			total:   false
+			values:  false
+		}
+		lines:         true
+		linewidth:     1
+		nullPointMode: "null"
+		percentage:    false
+		pluginVersion: "7.3.6"
+		pointradius:   2
+		points:        false
+		renderer:      "flot"
+		seriesOverrides: [{
+			$$hashKey: "object:251"
+			alias:     "/, out/"
+			transform: "negative-Y"
+		}]
+		spaceLength: 10
+		stack:       false
+		steppedLine: false
+		targets: [{
+			database:            "default"
+			dateColDataType:     ""
+			dateLoading:         false
+			dateTimeColDataType: "TimeReceived"
+			dateTimeType:        "DATETIME"
+			datetimeLoading:     false
+			format:              "time_series"
+			intervalFactor:      1
+			query:               """
 			SELECT
 			    $timeSeries as t,
 			    SrcAddr,
@@ -2253,109 +2251,109 @@ panels: [{
 			    FlowDirection
 			ORDER BY t
 			"""
-		refId:               "A"
-		round:               "0s"
-		table:               "flows_raw"
-		tableLoading:        false
-	}]
-	thresholds: []
-	timeFrom: null
-	timeRegions: []
-	timeShift: null
-	title:     "Top 10 Source IPs"
-	tooltip: {
-		shared:     true
-		sort:       0
-		value_type: "individual"
-	}
-	transformations: []
-	type: "graph"
-	xaxis: {
-		buckets: null
-		mode:    "time"
-		name:    null
-		show:    true
-		values: []
-	}
-	yaxes: [{
-		$$hashKey: "object:639"
-		format:    "bps"
-		label:     null
-		logBase:   1
-		max:       null
-		min:       null
-		show:      true
-	}, {
-		$$hashKey: "object:640"
-		format:    "short"
-		label:     null
-		logBase:   1
-		max:       null
-		min:       null
-		show:      true
-	}]
-	yaxis: {
-		align:      false
-		alignLevel: null
-	}
-}, {
-	aliasColors: {}
-	bars:       false
-	dashLength: 10
-	dashes:     false
-	datasource: "NetMeta ClickHouse"
-	fieldConfig: {
-		defaults: {
-			custom: {}
-			links: []
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
+		}]
+		thresholds: []
+		timeFrom: null
+		timeRegions: []
+		timeShift: null
+		title:     "Top 10 Source IPs"
+		tooltip: {
+			shared:     true
+			sort:       0
+			value_type: "individual"
 		}
-		overrides: []
-	}
-	fill:         1
-	fillGradient: 0
-	gridPos: {
-		h: 12
-		w: 12
-		x: 12
-		y: 105
-	}
-	hiddenSeries: false
-	id:           34
-	legend: {
-		avg:     false
-		current: false
-		max:     false
-		min:     false
-		show:    true
-		total:   false
-		values:  false
-	}
-	lines:         true
-	linewidth:     1
-	nullPointMode: "null"
-	percentage:    false
-	pluginVersion: "7.3.6"
-	pointradius:   2
-	points:        false
-	renderer:      "flot"
-	seriesOverrides: [{
-		$$hashKey: "object:251"
-		alias:     "/, out/"
-		transform: "negative-Y"
-	}]
-	spaceLength: 10
-	stack:       false
-	steppedLine: false
-	targets: [{
-		database:            "default"
-		dateColDataType:     ""
-		dateLoading:         false
-		dateTimeColDataType: "TimeReceived"
-		dateTimeType:        "DATETIME"
-		datetimeLoading:     false
-		format:              "time_series"
-		intervalFactor:      1
-		query:               """
+		transformations: []
+		type: "graph"
+		xaxis: {
+			buckets: null
+			mode:    "time"
+			name:    null
+			show:    true
+			values: []
+		}
+		yaxes: [{
+			$$hashKey: "object:639"
+			format:    "bps"
+			label:     null
+			logBase:   1
+			max:       null
+			min:       null
+			show:      true
+		}, {
+			$$hashKey: "object:640"
+			format:    "short"
+			label:     null
+			logBase:   1
+			max:       null
+			min:       null
+			show:      true
+		}]
+		yaxis: {
+			align:      false
+			alignLevel: null
+		}
+	}, {
+		aliasColors: {}
+		bars:       false
+		dashLength: 10
+		dashes:     false
+		datasource: "NetMeta ClickHouse"
+		fieldConfig: {
+			defaults: {
+				custom: {}
+				links: []
+			}
+			overrides: []
+		}
+		fill:         1
+		fillGradient: 0
+		gridPos: {
+			h: 12
+			w: 12
+			x: 12
+			y: 105
+		}
+		hiddenSeries: false
+		id:           34
+		legend: {
+			avg:     false
+			current: false
+			max:     false
+			min:     false
+			show:    true
+			total:   false
+			values:  false
+		}
+		lines:         true
+		linewidth:     1
+		nullPointMode: "null"
+		percentage:    false
+		pluginVersion: "7.3.6"
+		pointradius:   2
+		points:        false
+		renderer:      "flot"
+		seriesOverrides: [{
+			$$hashKey: "object:251"
+			alias:     "/, out/"
+			transform: "negative-Y"
+		}]
+		spaceLength: 10
+		stack:       false
+		steppedLine: false
+		targets: [{
+			database:            "default"
+			dateColDataType:     ""
+			dateLoading:         false
+			dateTimeColDataType: "TimeReceived"
+			dateTimeType:        "DATETIME"
+			datetimeLoading:     false
+			format:              "time_series"
+			intervalFactor:      1
+			query:               """
 			SELECT
 			    $timeSeries as t,
 			    DstAddr,
@@ -2379,124 +2377,125 @@ panels: [{
 			    FlowDirection
 			ORDER BY t
 			"""
-		refId:               "A"
-		round:               "0s"
-		table:               "flows_raw"
-		tableLoading:        false
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
+		}]
+		thresholds: []
+		timeFrom: null
+		timeRegions: []
+		timeShift: null
+		title:     "Top 10 Destination IPs"
+		tooltip: {
+			shared:     true
+			sort:       0
+			value_type: "individual"
+		}
+		transformations: []
+		type: "graph"
+		xaxis: {
+			buckets: null
+			mode:    "time"
+			name:    null
+			show:    true
+			values: []
+		}
+		yaxes: [{
+			$$hashKey: "object:639"
+			format:    "bps"
+			label:     null
+			logBase:   1
+			max:       null
+			min:       null
+			show:      true
+		}, {
+			$$hashKey: "object:640"
+			format:    "short"
+			label:     null
+			logBase:   1
+			max:       null
+			min:       null
+			show:      true
+		}]
+		yaxis: {
+			align:      false
+			alignLevel: null
+		}
 	}]
-	thresholds: []
-	timeFrom: null
-	timeRegions: []
-	timeShift: null
-	title:     "Top 10 Destination IPs"
-	tooltip: {
-		shared:     true
-		sort:       0
-		value_type: "individual"
-	}
-	transformations: []
-	type: "graph"
-	xaxis: {
-		buckets: null
-		mode:    "time"
-		name:    null
-		show:    true
-		values: []
-	}
-	yaxes: [{
-		$$hashKey: "object:639"
-		format:    "bps"
-		label:     null
-		logBase:   1
-		max:       null
-		min:       null
-		show:      true
-	}, {
-		$$hashKey: "object:640"
-		format:    "short"
-		label:     null
-		logBase:   1
-		max:       null
-		min:       null
-		show:      true
-	}]
-	yaxis: {
-		align:      false
-		alignLevel: null
-	}
+	title: "Traffic Details (expensive)"
+	type:  "row"
 }, {
-	collapsed:  false
+	collapsed:  true
 	datasource: "NetMeta ClickHouse"
 	gridPos: {
 		h: 1
 		w: 24
 		x: 0
-		y: 117
+		y: 81
 	}
-	id: 18
-	panels: []
-	title: "Top Hosts (expensive)"
-	type:  "row"
-}, {
-	datasource:  "NetMeta ClickHouse"
-	description: ""
-	fieldConfig: {
-		defaults: {
-			custom: {
-				align:       null
-				displayMode: "auto"
-				filterable:  false
+	id:       18
+	interval: null
+	panels: [{
+		datasource:  "NetMeta ClickHouse"
+		description: ""
+		fieldConfig: {
+			defaults: {
+				custom: {
+					align:       null
+					displayMode: "auto"
+					filterable:  false
+				}
+				mappings: []
+				thresholds: {
+					mode: "percentage"
+					steps: [{
+						color: "green"
+						value: null
+					}, {
+						color: "red"
+						value: 80
+					}]
+				}
 			}
-			mappings: []
-			thresholds: {
-				mode: "percentage"
-				steps: [{
-					color: "green"
-					value: null
+			overrides: [{
+				matcher: {
+					id:      "byName"
+					options: "Bytes"
+				}
+				properties: [{
+					id:    "custom.displayMode"
+					value: "gradient-gauge"
 				}, {
-					color: "red"
-					value: 80
+					id:    "unit"
+					value: "kbytes"
+				}, {
+					id: "max"
+				}, {
+					id:    "custom.width"
+					value: null
 				}]
-			}
-		}
-		overrides: [{
-			matcher: {
-				id:      "byName"
-				options: "Bytes"
-			}
-			properties: [{
-				id:    "custom.displayMode"
-				value: "gradient-gauge"
-			}, {
-				id:    "unit"
-				value: "kbytes"
-			}, {
-				id: "max"
-			}, {
-				id:    "custom.width"
-				value: null
 			}]
-		}]
-	}
-	gridPos: {
-		h: 14
-		w: 12
-		x: 0
-		y: 118
-	}
-	id: 7
-	options: showHeader: true
-	pluginVersion: "7.3.6"
-	targets: [{
-		database:            "default"
-		dateColDataType:     ""
-		dateLoading:         false
-		dateTimeColDataType: "TimeReceived"
-		dateTimeType:        "DATETIME"
-		datetimeLoading:     false
-		format:              "table"
-		intervalFactor:      1
-		query:               """
+		}
+		gridPos: {
+			h: 14
+			w: 12
+			x: 0
+			y: 118
+		}
+		id: 7
+		options: showHeader: true
+		pluginVersion: "7.3.6"
+		targets: [{
+			database:            "default"
+			dateColDataType:     ""
+			dateLoading:         false
+			dateTimeColDataType: "TimeReceived"
+			dateTimeType:        "DATETIME"
+			datetimeLoading:     false
+			format:              "table"
+			intervalFactor:      1
+			query:               """
 			SELECT
 			  SamplerAddress,
 			  SrcAddr,
@@ -2509,73 +2508,73 @@ panels: [{
 			ORDER BY Bytes DESC
 			LIMIT 20
 			"""
-		refId:               "A"
-		round:               "0s"
-		table:               "flows_raw"
-		tableLoading:        false
-	}]
-	timeFrom:  null
-	timeShift: null
-	title:     "Top Source IPs"
-	transformations: []
-	type: "table"
-}, {
-	datasource:  "NetMeta ClickHouse"
-	description: ""
-	fieldConfig: {
-		defaults: {
-			custom: {
-				align:       null
-				displayMode: "auto"
-				filterable:  false
-			}
-			mappings: []
-			thresholds: {
-				mode: "percentage"
-				steps: [{
-					color: "green"
-					value: null
-				}, {
-					color: "red"
-					value: 80
-				}]
-			}
-		}
-		overrides: [{
-			matcher: {
-				id:      "byName"
-				options: "Bytes"
-			}
-			properties: [{
-				id:    "custom.displayMode"
-				value: "gradient-gauge"
-			}, {
-				id:    "unit"
-				value: "kbytes"
-			}, {
-				id: "max"
-			}]
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
 		}]
-	}
-	gridPos: {
-		h: 14
-		w: 12
-		x: 12
-		y: 118
-	}
-	id: 3
-	options: showHeader: true
-	pluginVersion: "7.3.6"
-	targets: [{
-		database:            "default"
-		dateColDataType:     ""
-		dateLoading:         false
-		dateTimeColDataType: "TimeReceived"
-		dateTimeType:        "DATETIME"
-		datetimeLoading:     false
-		format:              "table"
-		intervalFactor:      1
-		query:               """
+		timeFrom:  null
+		timeShift: null
+		title:     "Top Source IPs"
+		transformations: []
+		type: "table"
+	}, {
+		datasource:  "NetMeta ClickHouse"
+		description: ""
+		fieldConfig: {
+			defaults: {
+				custom: {
+					align:       null
+					displayMode: "auto"
+					filterable:  false
+				}
+				mappings: []
+				thresholds: {
+					mode: "percentage"
+					steps: [{
+						color: "green"
+						value: null
+					}, {
+						color: "red"
+						value: 80
+					}]
+				}
+			}
+			overrides: [{
+				matcher: {
+					id:      "byName"
+					options: "Bytes"
+				}
+				properties: [{
+					id:    "custom.displayMode"
+					value: "gradient-gauge"
+				}, {
+					id:    "unit"
+					value: "kbytes"
+				}, {
+					id: "max"
+				}]
+			}]
+		}
+		gridPos: {
+			h: 14
+			w: 12
+			x: 12
+			y: 118
+		}
+		id: 3
+		options: showHeader: true
+		pluginVersion: "7.3.6"
+		targets: [{
+			database:            "default"
+			dateColDataType:     ""
+			dateLoading:         false
+			dateTimeColDataType: "TimeReceived"
+			dateTimeType:        "DATETIME"
+			datetimeLoading:     false
+			format:              "table"
+			intervalFactor:      1
+			query:               """
 			SELECT
 			  SamplerAddress,
 			  DstAddr,
@@ -2589,16 +2588,19 @@ panels: [{
 			LIMIT 20
 
 			"""
-		refId:               "A"
-		round:               "0s"
-		table:               "flows_raw"
-		tableLoading:        false
+			refId:               "A"
+			round:               "0s"
+			table:               "flows_raw"
+			tableLoading:        false
+		}]
+		timeFrom:  null
+		timeShift: null
+		title:     "Top Destination IPs"
+		transformations: []
+		type: "table"
 	}]
-	timeFrom:  null
-	timeShift: null
-	title:     "Top Destination IPs"
-	transformations: []
-	type: "table"
+	title: "Top Hosts (expensive)"
+	type:  "row"
 }, {
 	collapsed:  true
 	datasource: "NetMeta ClickHouse"
@@ -2606,7 +2608,7 @@ panels: [{
 		h: 1
 		w: 24
 		x: 0
-		y: 132
+		y: 82
 	}
 	id: 36
 	panels: [{
@@ -2701,7 +2703,7 @@ panels: [{
 		h: 1
 		w: 24
 		x: 0
-		y: 133
+		y: 83
 	}
 	id:       41
 	interval: null
