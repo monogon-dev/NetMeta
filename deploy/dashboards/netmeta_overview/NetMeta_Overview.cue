@@ -2756,7 +2756,7 @@ panels: [{
 			query:               """
 			SELECT
 			    $timeSeries as t,
-			    any(IPTTL)
+				    IPTTL as b
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
@@ -2839,7 +2839,7 @@ panels: [{
 			query:               """
 			SELECT
 			    $timeSeries as t,
-			    any(Bytes)
+				    Bytes as b
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
@@ -2922,7 +2922,7 @@ panels: [{
 			query:               """
 			SELECT
 			    $timeSeries as t,
-			    any(SrcPort)
+				    SrcPort as b
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
@@ -3005,7 +3005,7 @@ panels: [{
 			query:               """
 			SELECT
 			    $timeSeries as t,
-			    any(DstPort)
+				    DstPort as b
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
