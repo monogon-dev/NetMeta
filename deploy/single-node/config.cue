@@ -42,6 +42,10 @@ package k8s
 	//
 	// For IPFIX, set minInterval to 2× the minimum flow timeout on the network device.
 	minInterval: string | null | *null
+
+	// Maximum packet size for heatmap panel. We set a fixed maximum value to filter out spurious oversizes packets from
+	// loopback interfaces and have the right scale when only small packets are visible.
+	maxPacketSize: *1500 | uint
 }
 
 #NetMetaConfig: {

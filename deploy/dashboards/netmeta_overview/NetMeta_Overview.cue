@@ -3,6 +3,9 @@ package netmeta_overview
 #Config: {
 	// Minimum interval for all panels
 	interval: string | null
+
+	// Maximum packet size for heatmaps (filter out spurious oversized packet from loopback interfaces)
+	maxPacketSize: uint | *1500
 }
 
 _genericFilterWithoutHost: """
@@ -2783,14 +2786,14 @@ panels: [{
 			decimals:    null
 			format:      "short"
 			logBase:     1
-			max:         null
-			min:         null
+			max:         "255"
+			min:         "0"
 			show:        true
 			splitFactor: null
 		}
 		yBucketBound:  "auto"
-		yBucketNumber: 100
-		yBucketSize:   null
+		yBucketNumber: null
+		yBucketSize:   1
 	}, {
 		cards: {
 			cardPadding: 0
@@ -2866,8 +2869,8 @@ panels: [{
 			decimals:    null
 			format:      "short"
 			logBase:     1
-			max:         null
-			min:         null
+			max:         "\(#Config.maxPacketSize)"
+			min:         "0"
 			show:        true
 			splitFactor: null
 		}
@@ -2949,8 +2952,8 @@ panels: [{
 			decimals:    null
 			format:      "short"
 			logBase:     1
-			max:         null
-			min:         null
+			max:         "65535"
+			min:         "0"
 			show:        true
 			splitFactor: null
 		}
@@ -3032,8 +3035,8 @@ panels: [{
 			decimals:    null
 			format:      "short"
 			logBase:     1
-			max:         null
-			min:         null
+			max:         "65535"
+			min:         "0"
 			show:        true
 			splitFactor: null
 		}

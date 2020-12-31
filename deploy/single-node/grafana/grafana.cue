@@ -97,7 +97,8 @@ k8s: {
 	configmaps: "grafana-dashboards-data": data: {
 		_dashboard_overview: dashboard_overview & {
 			#Config: {
-				interval: netmeta.config.dashboardDisplay.minInterval
+				interval:      netmeta.config.dashboardDisplay.minInterval
+				maxPacketSize: netmeta.config.dashboardDisplay.maxPacketSize
 			}
 		}
 		"netmeta_overview.json":   json.Indent(json.Marshal(_dashboard_overview), "", " ")
