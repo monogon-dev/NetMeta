@@ -2773,11 +2773,11 @@ panels: [{
 		title:     "IP TTL"
 		tooltip: {
 			show:          true
-			showHistogram: true
+			showHistogram: false
 		}
 		type: "heatmap"
 		xAxis: show: true
-		xBucketNumber: 300
+		xBucketNumber: 150
 		xBucketSize:   ""
 		yAxis: {
 			decimals:    null
@@ -2856,11 +2856,11 @@ panels: [{
 		title:     "Packet Size (Bytes)"
 		tooltip: {
 			show:          true
-			showHistogram: true
+			showHistogram: false
 		}
 		type: "heatmap"
 		xAxis: show: true
-		xBucketNumber: 300
+		xBucketNumber: 150
 		xBucketSize:   ""
 		yAxis: {
 			decimals:    null
@@ -2872,8 +2872,8 @@ panels: [{
 			splitFactor: null
 		}
 		yBucketBound:  "auto"
-		yBucketNumber: 100
-		yBucketSize:   null
+		yBucketNumber: null
+		yBucketSize:   10
 	}, {
 		cards: {
 			cardPadding: 0
@@ -2939,11 +2939,11 @@ panels: [{
 		title:     "Source Port"
 		tooltip: {
 			show:          true
-			showHistogram: true
+			showHistogram: false
 		}
 		type: "heatmap"
 		xAxis: show: true
-		xBucketNumber: 300
+		xBucketNumber: 150
 		xBucketSize:   ""
 		yAxis: {
 			decimals:    null
@@ -2955,8 +2955,8 @@ panels: [{
 			splitFactor: null
 		}
 		yBucketBound:  "auto"
-		yBucketNumber: 100
-		yBucketSize:   null
+		yBucketNumber: null
+		yBucketSize:   1000
 	}, {
 		cards: {
 			cardPadding: 0
@@ -3022,11 +3022,11 @@ panels: [{
 		title:     "Destination Port"
 		tooltip: {
 			show:          true
-			showHistogram: true
+			showHistogram: false
 		}
 		type: "heatmap"
 		xAxis: show: true
-		xBucketNumber: 300
+		xBucketNumber: 150
 		xBucketSize:   ""
 		yAxis: {
 			decimals:    null
@@ -3038,8 +3038,8 @@ panels: [{
 			splitFactor: null
 		}
 		yBucketBound:  "auto"
-		yBucketNumber: 100
-		yBucketSize:   null
+		yBucketNumber: null
+		yBucketSize:   1000
 	}]
 	title: "Heatmaps (may induce spontaneous browser combustion)"
 	type:  "row"
