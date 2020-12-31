@@ -82,6 +82,8 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.20.0+k3s2" INSTALL_K3S_EX
   --disable-cloud-controller
   --kube-scheduler-arg=address=127.0.0.1
   --kube-controller-manager-arg=address=127.0.0.1
+  --kubelet-arg=eviction-hard=imagefs.available<1%,nodefs.available<1%
+  --kubelet-arg=eviction-minimum-reclaim=imagefs.available=1%,nodefs.available=1%
   --disable traefik
 " sh -s -
 
