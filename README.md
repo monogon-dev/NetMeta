@@ -20,8 +20,8 @@ It captures, aggregates and analyzes events from a variety of data sources:
 
 
 <img src="https://i.imgur.com/kl2ThBc.png" width="550px" alt="" />
-<img src="https://i.imgur.com/59y1D1b.png" width="550px" alt="" />
 <img src="https://i.imgur.com/lt0LFqh.png" width="550px" alt="" />
+<img src="https://user-images.githubusercontent.com/859697/103421113-10df0f00-4b9b-11eb-8747-7ccd9c8af76c.png" width="100%" alt="" />
 
 Sampling rate is detected automatically. Different devices with different sampling rates can be mixed.
 IPv6 is fully supported throughout the stack.
