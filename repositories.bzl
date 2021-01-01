@@ -280,6 +280,13 @@ def go_repositories():
         version = "v0.3.0",
     )
     go_repository(
+        name = "com_github_go_logr_logr",
+        importpath = "github.com/go-logr/logr",
+        sum = "h1:QvGt2nLcHH0WK9orKa+ppBPAxREcH364nPUedEpK0TY=",
+        version = "v0.2.0",
+    )
+
+    go_repository(
         name = "com_github_go_sql_driver_mysql",
         importpath = "github.com/go-sql-driver/mysql",
         sum = "h1:ozyZYNQW3x3HtqT1jira07DN2PArx2v7/mN66gGcHOs=",
@@ -1055,6 +1062,12 @@ def go_repositories():
         importpath = "gopkg.in/yaml.v3",
         sum = "h1:VEmvx0P+GVTgkNu2EdTN988YCZPcD3lo9AoczZpucwc=",
         version = "v3.0.0-20200601152816-913338de1bd2",
+    )
+    go_repository(
+        name = "io_k8s_klog_v2",
+        importpath = "k8s.io/klog/v2",
+        sum = "h1:7+X0fUguPyrKEC4WjH8iGDg3laWgMo5tMnRTIGTTxGQ=",
+        version = "v2.4.0",
     )
 
     go_repository(

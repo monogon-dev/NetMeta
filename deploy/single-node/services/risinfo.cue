@@ -10,6 +10,8 @@ k8s: services: risinfo: spec: {
 	selector: app: "risinfo"
 }
 
+k8s: pvcs: "risinfo-cache": {}
+
 k8s: deployments: risinfo: {
 	M=metadata: labels: app: "risinfo"
 
@@ -27,11 +29,18 @@ k8s: deployments: risinfo: {
 						name:            "risinfo"
 						imagePullPolicy: "Never"
 						image:           netmeta.images.risinfo.image
+
+						args: ["-cacheDir=/cache"]
+
 						ports: [
 							{name: "api", containerPort: 8080, protocol: "TCP"},
 						]
+
+						volumeMounts: [{mountPath: "/cache", name: "risinfo-cache"}]
 					},
 				]
+
+				volumes: [{name: "risinfo-cache", persistentVolumeClaim: claimName: name}]
 			}
 		}
 	}
