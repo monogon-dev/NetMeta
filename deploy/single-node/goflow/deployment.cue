@@ -25,6 +25,12 @@ k8s: deployments: goflow: {
 							"-nfl.port=\(netmeta.config.ports.netflowLegacy)",
 							"-sflow.port=\(netmeta.config.ports.sflow)",
 						]
+
+						// Workaround for mlock crashes until Go 1.16 is released.
+						//   https://go-review.googlesource.com/c/go/+/246200/
+						//   https://github.com/golang/go/issues/40184
+						env: [{name: "GODEBUG", value: "mlock=0"}]
+
 						ports: [
 							{name: "netflow-legacy", containerPort: netmeta.config.ports.netflowLegacy, protocol: "UDP"},
 							{name: "netflow", containerPort:        netmeta.config.ports.netflow, protocol:       "UDP"},
