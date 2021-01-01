@@ -129,7 +129,7 @@ On Fedora >= 32, disable cgroupsv2, which is [not yet supported by k3s](https://
 
 Install build dependencies on Debian Buster and Ubuntu 18.04:
     
-    apt install -y jq gcc git gcc python curl
+    apt install -y jq gcc git gcc python curl g++
 
 We will eventually provide pre-built images, for now, the build dependencies are always required.
 
