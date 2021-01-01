@@ -26,8 +26,11 @@ It captures, aggregates and analyzes events from a variety of data sources:
 Sampling rate is detected automatically. Different devices with different sampling rates can be mixed.
 IPv6 is fully supported throughout the stack.
 
-NetMeta is powered by a number of great open source projects like ClickHouse, 
-Kafka, goflow, Strimzi, clickhouse-operator, Kubernetes, and k3s.
+NetMeta is powered by a number of great open source projects: we use [ClickHouse](https://clickhouse.tech) as the main
+database, [Kafka](https://kafka.apache.org) as a queue in front of ClickHouse,
+[goflow](https://github.com/cloudflare/goflow) as the sFlow/Netflow collector, [Strimzi](https://strimzi.io/) to deploy
+Kafka, [clickhouse-operator](https://github.com/Altinity/clickhouse-operator) to deploy ClickHouse, as well as
+[Kubernetes](https://kubernetes.io/) and Rancher's [k3s](https://k3s.io/).
 
 NetMeta is **alpha software** and subject to change.
 
