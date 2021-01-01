@@ -1684,8 +1684,7 @@ panels: [{
 		x: 0
 		y: 80
 	}
-	id:       27
-	interval: null
+	id: 27
 	panels: [{
 		aliasColors: {}
 		bars:       false
@@ -2437,8 +2436,7 @@ panels: [{
 		x: 0
 		y: 81
 	}
-	id:       18
-	interval: null
+	id: 18
 	panels: [{
 		datasource:  "NetMeta ClickHouse"
 		description: ""
@@ -2708,8 +2706,7 @@ panels: [{
 		x: 0
 		y: 83
 	}
-	id:       41
-	interval: null
+	id: 41
 	panels: [{
 		cards: {
 			cardPadding: 0
