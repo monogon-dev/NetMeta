@@ -27,7 +27,8 @@ Sampling rate is detected automatically. Different devices with different sampli
 IPv6 is fully supported throughout the stack.
 
 NetMeta is powered by a number of great open source projects: we use [ClickHouse](https://clickhouse.tech) as the main
-database, [Kafka](https://kafka.apache.org) as a queue in front of ClickHouse,
+database, [Kafka](https://kafka.apache.org) as a queue in front of ClickHouse, [Grafana](https://grafana.com/) with
+[clickhouse-grafana](https://github.com/Vertamedia/clickhouse-grafana) as frontend,
 [goflow](https://github.com/cloudflare/goflow) as the sFlow/Netflow collector, [Strimzi](https://strimzi.io/) to deploy
 Kafka, [clickhouse-operator](https://github.com/Altinity/clickhouse-operator) to deploy ClickHouse, as well as
 [Kubernetes](https://kubernetes.io/) and Rancher's [k3s](https://k3s.io/).
