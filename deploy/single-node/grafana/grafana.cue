@@ -137,7 +137,7 @@ k8s: {
 
 						_googleAuth: [...]
 
-						if netmeta.config.grafanaGoogleAuth.clientID != "" {
+						if netmeta.config.grafanaGoogleAuth != _|_ {
 							_googleAuth: [
 								{
 									name:  "GF_AUTH_GOOGLE_ENABLED"

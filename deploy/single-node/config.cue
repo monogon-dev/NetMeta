@@ -94,7 +94,7 @@ package k8s
 	grafanaBasicAuth: bool | *true
 
 	// Optional: configure GSuite authentication
-	grafanaGoogleAuth: #GoogleAuth
+	grafanaGoogleAuth?: #GoogleAuth
 
 	// Default org role for new Grafana users
 	grafanaDefaultRole: string | *"Viewer"
