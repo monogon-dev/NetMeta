@@ -181,7 +181,12 @@ k8s: {
 							},
 							{
 								name:  "GF_INSTALL_PLUGINS"
-								value: "vertamedia-clickhouse-datasource 1.9.5"
+								value: "vertamedia-clickhouse-datasource 2.1.0"
+							},
+							// TODO: remove after upgrading to 2.2.0, which is signed
+							{
+								name:  "GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS"
+								value: "vertamedia-clickhouse-datasource"
 							},
 							{
 								name:  "GF_SECURITY_ADMIN_PASSWORD"
