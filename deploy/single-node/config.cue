@@ -103,7 +103,13 @@ package k8s
 	interfaceMap: [...#InterfaceMap]
 }
 
+#Image: {
+	image:  string
+	digest: string
+}
+
 #NetMetaImages: {
-	helloworld: string
-	migrate:    string
+	helloworld: #Image
+	migrate:    #Image
+	risinfo:    #Image
 }

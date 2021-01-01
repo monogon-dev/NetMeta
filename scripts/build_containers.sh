@@ -12,15 +12,19 @@ function build() {
 
   bazel build //${target}.tar
   k3s ctr images import --digests bazel-bin/${target/:/\//}.tar 1>&2
+  local digest=$(crictl inspecti bazel/${target} 2>&1 | jq -r '.status.repoDigests[0] | split("@")[-1]')
 
-  crictl inspecti bazel/${target} 2>&1 | jq -r .status.repoDigests[0]
+  # "docker.io/bazel" is hardcoded in rules_docker. Specifying a digest does not work with a local image, therefore, we
+  # need force the pod to redeploy when the digest changes by adding a digest annotation on the deployment.
+  echo "{image: \"docker.io/bazel/${target}\", digest: \"${digest}\"}"
 }
 
 cat <<EOF > deploy/single-node/images_local.cue
 package k8s
 
-netmeta: images: {
-  helloworld: "$(build cmd/helloworld:helloworld)"
-  migrate: "$(build schema:migrate)"
+netmeta: images: #NetMetaImages & {
+  helloworld: $(build cmd/helloworld:helloworld)
+  migrate: $(build schema:migrate)
+  risinfo: $(build cmd/risinfo:risinfo)
 }
 EOF

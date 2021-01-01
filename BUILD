@@ -3,6 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_path", "nogo")
 load("@io_bazel_rules_docker//container:bundle.bzl", "container_bundle")
 
 # gazelle:prefix github.com/leoluk/NetMeta
+# gazelle:exclude deploy
 # gazelle:exclude schema
 # gazelle:exclude third_party/tools
 gazelle(name = "gazelle")
