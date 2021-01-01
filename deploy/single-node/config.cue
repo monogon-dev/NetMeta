@@ -112,4 +112,5 @@ package k8s
 	helloworld: #Image
 	migrate:    #Image
 	risinfo:    #Image
+	goflow:     #Image
 }

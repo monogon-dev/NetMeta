@@ -7,6 +7,10 @@ k8s: deployments: goflow: {
 		selector: matchLabels: app: M.labels.app
 		template: {
 			metadata: labels: app: M.labels.app
+
+			// Trigger redeployment when digest changes.
+			metadata: annotations: "meta/local-image-digest": netmeta.images.goflow.digest
+
 			spec: {
 				// k3s does not support IPv6 networking, so we run goflow in the host network namespace.
 				hostNetwork: true
@@ -14,9 +18,8 @@ k8s: deployments: goflow: {
 				containers: [
 					{
 						name:  "goflow"
-						image: "docker.io/cloudflare/goflow:v3.4.2@sha256:dc78fadb655a60d2a46ff772d3db38d6d8af4817c2244b1671ac4fe7e0302b6f"
-						command: [
-							"./goflow",
+						image: netmeta.images.goflow.image
+						args: [
 							"-kafka.brokers=netmeta-kafka-bootstrap:9092",
 							"-proto.fixedlen=true",
 							"-loglevel=debug",

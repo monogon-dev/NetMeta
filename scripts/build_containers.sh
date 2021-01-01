@@ -26,5 +26,6 @@ netmeta: images: #NetMetaImages & {
   helloworld: $(build cmd/helloworld:helloworld)
   migrate: $(build schema:migrate)
   risinfo: $(build cmd/risinfo:risinfo)
+  goflow: $(build third_party/goflow:goflow)
 }
 EOF

@@ -18,7 +18,6 @@ set -euo pipefail
 #  - Go binary distribution by Google.
 #  - ClickHouse container images by Yandex.
 #  - Strimzi Kafka container images by Red Hat.
-#  - goflow container images by CloudFlare.
 #
 # All downloads happen via SSL and are fully open source.
 #

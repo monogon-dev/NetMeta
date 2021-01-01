@@ -110,6 +110,12 @@ def go_repositories():
         version = "v0.3.4",
     )
     go_repository(
+        name = "com_github_cloudflare_goflow_v3",
+        importpath = "github.com/cloudflare/goflow/v3",
+        sum = "h1:eeKaeae4FNeK3d3TcNvYazPzjfGJ4/z8Nmqx/S/NK3Q=",
+        version = "v3.4.2",
+    )
+    go_repository(
         name = "com_github_cloudflare_golz4",
         importpath = "github.com/cloudflare/golz4",
         sum = "h1:F1EaeKL/ta07PY/k9Os/UFtwERei2/XzGemhpGnBKNg=",
@@ -151,6 +157,13 @@ def go_repositories():
         sum = "h1:XNT/Zf5l++1Pyg08/HV04ppB0gKxAqtZQBRYiYrUuYk=",
         version = "v0.0.0-20180504122225-ca4c9f2c1369",
     )
+    go_repository(
+        name = "com_github_datadog_zstd",
+        importpath = "github.com/DataDog/zstd",
+        sum = "h1:DtpNbljikUepEPD16hD4LvIcmhnhdLTiW/5pHgbmp14=",
+        version = "v1.3.5",
+    )
+
     go_repository(
         name = "com_github_davecgh_go_spew",
         importpath = "github.com/davecgh/go-spew",
@@ -636,6 +649,13 @@ def go_repositories():
         version = "v1.3.0",
     )
     go_repository(
+        name = "com_github_libp2p_go_reuseport",
+        importpath = "github.com/libp2p/go-reuseport",
+        sum = "h1:7PhkfH73VXfPJYKQ6JwS5I/eVcoyYi9IMNGc6FWpFLw=",
+        version = "v0.0.1",
+    )
+
+    go_repository(
         name = "com_github_magiconair_properties",
         importpath = "github.com/magiconair/properties",
         sum = "h1:6AOjgCKyZFMG/1yfReDPDz3CJZPxnYk7DGmj2HtyF24=",
@@ -779,6 +799,13 @@ def go_repositories():
         version = "v0.9.1",
     )
     go_repository(
+        name = "com_github_pkg_profile",
+        importpath = "github.com/pkg/profile",
+        sum = "h1:F++O52m40owAmADcojzM+9gyjmMOY/T4oYJkgFDH8RE=",
+        version = "v1.2.1",
+    )
+
+    go_repository(
         name = "com_github_pmezard_go_difflib",
         importpath = "github.com/pmezard/go-difflib",
         sum = "h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=",
@@ -847,8 +874,8 @@ def go_repositories():
     go_repository(
         name = "com_github_shopify_sarama",
         importpath = "github.com/Shopify/sarama",
-        sum = "h1:9oksLxC6uxVPHPVYUmq6xhr1BOF/hHobWH2UzO67z1s=",
-        version = "v1.19.0",
+        sum = "h1:rtiODsvY4jW6nUV6n3K+0gx/8WlAwVt+Ixt6RIvpYyo=",
+        version = "v1.22.0",
     )
     go_repository(
         name = "com_github_shopify_toxiproxy",
