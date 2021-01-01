@@ -22,11 +22,13 @@ _genericFilter: """
 $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
 """
 
-panels: [
-	...{
-		interval: #Config.interval
-	},
-]
+#Panel: {
+	interval: #Config.interval
+	panels: [...#Panel]
+	...
+}
+
+panels: [...#Panel]
 
 annotations: list: [{
 	builtIn:    1
@@ -2740,7 +2742,6 @@ panels: [{
 		hideZeroBuckets: true
 		highlightCards:  true
 		id:              45
-		interval:        null
 		legend: show: false
 		pluginVersion:   "7.3.6"
 		reverseYBuckets: false
@@ -2823,7 +2824,6 @@ panels: [{
 		hideZeroBuckets: true
 		highlightCards:  true
 		id:              46
-		interval:        null
 		legend: show: false
 		pluginVersion:   "7.3.6"
 		reverseYBuckets: false
@@ -2906,7 +2906,6 @@ panels: [{
 		hideZeroBuckets: true
 		highlightCards:  true
 		id:              47
-		interval:        null
 		legend: show: false
 		pluginVersion:   "7.3.6"
 		reverseYBuckets: false
@@ -2989,7 +2988,6 @@ panels: [{
 		hideZeroBuckets: true
 		highlightCards:  true
 		id:              48
-		interval:        null
 		legend: show: false
 		pluginVersion:   "7.3.6"
 		reverseYBuckets: false
