@@ -1,0 +1,36 @@
+package k8s
+
+k8s: clickhouseinstallations: netmeta: spec: configuration: files: {
+	"risinfo.dict": #"""
+		    <yandex>
+		        <dictionary>
+		            <name>risinfo</name>
+		            <source>
+				    <http>
+				        <url>http://risinfo/rib.tsv</url>
+				        <format>TabSeparated</format>
+				    </http>
+		            </source>
+		            <lifetime>3600</lifetime>
+		            <layout>
+			            <ip_trie>
+			                <access_to_key_from_attributes>true</access_to_key_from_attributes>
+			            </ip_trie>
+		            </layout>
+			        <structure>
+			            <key>
+			                <attribute>
+			                    <name>prefix</name>
+			                    <type>String</type>
+			                </attribute>
+			            </key>
+			            <attribute>
+			                <name>asnum</name>
+			                <type>UInt32</type>
+			                <null_value>0</null_value>
+			            </attribute>
+			        </structure>
+		        </dictionary>
+		    </yandex>
+		"""#
+}

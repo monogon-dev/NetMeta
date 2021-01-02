@@ -46,3 +46,6 @@ alter table flows_raw drop partition '2020-06-17';
 
 Rebuild services:
 scripts/build_containers.sh && (cd deploy/single-node/services && cue apply)
+
+IP trie query:
+select dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(toIPv6('::1.1.1.1'))));
