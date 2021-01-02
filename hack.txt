@@ -35,7 +35,7 @@ rm /goflow
 Manually adjust TTL:
 alter table default.flows_raw modify ttl Date + toIntervalDay(20);
 
-List oldest partitions:
+List oldest partitions:h
 select distinct partition from system.parts limit 10;
 
 Drop partitions:
@@ -47,5 +47,9 @@ alter table flows_raw drop partition '2020-06-17';
 Rebuild services:
 scripts/build_containers.sh && (cd deploy/single-node/services && cue apply)
 
-IP trie query:
+risinfo queries:
 select dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(toIPv6('::1.1.1.1'))));
+select dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(SrcAddr))) AS SrcAsn, count(*) from flows_raw group by SrcAsn order by count(*) desc limit 20;
+
+select dictGetString('autnums', 'name', toUInt64(3320));
+select dictGetString('autnums', 'country', toUInt64(3320));

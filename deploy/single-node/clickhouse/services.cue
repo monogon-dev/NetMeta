@@ -33,4 +33,37 @@ k8s: clickhouseinstallations: netmeta: spec: configuration: files: {
 		        </dictionary>
 		    </yandex>
 		"""#
+
+	"autnums.dict": #"""
+		    <yandex>
+		        <dictionary>
+		            <name>autnums</name>
+		            <source>
+				    <http>
+				        <url>http://risinfo/autnums.tsv</url>
+				        <format>TabSeparated</format>
+				    </http>
+		            </source>
+		            <lifetime>86400</lifetime>
+		            <layout>
+			            <flat />
+		            </layout>
+			        <structure>
+			            <id>
+		                    <name>asnum</name>
+			            </id>
+			            <attribute>
+			                <name>name</name>
+			                <type>String</type>
+			                <null_value></null_value>
+			            </attribute>
+			            <attribute>
+			                <name>country</name>
+			                <type>String</type>
+			                <null_value></null_value>
+			            </attribute>
+			        </structure>
+		        </dictionary>
+		    </yandex>
+		"""#
 }
