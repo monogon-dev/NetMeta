@@ -94,6 +94,10 @@ func parseMRT(r io.Reader) (map[string]uint32, error) {
 		d := s.Bytes()
 		count++
 
+		if count%10000 == 0 {
+			klog.V(1).Infof("progress: %d", count)
+		}
+
 		hdr := &mrt.MRTHeader{}
 		err := hdr.DecodeFromBytes(d[:mrt.MRT_COMMON_HEADER_LEN])
 		if err != nil {
@@ -120,8 +124,17 @@ func parseMRT(r io.Reader) (map[string]uint32, error) {
 		case mrt.RIB_IPV4_UNICAST:
 			// IPv6 "subnets" for truncated IPv6-mapped IPv4
 			p := body.Prefix.(*bgp.IPAddrPrefix)
+			if p.Length == 0 {
+				klog.V(1).Infof("ignoring IPv4 default route: %+v", body)
+				continue
+			}
 			prefix = fmt.Sprintf("::%s/%d", p.Prefix.String(), p.Length+96)
 		case mrt.RIB_IPV6_UNICAST:
+			p := body.Prefix.(*bgp.IPv6AddrPrefix)
+			if p.Length == 0 {
+				klog.V(1).Infof("ignoring IPv6 default route: %+v", body)
+				continue
+			}
 			prefix = body.Prefix.String()
 		default:
 			continue
