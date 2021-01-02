@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"regexp"
 	"sync"
 	"time"
 
@@ -43,11 +44,56 @@ const (
 	// experience a sudden spike in popularity.
 	//
 	// True origin is http://archive.routeviews.org/route-views4/bgpdata.
-	ribDumpPath = "https://netmeta-cache.leoluk.de/v1/routeviews"
+	ribDumpURI = "https://netmeta-cache.leoluk.de/v1/routeviews"
+
+	// In order to resolve AS numbers to descriptions, we need data from every individual IRRs. Thankfully, someone else
+	// already did the hard work of aggregating them, and we can just fetch that (origin is
+	// https://bgp.potaroo.net/cidr/autnums.html, we cache it to avoid causing load).
+	autnumURI = "https://netmeta-cache.leoluk.de/v1/autnums.html"
 )
 
 func init() {
 	klog.InitFlags(nil)
+}
+
+// serveAutnums requests and parses autnums.html and writes its contents as tab-separated (asnum, asname, country)
+// lines to an io.Writer.
+func serveAutnums(ctx context.Context, w io.Writer) error {
+	autnumRegexp, err := regexp.Compile(`<a .*>AS(\d+)\s*<\/a>\s*(.*), ([A-Z]+)`) // Hi Zalgo
+	if err != nil {
+		panic(err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", autnumURI, nil)
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Set("user-agent", userAgent)
+
+	resp, err := new(http.Client).Do(req)
+	if err != nil {
+		return fmt.Errorf("failed to request autnums.html: %w", err)
+	}
+	defer resp.Body.Close()
+
+	s := bufio.NewScanner(resp.Body)
+
+	for s.Scan() {
+		t := s.Text()
+		m := autnumRegexp.FindStringSubmatch(t)
+
+		if m != nil {
+			if _, err := fmt.Fprintf(w, "%s\t%s\t%s\n", m[1], m[2], m[3]); err != nil {
+				return fmt.Errorf("failed to write response: %w", err)
+			}
+		}
+	}
+
+	if err := s.Err(); err != nil {
+		return fmt.Errorf("failed to scan input: %w", err)
+	}
+
+	return nil
 }
 
 func fetchLatestRIB(ctx context.Context) (io.ReadCloser, error) {
@@ -59,7 +105,7 @@ func fetchLatestRIB(ctx context.Context) (io.ReadCloser, error) {
 		t := utc.Add(time.Duration(-i) * time.Hour)
 		d := t.Format("2006.01")
 		f := t.Format("rib.20060102.1500") + ".bz2"
-		u := fmt.Sprintf("%s/%s/RIBS/%s", ribDumpPath, d, f)
+		u := fmt.Sprintf("%s/%s/RIBS/%s", ribDumpURI, d, f)
 
 		klog.Infof("trying %s", u)
 
@@ -157,11 +203,15 @@ func parseMRT(r io.Reader) (map[string]uint32, error) {
 		}
 	}
 
+	if err := s.Err(); err != nil {
+		return nil, fmt.Errorf("failed to scan input: %w", err)
+	}
+
 	klog.Infof("parsed %d routes", count)
 	return result, nil
 }
 
-func handle(w http.ResponseWriter, r *http.Request) {
+func handleRIB(w http.ResponseWriter, r *http.Request) {
 	klog.Infof("%v %s %s", r.RemoteAddr, r.Method, r.URL)
 
 	// Check if we can serve the RIB from local cache.
@@ -246,13 +296,26 @@ func handle(w http.ResponseWriter, r *http.Request) {
 	klog.Infof("%v sent %d bytes (cache miss)", r.RemoteAddr, written)
 }
 
+func handleAutnums(w http.ResponseWriter, r *http.Request) {
+	klog.Infof("%v %s %s", r.RemoteAddr, r.Method, r.URL)
+
+	// This is a cheap request - we do not cache it locally.
+
+	if err := serveAutnums(r.Context(), w); err != nil {
+		klog.Errorf("failed to parse autnums.html: %v", err)
+		w.WriteHeader(500)
+		return
+	}
+}
+
 func main() {
 	flag.Parse()
 	if err := os.MkdirAll(*cacheDir, 0750); err != nil {
 		klog.Fatal(err)
 	}
 
-	http.HandleFunc("/rib.tsv", handle)
+	http.HandleFunc("/rib.tsv", handleRIB)
+	http.HandleFunc("/autnums.tsv", handleAutnums)
 
 	klog.Fatal(http.ListenAndServe(*addr, nil))
 }
