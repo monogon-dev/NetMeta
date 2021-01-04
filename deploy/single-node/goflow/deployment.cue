@@ -19,6 +19,10 @@ k8s: deployments: goflow: {
 					{
 						name:  "goflow"
 						image: netmeta.images.goflow.image
+
+						// Removed in 58175b24, explicitly zero it for backwards compatibility.
+						command: []
+
 						args: [
 							"-kafka.brokers=netmeta-kafka-bootstrap:9092",
 							"-proto.fixedlen=true",
