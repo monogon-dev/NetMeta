@@ -155,8 +155,8 @@ cd deploy/single-node
 cue apply ./...
 
 # Apply SQL migrations (work in progress - will be automated in the future)
-# Wait for all pods to be running first (kubectl get pod -w).
-kubectl exec -it chi-netmeta-netmeta-0-0-0 -- clickhouse-client -mn < schema/1_init.up.sql
+# Wait for all pods to be running first (kubectl get pod -w). No error means it worked.
+kubectl exec -i chi-netmeta-netmeta-0-0-0 -c clickhouse -- clickhouse-client -mn < schema/1_init.up.sql
 ```
 
 Common errors during deployment:
