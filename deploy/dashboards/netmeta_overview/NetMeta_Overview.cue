@@ -1314,6 +1314,24 @@ panels: [{
 			}, {
 				id: "max"
 			}]
+		}, {
+			matcher: {
+				id:      "byName"
+				options: "CO"
+			}
+			properties: [{
+				id:    "custom.width"
+				value: 42
+			}]
+		}, {
+			matcher: {
+				id:      "byName"
+				options: "SrcAS"
+			}
+			properties: [{
+				id:    "custom.width"
+				value: 100
+			}]
 		}]
 	}
 	gridPos: {
@@ -1337,6 +1355,8 @@ panels: [{
 		query:               """
 			SELECT
 			  SrcAS,
+			  dictGetString('autnums', 'name', toUInt64(SrcAS)) AS ASName,
+			  dictGetString('autnums', 'country', toUInt64(SrcAS)) AS CO,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
 			FROM $table
 			WHERE $timeFilter AND FlowDirection = 0
@@ -1392,6 +1412,24 @@ panels: [{
 			}, {
 				id: "max"
 			}]
+		}, {
+			matcher: {
+				id:      "byName"
+				options: "CO"
+			}
+			properties: [{
+				id:    "custom.width"
+				value: 42
+			}]
+		}, {
+			matcher: {
+				id:      "byName"
+				options: "SrcAS"
+			}
+			properties: [{
+				id:    "custom.width"
+				value: 100
+			}]
 		}]
 	}
 	gridPos: {
@@ -1415,6 +1453,8 @@ panels: [{
 		query:               """
 			SELECT
 			  DstAS,
+			  dictGetString('autnums', 'name', toUInt64(DstAS)) AS ASName,
+			  dictGetString('autnums', 'country', toUInt64(DstAS)) AS CO,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
 			FROM $table
 			WHERE $timeFilter AND FlowDirection = 1
