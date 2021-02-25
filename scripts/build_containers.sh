@@ -27,5 +27,6 @@ netmeta: images: #NetMetaImages & {
   migrate: $(build schema:migrate)
   risinfo: $(build cmd/risinfo:risinfo)
   goflow: $(build third_party/goflow:goflow)
+  portmirror: $(build cmd/portmirror:portmirror)
 }
 EOF

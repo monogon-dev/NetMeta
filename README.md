@@ -323,6 +323,24 @@ For Linux hosts, there's a custom agent on the roadmap that directly pushes to K
 and get better data that includes the flow direction.
 In the meantime, hsflowd is your best bet for collecting samples from a host.
 
+### Port Mirror collector
+
+If you have a Interface Pair that receives a copy of your Traffic e.G. Switch Portmirror, Fibre Taps, etc. you can use
+this as your collector. For this you have to set it up in the config like this:
+
+```yaml
+netmeta: config: {
+    [...]
+    portMirror: {
+      interfaces: "tap_rx:tap_tx,tap2_rx:tap2_tx"
+      sampleRate: 100
+    }
+}
+```
+
+You have to configure which interfaces the collector should listen on. You can have multiple pairs by 
+seperating them with a comma. You can also configure the sample rate.
+
 ### nxtOS
 
 Stay tuned - NetMeta will be a first-class citizen on our nxtOS Kubernetes cluster operating system. 
