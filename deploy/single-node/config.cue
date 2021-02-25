@@ -103,6 +103,7 @@ package k8s
 	// List of router interfaces to resolve to names
 	interfaceMap: [...#InterfaceMap]
 
+	// Expose the ClickHouse HTTP query API on the port defined above.
 	enableClickhouseIngress: bool | *false
 }
 
