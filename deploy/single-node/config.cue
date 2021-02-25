@@ -48,6 +48,11 @@ package k8s
 	maxPacketSize: *1500 | uint
 }
 
+#PortMirrorConfig: {
+	interfaces: string | *"tap_rx:tap_tx"
+	sampleRate: int | *1000
+}
+
 #NetMetaConfig: {
 	// Size of the goflow sFlow/IPFIX ingestion queue. Keeping
 	// a larger queue allows for backprocessing of longer periods of historical data.
@@ -101,6 +106,9 @@ package k8s
 
 	// List of router interfaces to resolve to names
 	interfaceMap: [...#InterfaceMap]
+
+	ingressType: *"goflow" | "portmirror"
+	portMirror?: #PortMirrorConfig
 }
 
 #Image: {
@@ -113,4 +121,5 @@ package k8s
 	migrate:    #Image
 	risinfo:    #Image
 	goflow:     #Image
+	portmirror: #Image
 }
