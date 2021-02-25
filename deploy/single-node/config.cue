@@ -15,8 +15,9 @@ package k8s
 
 #Ports: {
 	// Frontend (HTTP is redirected to HTTPS)
-	http:  int | *80
-	https: int | *443
+	http:       int | *80
+	https:      int | *443
+	clickhouse: int | *8123
 
 	// Netflow/IPFIX
 	netflow: int | *2055
@@ -101,6 +102,8 @@ package k8s
 
 	// List of router interfaces to resolve to names
 	interfaceMap: [...#InterfaceMap]
+
+	enableClickhouseIngress: bool | *false
 }
 
 #Image: {
