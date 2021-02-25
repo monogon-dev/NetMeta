@@ -35,14 +35,22 @@ k8s: deployments: traefik: {
 						]
 					}
 
-					args: [
+					let _args = [
 						"--accesslog",
 						"--entrypoints.web.Address=:\(netmeta.config.ports.http)",
 						"--entrypoints.websecure.Address=:\(netmeta.config.ports.https)",
 						"--providers.kubernetescrd",
-					] + _letsencrypt + _letsencryptStaging
+					]
 
-					ports: [{
+					if netmeta.config.enableClickhouseIngress {
+						let _args = _args + [
+							"--entrypoints.clickhouse.Address=:\(netmeta.config.ports.clickhouse)",
+						]
+					}
+
+					args: _args
+
+					let _ports = [{
 						name:          "web"
 						containerPort: netmeta.config.ports.http
 						protocol:      "TCP"
@@ -50,7 +58,21 @@ k8s: deployments: traefik: {
 						name:          "websecure"
 						containerPort: netmeta.config.ports.https
 						protocol:      "TCP"
+					}, {
+						name:          "clickhouse"
+						containerPort: netmeta.config.ports.clickhouse
+						protocol:      "TCP"
 					}]
+
+					if netmeta.config.enableClickhouseIngress {
+						let _ports = _ports + [{
+							name:          "clickhouse"
+							containerPort: netmeta.config.ports.clickhouse
+							protocol:      "TCP"
+						}]
+					}
+					ports: _ports
+
 					volumeMounts: [{
 						mountPath: "/data"
 						name:      "traefik-data"
