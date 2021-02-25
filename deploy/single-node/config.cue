@@ -70,13 +70,13 @@ package k8s
 	dashboardDisplay: #DashboardDisplayConfig
 
 	// Let's Encrypt Mode
-	//  - off: self-signed certificate (TODO)
+	//  - off: self-signed certificate (TODO, right now, it just disables certificates altogether)
 	//  - staging: staging Let's Encrypt server (recommended for testing!)
 	//  - production: production Let's Encrypt server (beware of rate limits)
 	//
 	// Switching between staging and production will not automatically
 	// delete the existing certificate - delete acme.json and restart Traefik.
-	letsencryptMode: *"staging" | "production"
+	letsencryptMode: *"staging" | "production" | "off"
 
 	// Let's Encrypt Account Email Address
 	letsencryptAccountMail: string

@@ -21,36 +21,34 @@ k8s: deployments: traefik: {
 					name:  "traefik"
 					image: "docker.io/traefik:v2.3.6@sha256:03e2149c3a844ca9543edd2a7a8cd0e4a1a9afb543486ad99e737323eb5c25f2"
 
+					_letsencrypt: [...]
+					if netmeta.config.letsencryptMode != "off" {
+						_letsencrypt: [
+							"--certificatesresolvers.publicHostnameResolver.acme.tlschallenge",
+							"--certificatesresolvers.publicHostnameResolver.acme.email=\(netmeta.config.letsencryptAccountMail)",
+							"--certificatesresolvers.publicHostnameResolver.acme.storage=/data/acme.json",
+						]
+					}
+
 					_letsencryptStaging: [...]
-
-					_letsencrypt: [
-						"--certificatesresolvers.publicHostnameResolver.acme.tlschallenge",
-						"--certificatesresolvers.publicHostnameResolver.acme.email=\(netmeta.config.letsencryptAccountMail)",
-						"--certificatesresolvers.publicHostnameResolver.acme.storage=/data/acme.json",
-					]
-
 					if netmeta.config.letsencryptMode == "staging" {
 						_letsencryptStaging: [
 							"--certificatesresolvers.publicHostnameResolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory",
 						]
 					}
 
-					let _args = [
+					args: [
 						"--accesslog",
 						"--entrypoints.web.Address=:\(netmeta.config.ports.http)",
 						"--entrypoints.websecure.Address=:\(netmeta.config.ports.https)",
 						"--providers.kubernetescrd",
-					]
 
-					if netmeta.config.enableClickhouseIngress {
-						let _args = _args + [
-							"--entrypoints.clickhouse.Address=:\(netmeta.config.ports.clickhouse)",
-						]
-					}
+						if netmeta.config.enableClickhouseIngress {
+							"--entrypoints.clickhouse.Address=:\(netmeta.config.ports.clickhouse)"
+						},
+					] + _letsencrypt + _letsencryptStaging
 
-					args: _args
-
-					let _ports = [{
+					ports: [{
 						name:          "web"
 						containerPort: netmeta.config.ports.http
 						protocol:      "TCP"
@@ -63,15 +61,6 @@ k8s: deployments: traefik: {
 						containerPort: netmeta.config.ports.clickhouse
 						protocol:      "TCP"
 					}]
-
-					if netmeta.config.enableClickhouseIngress {
-						let _ports = _ports + [{
-							name:          "clickhouse"
-							containerPort: netmeta.config.ports.clickhouse
-							protocol:      "TCP"
-						}]
-					}
-					ports: _ports
 
 					volumeMounts: [{
 						mountPath: "/data"
