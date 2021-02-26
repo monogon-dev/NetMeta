@@ -1,5 +1,9 @@
 package k8s
 
+import (
+	"list"
+)
+
 k8s: serviceaccounts: "traefik-ingress-controller": {}
 
 k8s: pvcs: "traefik-data": {}
@@ -21,32 +25,36 @@ k8s: deployments: traefik: {
 					name:  "traefik"
 					image: "docker.io/traefik:v2.3.6@sha256:03e2149c3a844ca9543edd2a7a8cd0e4a1a9afb543486ad99e737323eb5c25f2"
 
-					_letsencrypt: [...]
-					if netmeta.config.letsencryptMode != "off" {
-						_letsencrypt: [
-							"--certificatesresolvers.publicHostnameResolver.acme.tlschallenge",
-							"--certificatesresolvers.publicHostnameResolver.acme.email=\(netmeta.config.letsencryptAccountMail)",
-							"--certificatesresolvers.publicHostnameResolver.acme.storage=/data/acme.json",
-						]
-					}
+					let _args = [
+						[
+							"--accesslog",
+							"--entrypoints.web.Address=:\(netmeta.config.ports.http)",
+							"--entrypoints.websecure.Address=:\(netmeta.config.ports.https)",
+							"--providers.kubernetescrd",
+						],
 
-					_letsencryptStaging: [...]
-					if netmeta.config.letsencryptMode == "staging" {
-						_letsencryptStaging: [
-							"--certificatesresolvers.publicHostnameResolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory",
-						]
-					}
+						if netmeta.config.letsencryptMode != "off" {
+							[
+								"--certificatesresolvers.publicHostnameResolver.acme.tlschallenge",
+								"--certificatesresolvers.publicHostnameResolver.acme.email=\(netmeta.config.letsencryptAccountMail)",
+								"--certificatesresolvers.publicHostnameResolver.acme.storage=/data/acme.json",
+							]
+						},
 
-					args: [
-						"--accesslog",
-						"--entrypoints.web.Address=:\(netmeta.config.ports.http)",
-						"--entrypoints.websecure.Address=:\(netmeta.config.ports.https)",
-						"--providers.kubernetescrd",
+						if netmeta.config.letsencryptMode == "staging" {
+							[
+								"--certificatesresolvers.publicHostnameResolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory",
+							]
+						},
 
 						if netmeta.config.enableClickhouseIngress {
-							"--entrypoints.clickhouse.Address=:\(netmeta.config.ports.clickhouse)"
+							[
+								"--entrypoints.clickhouse.Address=:\(netmeta.config.ports.clickhouse)",
+							]
 						},
-					] + _letsencrypt + _letsencryptStaging
+					]
+
+					args: list.FlattenN(_args, 1)
 
 					ports: [{
 						name:          "web"
