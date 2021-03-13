@@ -9,3 +9,5 @@ command: diff: {
 		stdin: yaml.MarshalStream(preObjects + objects)
 	}
 }
+
+yo: "yo"
