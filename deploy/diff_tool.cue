@@ -11,3 +11,5 @@ command: diff: {
 }
 
 yo: "yo"
+
+yo: "conflict"
