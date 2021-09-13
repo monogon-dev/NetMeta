@@ -323,9 +323,9 @@ For Linux hosts, there's a custom agent on the roadmap that directly pushes to K
 and get better data that includes the flow direction.
 In the meantime, hsflowd is your best bet for collecting samples from a host.
 
-### nxtOS
+### Monogon Metropolis
 
-Stay tuned - NetMeta will be a first-class citizen on our nxtOS Kubernetes cluster operating system. 
+Stay tuned - NetMeta will be a first-class citizen on Monogon's [Metropolis](https://monogon.tech/metropolis.html) cluster operating system. 
 
 ### Kubernetes
 
