@@ -77,7 +77,7 @@ GO=1.17.2
 #
 # This leaves us with apiserver and kubelet on public ports, both of which are designed for public exposure.
 #
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.20.0+k3s2" INSTALL_K3S_EXEC="server
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.22.2+k3s2" INSTALL_K3S_EXEC="server
   --disable-cloud-controller
   --kube-scheduler-arg=address=127.0.0.1
   --kube-controller-manager-arg=address=127.0.0.1
