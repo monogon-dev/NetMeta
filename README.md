@@ -173,7 +173,7 @@ NetMeta expects a config file at `deploy/single-node/config_local.cue`. Check
 
 Minimal config for a working installation:
 
-```yaml
+```cue
 package k8s
 
 netmeta: config: {
@@ -193,7 +193,7 @@ with generated random values.
 
 If you use GSuite, configure authentication:
 
-```yaml
+```cue
 netmeta: config: {
     [...]
 
@@ -211,7 +211,7 @@ netmeta: config: {
 
 You can manually resolve numeric interface IDs (also known as "SNMP ID") to human-readable interface names:
 
-```yaml
+```cue
 netmeta: config: {
     [...]
 
