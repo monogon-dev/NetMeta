@@ -39,7 +39,7 @@ fi
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
 
 ARCH=amd64
-GO=1.15.6
+GO=1.17.2
 
 (
   if [[ -d /usr/local/go ]]; then
