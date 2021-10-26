@@ -99,7 +99,7 @@ NetMeta can scale to millions of events per seconds in multi-node deployments.
 
 ### Single-node deployment
 
-Single-node deployment is tested on CentOS/RHEL 7 + 8, Debian 10 and Ubuntu 18.04 LTS. 
+Single-node deployment is tested on CentOS/RHEL 7 + 8, Debian 10 and Ubuntu 18.04 LTS + 20.04 LTS. 
 
 We strongly recommend deploying NetMeta on a dedicated VM or physical server.
 
