@@ -9,8 +9,8 @@ import (
 	"strconv"
 
 	// Dashboards
-	dashboard_overview "github.com/leoluk/NetMeta/deploy/dashboards/netmeta_overview"
-	dashboard_queries "github.com/leoluk/NetMeta/deploy/dashboards/clickhouse_queries"
+	dashboard_overview "github.com/monogon-dev/NetMeta/deploy/dashboards/netmeta_overview"
+	dashboard_queries "github.com/monogon-dev/NetMeta/deploy/dashboards/clickhouse_queries"
 )
 
 // https://github.com/grafana/grafana/blob/master/docs/sources/administration/provisioning.md

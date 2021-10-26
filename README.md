@@ -140,7 +140,7 @@ We will eventually provide pre-built images, for now, the build dependencies are
 Quick start:
 
 ```bash
-git clone https://github.com/leoluk/NetMeta && cd NetMeta
+git clone https://github.com/monogon-dev/NetMeta && cd NetMeta
 
 # Install dependencies
 ./install.sh
