@@ -298,7 +298,7 @@ k8s: clickhouseinstallations: netmeta: spec: configuration: files: {
     128	CWR
     """#
 
-	// TODO: deduplicate (https://github.com/leoluk/NetMeta/issues/6)
+	// TODO: deduplicate (https://github.com/monogon-dev/NetMeta/issues/6)
 	"FlowMessage.proto": #"""
       syntax = "proto3";
       package netmeta;

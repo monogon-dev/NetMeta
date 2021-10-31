@@ -4,7 +4,7 @@ load("@io_bazel_rules_docker//go:image.bzl", "go_image")
 go_library(
     name = "go_default_library",
     srcs = ["risinfo.go"],
-    importpath = "github.com/leoluk/NetMeta/cmd/risinfo",
+    importpath = "github.com/monogon-dev/NetMeta/cmd/risinfo",
     visibility = ["//visibility:private"],
     deps = [
         "@com_github_osrg_gobgp//pkg/packet/bgp:go_default_library",

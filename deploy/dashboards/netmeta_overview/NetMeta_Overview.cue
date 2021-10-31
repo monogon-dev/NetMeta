@@ -326,7 +326,7 @@ panels: [{
 	id: 43
 	options: {
 		content: """
-			For questions, bug reports or feature requests please refer to https://github.com/leoluk/NetMeta or send a mail to netmeta@leoluk.de
+			For questions, bug reports or feature requests please refer to https://github.com/monogon-dev/NetMeta or send a mail to netmeta@leoluk.de
 
 			Contributions are very welcome!
 			"""

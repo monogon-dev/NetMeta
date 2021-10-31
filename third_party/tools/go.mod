@@ -1,4 +1,4 @@
-module github.com/leoluk/NetMeta
+module github.com/monogon-dev/NetMeta
 
 go 1.14
 

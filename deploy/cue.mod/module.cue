@@ -1,1 +1,1 @@
-module: "github.com/leoluk/NetMeta/deploy"
+module: "github.com/monogon-dev/NetMeta/deploy"
