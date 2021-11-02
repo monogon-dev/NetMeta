@@ -57,7 +57,7 @@ Of course, pre-aggregation means that we lose data about the individual packets.
 * Does this flow consist of only SYN packets? SYN-ACKs? A mixture of both? We can't tell, because the TCP flags in the 
   flow metadata are a union of all individual packet's TCP flags.
 
-* In adverserial network conditions, like DDoS attacks using random source IP and ports, each packet can represent a new
+* In adversarial network conditions, like DDoS attacks using random source IP and ports, each packet can represent a new
   flow. This can quickly fill up the flow table, resulting in dropped flows, losing visibility in a situation where it
   would be particularly useful. The rate of samples sent to the collector is hard to reason about, since it is
   implementation-specific and depends on flow cardinality, table size and timeouts.
