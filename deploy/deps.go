@@ -1,3 +1,6 @@
+//go:build tools
+// +build tools
+
 package deploy
 
 // Static imports for Cue definitions
