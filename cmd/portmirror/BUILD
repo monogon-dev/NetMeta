@@ -4,7 +4,7 @@ load("@io_bazel_rules_docker//go:image.bzl", "go_image")
 go_library(
     name = "go_default_library",
     srcs = ["portmirror.go","frame.go","iface.go"],
-    importpath = "github.com/leoluk/NetMeta/cmd/portmirror",
+    importpath = "github.com/monogon-dev/NetMeta/cmd/portmirror",
     visibility = ["//visibility:private"],
     deps = [
         "@com_github_cloudflare_goflow_v3//pb:go_default_library",
