@@ -369,7 +369,7 @@ Work In Progress. Please contact us if you're interested in large-scale deployme
 
 ---
 
-(C) 2020 Nexantic GmbH. This is not (yet?) an official Nexantic product. 
+(C) 2021 [Monogon SE](https://monogon.tech). 
 
 This software is provided "as-is" and
 without any express or implied warranties, including, without limitation, the implied warranties of
