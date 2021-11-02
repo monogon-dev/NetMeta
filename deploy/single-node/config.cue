@@ -49,6 +49,14 @@ package k8s
 	maxPacketSize: *1500 | uint
 }
 
+#PortMirrorConfig: {
+	// The Interfaces to listen to. Multiple interface pairs can be set by seperating them with a comma.
+	interfaces: string | *"tap_rx:tap_tx"
+
+	// The sample rate for the traffic sniffing. Defaults to every 1000th frame.
+	sampleRate: int | *1000
+}
+
 #NetMetaConfig: {
 	// Size of the goflow sFlow/IPFIX ingestion queue. Keeping
 	// a larger queue allows for backprocessing of longer periods of historical data.
@@ -105,6 +113,13 @@ package k8s
 
 	// Expose the ClickHouse HTTP query API on the port defined above.
 	enableClickhouseIngress: bool | *false
+
+	// When set to a PortMirrorConfig, the PortMirror Tool will be deployed and
+	// listen to the defined interfaces.
+	portMirror?: #PortMirrorConfig
+
+	// Defines if the goflow tool should be deployed
+	deployGoflow: bool | *true
 }
 
 #Image: {
@@ -117,4 +132,5 @@ package k8s
 	migrate:    #Image
 	risinfo:    #Image
 	goflow:     #Image
+	portmirror: #Image
 }
