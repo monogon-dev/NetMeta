@@ -132,7 +132,7 @@ k8s: {
 				containers: [
 					{
 						name:            "grafana"
-						image:           "docker.io/grafana/grafana:7.3.6@sha256:05bc2b08de2a6cd6260937dc174cc4bdfada29cc7dd13c73e638caad32d26b3e"
+						image:           "docker.io/grafana/grafana:8.2.1@sha256:b3ec90dcb532054144a039760a71311b60b17db22b4711541eb72b08d583c52e"
 						imagePullPolicy: "IfNotPresent"
 
 						_googleAuth: [...]
@@ -181,12 +181,7 @@ k8s: {
 							},
 							{
 								name:  "GF_INSTALL_PLUGINS"
-								value: "vertamedia-clickhouse-datasource 2.1.0"
-							},
-							// TODO: remove after upgrading to 2.2.0, which is signed
-							{
-								name:  "GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS"
-								value: "vertamedia-clickhouse-datasource"
+								value: "vertamedia-clickhouse-datasource 2.3.1"
 							},
 							{
 								name:  "GF_SECURITY_ADMIN_PASSWORD"
