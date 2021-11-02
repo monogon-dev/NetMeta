@@ -48,6 +48,8 @@ k8s: clusterroles: "traefik-ingress-controller": rules: [{
 		"ingressrouteudps",
 		"tlsoptions",
 		"tlsstores",
+		"serverstransports",
+		"middlewaretcps",
 	]
 	verbs: [
 		"get",
