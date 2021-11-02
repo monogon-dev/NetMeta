@@ -330,7 +330,7 @@ NetMeta's integrated collector to directly sample traffic without requiring an s
 
 You can either deploy the collector to a remote host, or have it deployed automatically on your monitoring host:
 
-```yaml
+```cue
 netmeta: config: {
     [...]
     portMirror: {
