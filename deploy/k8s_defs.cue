@@ -4,7 +4,7 @@ import (
 	core_v1 "k8s.io/api/core/v1"
 	apps_v1 "k8s.io/api/apps/v1"
 	rbac_v1 "k8s.io/api/rbac/v1"
-	apiext_v1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
+	apiext_v1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 )
 
 k8s: close({
@@ -34,8 +34,8 @@ k8s: close({
 		kind:       "IngressRouteUDP"
 		metadata: name: Name
 	}
-	crds: [Name=_]: apiext_v1beta1.#CustomResourceDefinition & {
-		apiVersion: "apiextensions.k8s.io/v1beta1"
+	crds: [Name=_]: apiext_v1.#CustomResourceDefinition & {
+		apiVersion: "apiextensions.k8s.io/v1"
 		kind:       "CustomResourceDefinition"
 		metadata: name: Name
 	}
