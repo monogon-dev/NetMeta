@@ -10,12 +10,12 @@ import (
 k8s: close({
 	// TODO(leo): type CRDs
 	kafkas: [Name=_]: {
-		apiVersion: "kafka.strimzi.io/v1beta1"
+		apiVersion: "kafka.strimzi.io/v1beta2"
 		kind:       "Kafka"
 		metadata: name: Name
 	}
 	kafkatopics: [Name=_]: {
-		apiVersion: "kafka.strimzi.io/v1beta1"
+		apiVersion: "kafka.strimzi.io/v1beta2"
 		kind:       "KafkaTopic"
 		metadata: name: Name
 	}
