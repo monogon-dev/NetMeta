@@ -24,7 +24,6 @@ k8s: clickhouseinstallations: netmeta: spec: {
 				name: "netmeta"
 				templates: {}
 				zookeeper: {}
-				address: {}
 				layout: {
 					shardsCount:   1
 					replicasCount: 1
@@ -59,11 +58,6 @@ k8s: clickhouseinstallations: netmeta: spec: {
 		podTemplates: [{
 			name:            "clickhouse-static"
 			distribution:    ""
-			podDistribution: null
-			zone: {
-				key:    ""
-				values: null
-			}
 			spec: containers: [{
 				name:  "clickhouse"
 				image: "docker.io/yandex/clickhouse-server:20.3.10.75@sha256:2302716e901205f288e8bbdb4795db7323066b146a2d42c7f36a1ba1c20a5666"
