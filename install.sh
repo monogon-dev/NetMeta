@@ -61,6 +61,19 @@ GO=1.17.2
 
 . /etc/profile.d/local_go.sh
 
+# k3s helper aliases
+cat <<EOF > /etc/profile.d/local_k3s_helpers.sh
+alias kc=kubectl
+alias use-context='kubectl config use-context'
+
+. <(kubectl completion bash)
+complete -o default -F __start_kubectl kc
+
+function use-namespace {
+  kubectl config set-context --current --namespace=$1
+}
+EOF
+
 # Install Go dependencies. Dependency versions and hashes are pinned using the
 # Go module mechanism.
 

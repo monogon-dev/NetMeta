@@ -3,6 +3,7 @@
 
 rm -rf /usr/local/go
 rm /etc/profile.d/local_go.sh
+rm /etc/profile.d/local_k3s_helpers.sh
 rm /usr/local/bin/cue
 rm /usr/local/bin/ko
 
