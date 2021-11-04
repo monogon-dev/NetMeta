@@ -1,3 +1,6 @@
+//go:build tools
+// +build tools
+
 package goflow
 
 // Build goflow container

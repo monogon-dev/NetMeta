@@ -9,9 +9,6 @@ if netmeta.config.deployGoflow {
 			template: {
 				metadata: labels: app: M.labels.app
 
-				// Trigger redeployment when digest changes.
-				metadata: annotations: "meta/local-image-digest": netmeta.images.goflow.digest
-
 				spec: {
 					// k3s does not support IPv6 networking, so we run goflow in the host network namespace.
 					hostNetwork: true
@@ -19,7 +16,7 @@ if netmeta.config.deployGoflow {
 					containers: [
 						{
 							name:  "goflow"
-							image: netmeta.images.goflow.image
+							image: netmeta.images.goflow
 
 							// Removed in 58175b24, explicitly zero it for backwards compatibility.
 							command: []

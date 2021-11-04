@@ -1,5 +1,0 @@
-build --incompatible_use_python_toolchains
-test --incompatible_use_python_toolchains
-
-# Enable ClickHouse support in golang-migrate
-build --define gotags=clickhouse

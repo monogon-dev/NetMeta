@@ -20,15 +20,12 @@ k8s: deployments: risinfo: {
 		template: {
 			metadata: labels: app: M.labels.app
 
-			// Trigger redeployment when digest changes.
-			metadata: annotations: "meta/local-image-digest": netmeta.images.risinfo.digest
-
 			spec: {
 				containers: [
 					{
 						name:            "risinfo"
 						imagePullPolicy: "Never"
-						image:           netmeta.images.risinfo.image
+						image:           netmeta.images.risinfo
 
 						args: ["-cacheDir=/cache"]
 

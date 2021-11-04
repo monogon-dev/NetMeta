@@ -19,7 +19,7 @@ set -euo pipefail
 #  - ClickHouse container images by Yandex.
 #  - Strimzi Kafka container images by Red Hat.
 #
-# All downloads happen via SSL and are fully open source.
+# All downloads happen via SSL. All dependencies are fully open source.
 #
 # We build most dependencies from source, except for the larger binary dependencies
 # listed above. It's possible to build these from source as well. If you need this
@@ -27,7 +27,7 @@ set -euo pipefail
 #
 # Might not eat existing data - we strongly recommend to run the NetMeta single
 # node deployment on a dedicated host for both security and performance reasons.
-#
+
 # Install Go binary. We need Go to build other dependencies.
 
 if [[ $EUID -ne 0 ]]; then
@@ -67,7 +67,7 @@ GO=1.17.2
 (
   cd third_party/tools
   go build -mod=readonly -o /usr/local/bin/cue cuelang.org/go/cmd/cue
-  go build -mod=readonly -o /usr/local/bin/bazel github.com/bazelbuild/bazelisk
+  go build -mod=readonly -o /usr/local/bin/ko github.com/google/ko
 )
 
 # Install k3s. k3s is a minimal Kubernetes distribution we use to deploy the various pieces of NetMeta.

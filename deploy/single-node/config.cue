@@ -122,14 +122,10 @@ package k8s
 	deployGoflow: bool | *true
 }
 
-#Image: {
-	image:  string
-	digest: string
-}
+#Image: string
 
 #NetMetaImages: {
 	helloworld: #Image
-	migrate:    #Image
 	risinfo:    #Image
 	goflow:     #Image
 	portmirror: #Image

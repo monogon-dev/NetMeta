@@ -104,38 +104,12 @@ Single-node deployment is tested on CentOS/RHEL 7 + 8, Debian 10 and Ubuntu 18.0
 We strongly recommend deploying NetMeta on a dedicated VM or physical server.
 
 Deployment is designed to be compatible with hosts that are managed by an organization's configuration management baseline.
-The NetMeta single-node deployment is self-contained and does not touch any of the system's global configuration.
+The NetMeta single-node deployment is **self-contained** and does not touch any of the system's global configuration.
 Make sure to read and understand install.sh before you run it! It can co-exist with other services on the same machine,
 but we do not recommend that.
 
-Build dependencies:
-
-- Python >=3.6 (rules_docker)
-- C compiler toolchain (protoc)
-
-Install build dependencies on RHEL/CentOS 7:
-
-    yum install -y jq "@Development Tools"
-    
-Install build dependencies on RHEL/CentOS 8 and Fedora:
-
-```bash
-dnf install -y python3 jq "@Development Tools"
-
-# TODO(leo): ugh - figure out how to convince Bazel to use the python3 binary
-ln -s /usr/bin/python3 /usr/local/bin/python
-```
-
-On Fedora >= 32, disable cgroupsv2, which is [not yet supported by k3s](https://github.com/rancher/k3s/issues/900):
-
-    grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
-    reboot
-
-Install build dependencies on Debian Buster and Ubuntu 18.04:
-    
-    apt install -y jq gcc git gcc python curl g++
-
-We will eventually provide pre-built images, for now, the build dependencies are always required.
+You need to install `jq` using your distro's package manager (e.g. `dnf -y install jq` or `apt install -y jq`).
+No other build dependencies are required beyond those installed by `install.sh`.
 
 Quick start:
 
@@ -165,6 +139,18 @@ Common errors during deployment:
 - Missing required fields in the config (`incomplete value`, see below).
 - It may take a few minutes for the cluster to converge, especially if downloads are slow.
   It's normal for goflow to be in a `crashloopbackoff` state while it waits for Kafka to exist.
+
+#### Upgrading
+
+Repeat the above steps to upgrade NetMeta to the latest version:
+
+    ./install.sh
+    scripts/build_containers.sh
+    cd deploy/single-node && cue apply ./...
+
+Do not upgrade to the current main branch unless you're ready to debug NetMeta.
+Instead, wait for the next stable release and read the release notes in case
+any manual upgrade steps are required.
 
 #### Configuration
 

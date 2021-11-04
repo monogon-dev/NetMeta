@@ -9,9 +9,6 @@ if netmeta.config.portMirror != null {
 			template: {
 				metadata: labels: app: M.labels.app
 
-				// Trigger redeployment when digest changes.
-				metadata: annotations: "meta/local-image-digest": netmeta.images.portmirror.digest
-
 				spec: {
 					// k3s does not support IPv6 networking, so we run portmirror in the host network namespace.
 					hostNetwork: true
@@ -19,7 +16,7 @@ if netmeta.config.portMirror != null {
 					containers: [
 						{
 							name:  "portmirror"
-							image: netmeta.images.portmirror.image
+							image: netmeta.images.portmirror
 
 							args: [
 								"-kafka.brokers=netmeta-kafka-bootstrap:9092",
