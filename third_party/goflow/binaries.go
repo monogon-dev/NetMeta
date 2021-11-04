@@ -3,7 +3,6 @@
 
 package goflow
 
-// Build goflow container
 import (
-	_ "github.com/cloudflare/goflow/v3/cmd/goflow"
+	_ "github.com/netsampler/goflow2/cmd/goflow2"
 )

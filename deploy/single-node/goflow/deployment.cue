@@ -22,19 +22,12 @@ if netmeta.config.deployGoflow {
 							command: []
 
 							args: [
-								"-kafka.brokers=netmeta-kafka-bootstrap:9092",
-								"-proto.fixedlen=true",
-								"-loglevel=debug",
+								"-transport=kafka",
+								"-transport.kafka.brokers=netmeta-kafka-bootstrap:9092",
+								"-format.protobuf.fixedlen=true",
 								"-metrics.addr=127.0.0.1:18080",
-								"-nf.port=\(netmeta.config.ports.netflow)",
-								"-nfl.port=\(netmeta.config.ports.netflowLegacy)",
-								"-sflow.port=\(netmeta.config.ports.sflow)",
+								"-listen=sflow://:\(netmeta.config.ports.sflow),netflow://:\(netmeta.config.ports.netflow),nfl://:\(netmeta.config.ports.netflowLegacy)",
 							]
-
-							// Workaround for mlock crashes until Go 1.16 is released.
-							//   https://go-review.googlesource.com/c/go/+/246200/
-							//   https://github.com/golang/go/issues/40184
-							env: [{name: "GODEBUG", value: "mlock=0"}]
 
 							ports: [
 								{name: "netflow-legacy", containerPort: netmeta.config.ports.netflowLegacy, protocol: "UDP"},

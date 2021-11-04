@@ -34,7 +34,7 @@ func newNetClasses() (netClasses, error) {
 		return nil, err
 	}
 
-	class, err := fs.NewNetClass()
+	class, err := fs.NetClass()
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,6 @@
 package k8s
 
-if netmeta.config.portMirror != null {
+if netmeta.config.portMirror != _|_ {
 	k8s: deployments: portmirror: {
 		M=metadata: labels: app: "portmirror"
 		spec: {
