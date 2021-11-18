@@ -31,6 +31,7 @@ if netmeta.config.portMirror != _|_ {
 							//   https://go-review.googlesource.com/c/go/+/246200/
 							//   https://github.com/golang/go/issues/40184
 							env: [{name: "GODEBUG", value: "mlock=0"}]
+							securityContext: capabilities: add: ["CAP_NET_ADMIN"]
 						},
 					]
 				}
