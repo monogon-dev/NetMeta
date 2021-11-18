@@ -8,8 +8,8 @@ require (
 	github.com/google/gopacket v1.1.19
 	github.com/netsampler/goflow2 v1.0.4
 	github.com/osrg/gobgp v2.0.0+incompatible
-	github.com/prometheus/procfs v0.7.3
 	github.com/sirupsen/logrus v1.8.1
+	github.com/vishvananda/netlink v1.1.1-0.20201029203352-d40f9887b852
 	k8s.io/klog/v2 v2.30.0
 )
 
@@ -102,10 +102,12 @@ require (
 	github.com/prometheus/client_golang v1.11.0 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.32.0 // indirect
+	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
 	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/snowflakedb/gosnowflake v1.6.3 // indirect
+	github.com/vishvananda/netns v0.0.0-20200728191858-db3c7e526aae // indirect
 	github.com/xanzy/go-gitlab v0.15.0 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.0.2 // indirect

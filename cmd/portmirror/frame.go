@@ -26,6 +26,7 @@ type frameInfo struct {
 	TCPFlags uint32
 	SrcPort  uint32
 	DstPort  uint32
+	SeqNum   uint32
 }
 
 func readFrameInfo(packet gopacket.Packet) (info frameInfo) {
@@ -53,6 +54,7 @@ func readFrameInfo(packet gopacket.Packet) (info frameInfo) {
 			info.SrcPort = uint32(layer.(*layers.TCP).SrcPort)
 			info.DstPort = uint32(layer.(*layers.TCP).DstPort)
 			info.TCPFlags = uint32(layer.(*layers.TCP).Contents[13])
+			info.SeqNum = layer.(*layers.TCP).Seq
 
 		case *layers.UDP:
 			info.SrcPort = uint32(layer.(*layers.UDP).SrcPort)
