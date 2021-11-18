@@ -12,8 +12,8 @@ go_library(
         "@com_github_google_gopacket//:go_default_library",
         "@com_github_google_gopacket//afpacket:go_default_library",
         "@com_github_google_gopacket//layers:go_default_library",
-        "@com_github_prometheus_procfs//sysfs:go_default_library",
         "@com_github_sirupsen_logrus//:go_default_library",
+        "@com_github_vishvananda_netlink//:go_default_library",
     ],
 )
 
