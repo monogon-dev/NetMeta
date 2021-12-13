@@ -23,6 +23,7 @@ k8s: kafkas: "netmeta": spec: {
 				deleteClaim: false
 			}]
 		}
+		jvmOptions: javaSystemProperties: [{name: "log4j2.formatMsgNoLookups", value: "true"}]
 	}
 	zookeeper: {
 		replicas: 1
@@ -31,9 +32,14 @@ k8s: kafkas: "netmeta": spec: {
 			size:        "100Gi"
 			deleteClaim: false
 		}
+		jvmOptions: javaSystemProperties: [{name: "log4j2.formatMsgNoLookups", value: "true"}]
 	}
 	entityOperator: {
-		topicOperator: {}
-		userOperator: {}
+		topicOperator: {
+			jvmOptions: javaSystemProperties: [{name: "log4j2.formatMsgNoLookups", value: "true"}]
+		}
+		userOperator: {
+			jvmOptions: javaSystemProperties: [{name: "log4j2.formatMsgNoLookups", value: "true"}]
+		}
 	}
 }

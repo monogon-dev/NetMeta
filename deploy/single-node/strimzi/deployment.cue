@@ -83,6 +83,9 @@ k8s: deployments: "strimzi-cluster-operator": spec: {
 				}, {
 					name:  "STRIMZI_LOG_LEVEL"
 					value: "INFO"
+				}, {
+					name:  "JAVA_OPTS"
+					value:  "-Dlog4j2.formatMsgNoLookups=true"
 				}]
 				livenessProbe: {
 					httpGet: {
