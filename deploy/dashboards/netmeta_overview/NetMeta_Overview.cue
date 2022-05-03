@@ -1356,7 +1356,7 @@ panels: [{
 		intervalFactor:      1
 		query:               """
 			SELECT
-			  SrcAS,
+			  if(SrcAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(SrcAddr))), SrcAS) as SrcAS,
 			  dictGetString('autnums', 'name', toUInt64(SrcAS)) AS ASName,
 			  dictGetString('autnums', 'country', toUInt64(SrcAS)) AS CO,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
@@ -1454,7 +1454,7 @@ panels: [{
 		intervalFactor:      1
 		query:               """
 			SELECT
-			  DstAS,
+			  if(DstAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(DstAddr))), DstAS) as DstAS,
 			  dictGetString('autnums', 'name', toUInt64(DstAS)) AS ASName,
 			  dictGetString('autnums', 'country', toUInt64(DstAS)) AS CO,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
@@ -1531,7 +1531,7 @@ panels: [{
 		query:               """
 			SELECT
 			    $timeSeries as t,
-			    SrcAS,
+			    if(SrcAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(SrcAddr))), SrcAS) as SrcAS,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps
 			FROM $table
 			WHERE
@@ -1543,7 +1543,7 @@ panels: [{
 			    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
 			    $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
 			    AND SrcAS IN (
-			    SELECT SrcAS
+			    SELECT if(SrcAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(SrcAddr))), SrcAS) as SrcAS
 			    FROM $table
 			    WHERE $timeFilter AND FlowDirection = 0 AND $adhoc
 			      \(_genericFilter)
@@ -1656,14 +1656,14 @@ panels: [{
 		query:               """
 			SELECT
 			    $timeSeries as t,
-			    DstAS,
+			    if(DstAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(DstAddr))), DstAS) as DstAS,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps
 			FROM $table
 			WHERE
 			    $timeFilter AND FlowDirection = 1
 			    \(_genericFilter)
 			    AND DstAS IN (
-			    SELECT DstAS
+			    SELECT if(DstAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(DstAddr))), DstAS) as DstAS
 			    FROM $table
 			    WHERE $timeFilter AND FlowDirection = 1 AND $adhoc
 			      \(_genericFilter)
