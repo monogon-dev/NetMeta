@@ -418,11 +418,11 @@ panels: [{
 			SELECT
 			    $timeSeries as t,
 			    sum(Packets * SamplingRate) / $interval AS Packets,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, FlowDirection
+			GROUP BY t, FlowDirectionStr
 			ORDER BY t
 			"""
 		refId:               "A"
@@ -532,11 +532,11 @@ panels: [{
 			SELECT
 			    $timeSeries as t,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, FlowDirection
+			GROUP BY t, FlowDirectionStr
 			ORDER BY t
 			"""
 		refId:               "A"
@@ -650,13 +650,13 @@ panels: [{
 		query:               """
 			SELECT
 			    $timeSeries as t,
-			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || ' (' || toString(Proto) || ')' AS Proto,
+			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || ' (' || toString(Proto) || ')' AS ProtoName,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, Proto, FlowDirection
+			GROUP BY t, ProtoName, FlowDirectionStr
 			ORDER BY t
 			"""
 		refId:               "A"
@@ -764,13 +764,13 @@ panels: [{
 		query:               """
 			SELECT
 			    $timeSeries as t,
-			    dictGetString('EtherTypes', 'Name', toUInt64(EType)) || ' (' || hex(EType) || ')' AS EType,
+			    dictGetString('EtherTypes', 'Name', toUInt64(EType)) || ' (' || hex(EType) || ')' AS ETypeName,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, EType, FlowDirection
+			GROUP BY t, ETypeName, FlowDirectionStr
 			ORDER BY t
 			"""
 		refId:               "A"
@@ -1101,11 +1101,11 @@ panels: [{
 			    SamplerAddress,
 			    toString(InIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), InIf)) || ')' AS InIf,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, SamplerAddress, InIf, FlowDirection
+			GROUP BY t, SamplerAddress, InIf, FlowDirectionStr
 			ORDER BY t
 			"""
 		refId:               "A"
@@ -1216,11 +1216,11 @@ panels: [{
 			    SamplerAddress,
 			    toString(OutIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), OutIf)) || ')' AS OutIf,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, SamplerAddress, OutIf, FlowDirection
+			GROUP BY t, SamplerAddress, OutIf, FlowDirectionStr
 			ORDER BY t
 			"""
 		refId:               "A"
@@ -1794,14 +1794,14 @@ panels: [{
 			      arrayMap(
 			        x -> dictGetString('TCPFlags', 'Name', toUInt64(x)), bitmaskToArray(TCPFlags))
 			      , '-')
-			    || ' (' || toString(TCPFlags) || ')' AS TCPFlags,
+			    || ' (' || toString(TCPFlags) || ')' AS TCPFlagsName,
 
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter AND Proto = 6
 			\(_genericFilter)
-			GROUP BY t, TCPFlags, FlowDirection
+			GROUP BY t, TCPFlagsName, FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -1910,11 +1910,11 @@ panels: [{
 			    $timeSeries as t,
 			    VlanId,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, VlanId, FlowDirection
+			GROUP BY t, VlanId, FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -2022,9 +2022,9 @@ panels: [{
 			SELECT
 			    $timeSeries as t,
 			    SrcPort,
-			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS Proto,
+			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS ProtoName,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE
 			    $timeFilter
@@ -2039,9 +2039,9 @@ panels: [{
 			    LIMIT 10)
 			GROUP BY
 			    t,
-			    Proto,
+			    ProtoName,
 			    SrcPort,
-			    FlowDirection
+			    FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -2150,9 +2150,9 @@ panels: [{
 			SELECT
 			    $timeSeries as t,
 			    DstPort,
-			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS Proto,
+			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS ProtoName,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE
 			    $timeFilter
@@ -2167,9 +2167,9 @@ panels: [{
 			    LIMIT 10)
 			GROUP BY
 			    t,
-			    Proto,
+			    ProtoName,
 			    DstPort,
-			    FlowDirection
+			    FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -2278,7 +2278,7 @@ panels: [{
 			    $timeSeries as t,
 			    SrcAddr,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE
 			    $timeFilter
@@ -2294,7 +2294,7 @@ panels: [{
 			GROUP BY
 			    t,
 			    SrcAddr,
-			    FlowDirection
+			    FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -2404,7 +2404,7 @@ panels: [{
 			    $timeSeries as t,
 			    DstAddr,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE
 			    $timeFilter
@@ -2420,7 +2420,7 @@ panels: [{
 			GROUP BY
 			    t,
 			    DstAddr,
-			    FlowDirection
+			    FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -2718,12 +2718,12 @@ panels: [{
 				  DstAddr,
 				  SrcPort,
 				  DstPort,
-				  dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS Proto,
+				  dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS ProtoName,
 				  sum(Bytes * SamplingRate) / 1024 as Bytes
 				FROM $table
 				WHERE $timeFilter
 				\(_genericFilter)
-				GROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, Proto
+				GROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, ProtoName
 				ORDER BY Bytes DESC
 				LIMIT 20
 
