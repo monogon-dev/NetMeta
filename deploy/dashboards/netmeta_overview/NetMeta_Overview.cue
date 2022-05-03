@@ -22,6 +22,8 @@ _genericFilter: """
 $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
 """
 
+_datasource: "NetMeta ClickHouse"
+
 #Panel: {
 	interval: #Config.interval
 	panels: [...#Panel]
@@ -44,7 +46,7 @@ gnetId:       null
 graphTooltip: 1
 links: []
 panels: [{
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: align: null
@@ -107,7 +109,7 @@ panels: [{
 	title:     "Filtered Flows "
 	type:      "stat"
 }, {
-	datasource:  "NetMeta ClickHouse"
+	datasource:  _datasource
 	description: "Does not include Kafka usage (which is capped by `goflowTopicRetention` config)."
 	fieldConfig: {
 		defaults: {
@@ -192,7 +194,7 @@ panels: [{
 	title:     "This is a preprovisioned dashboard"
 	type:      "text"
 }, {
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: align: null
@@ -253,7 +255,7 @@ panels: [{
 	title:     "Total Flows Stored"
 	type:      "stat"
 }, {
-	datasource:  "NetMeta ClickHouse"
+	datasource:  _datasource
 	description: ""
 	fieldConfig: {
 		defaults: {
@@ -343,7 +345,7 @@ panels: [{
 	type:      "text"
 }, {
 	collapsed:  false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	gridPos: {
 		h: 1
 		w: 24
@@ -359,7 +361,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -416,11 +418,11 @@ panels: [{
 			SELECT
 			    $timeSeries as t,
 			    sum(Packets * SamplingRate) / $interval AS Packets,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, FlowDirection
+			GROUP BY t, FlowDirectionStr
 			ORDER BY t
 			"""
 		refId:               "A"
@@ -473,7 +475,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -530,11 +532,11 @@ panels: [{
 			SELECT
 			    $timeSeries as t,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, FlowDirection
+			GROUP BY t, FlowDirectionStr
 			ORDER BY t
 			"""
 		refId:               "A"
@@ -586,7 +588,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -648,13 +650,13 @@ panels: [{
 		query:               """
 			SELECT
 			    $timeSeries as t,
-			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || ' (' || toString(Proto) || ')' AS Proto,
+			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || ' (' || toString(Proto) || ')' AS ProtoName,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, Proto, FlowDirection
+			GROUP BY t, ProtoName, FlowDirectionStr
 			ORDER BY t
 			"""
 		refId:               "A"
@@ -706,7 +708,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -762,13 +764,13 @@ panels: [{
 		query:               """
 			SELECT
 			    $timeSeries as t,
-			    dictGetString('EtherTypes', 'Name', toUInt64(EType)) || ' (' || hex(EType) || ')' AS EType,
+			    dictGetString('EtherTypes', 'Name', toUInt64(EType)) || ' (' || hex(EType) || ')' AS ETypeName,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, EType, FlowDirection
+			GROUP BY t, ETypeName, FlowDirectionStr
 			ORDER BY t
 			"""
 		refId:               "A"
@@ -820,7 +822,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -931,7 +933,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -1040,7 +1042,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -1099,11 +1101,11 @@ panels: [{
 			    SamplerAddress,
 			    toString(InIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), InIf)) || ')' AS InIf,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, SamplerAddress, InIf, FlowDirection
+			GROUP BY t, SamplerAddress, InIf, FlowDirectionStr
 			ORDER BY t
 			"""
 		refId:               "A"
@@ -1155,7 +1157,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -1214,11 +1216,11 @@ panels: [{
 			    SamplerAddress,
 			    toString(OutIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), OutIf)) || ')' AS OutIf,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, SamplerAddress, OutIf, FlowDirection
+			GROUP BY t, SamplerAddress, OutIf, FlowDirectionStr
 			ORDER BY t
 			"""
 		refId:               "A"
@@ -1267,7 +1269,7 @@ panels: [{
 	}
 }, {
 	collapsed:  false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	gridPos: {
 		h: 1
 		w: 24
@@ -1279,7 +1281,7 @@ panels: [{
 	title: "Origin AS Stats"
 	type:  "row"
 }, {
-	datasource:  "NetMeta ClickHouse"
+	datasource:  _datasource
 	description: ""
 	fieldConfig: {
 		defaults: {
@@ -1354,7 +1356,7 @@ panels: [{
 		intervalFactor:      1
 		query:               """
 			SELECT
-			  SrcAS,
+			  if(SrcAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(SrcAddr))), SrcAS) as SrcAS,
 			  dictGetString('autnums', 'name', toUInt64(SrcAS)) AS ASName,
 			  dictGetString('autnums', 'country', toUInt64(SrcAS)) AS CO,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
@@ -1377,7 +1379,7 @@ panels: [{
 	transformations: []
 	type: "table"
 }, {
-	datasource:  "NetMeta ClickHouse"
+	datasource:  _datasource
 	description: ""
 	fieldConfig: {
 		defaults: {
@@ -1452,7 +1454,7 @@ panels: [{
 		intervalFactor:      1
 		query:               """
 			SELECT
-			  DstAS,
+			  if(DstAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(DstAddr))), DstAS) as DstAS,
 			  dictGetString('autnums', 'name', toUInt64(DstAS)) AS ASName,
 			  dictGetString('autnums', 'country', toUInt64(DstAS)) AS CO,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
@@ -1478,7 +1480,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -1529,7 +1531,7 @@ panels: [{
 		query:               """
 			SELECT
 			    $timeSeries as t,
-			    SrcAS,
+			    if(SrcAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(SrcAddr))), SrcAS) as SrcAS,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps
 			FROM $table
 			WHERE
@@ -1541,7 +1543,7 @@ panels: [{
 			    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
 			    $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
 			    AND SrcAS IN (
-			    SELECT SrcAS
+			    SELECT if(SrcAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(SrcAddr))), SrcAS) as SrcAS
 			    FROM $table
 			    WHERE $timeFilter AND FlowDirection = 0 AND $adhoc
 			      \(_genericFilter)
@@ -1603,7 +1605,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -1654,14 +1656,14 @@ panels: [{
 		query:               """
 			SELECT
 			    $timeSeries as t,
-			    DstAS,
+			    if(DstAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(DstAddr))), DstAS) as DstAS,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps
 			FROM $table
 			WHERE
 			    $timeFilter AND FlowDirection = 1
 			    \(_genericFilter)
 			    AND DstAS IN (
-			    SELECT DstAS
+			    SELECT if(DstAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(DstAddr))), DstAS) as DstAS
 			    FROM $table
 			    WHERE $timeFilter AND FlowDirection = 1 AND $adhoc
 			      \(_genericFilter)
@@ -1719,7 +1721,7 @@ panels: [{
 	}
 }, {
 	collapsed:  true
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	gridPos: {
 		h: 1
 		w: 24
@@ -1732,7 +1734,7 @@ panels: [{
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -1792,14 +1794,14 @@ panels: [{
 			      arrayMap(
 			        x -> dictGetString('TCPFlags', 'Name', toUInt64(x)), bitmaskToArray(TCPFlags))
 			      , '-')
-			    || ' (' || toString(TCPFlags) || ')' AS TCPFlags,
+			    || ' (' || toString(TCPFlags) || ')' AS TCPFlagsName,
 
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter AND Proto = 6
 			\(_genericFilter)
-			GROUP BY t, TCPFlags, FlowDirection
+			GROUP BY t, TCPFlagsName, FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -1851,7 +1853,7 @@ panels: [{
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -1908,11 +1910,11 @@ panels: [{
 			    $timeSeries as t,
 			    VlanId,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, VlanId, FlowDirection
+			GROUP BY t, VlanId, FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -1964,7 +1966,7 @@ panels: [{
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -2020,9 +2022,9 @@ panels: [{
 			SELECT
 			    $timeSeries as t,
 			    SrcPort,
-			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS Proto,
+			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS ProtoName,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE
 			    $timeFilter
@@ -2037,9 +2039,9 @@ panels: [{
 			    LIMIT 10)
 			GROUP BY
 			    t,
-			    Proto,
+			    ProtoName,
 			    SrcPort,
-			    FlowDirection
+			    FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -2092,7 +2094,7 @@ panels: [{
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -2148,9 +2150,9 @@ panels: [{
 			SELECT
 			    $timeSeries as t,
 			    DstPort,
-			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS Proto,
+			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS ProtoName,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE
 			    $timeFilter
@@ -2165,9 +2167,9 @@ panels: [{
 			    LIMIT 10)
 			GROUP BY
 			    t,
-			    Proto,
+			    ProtoName,
 			    DstPort,
-			    FlowDirection
+			    FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -2219,7 +2221,7 @@ panels: [{
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -2276,7 +2278,7 @@ panels: [{
 			    $timeSeries as t,
 			    SrcAddr,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE
 			    $timeFilter
@@ -2292,7 +2294,7 @@ panels: [{
 			GROUP BY
 			    t,
 			    SrcAddr,
-			    FlowDirection
+			    FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -2345,7 +2347,7 @@ panels: [{
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -2402,7 +2404,7 @@ panels: [{
 			    $timeSeries as t,
 			    DstAddr,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirection
+			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE
 			    $timeFilter
@@ -2418,7 +2420,7 @@ panels: [{
 			GROUP BY
 			    t,
 			    DstAddr,
-			    FlowDirection
+			    FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -2471,7 +2473,7 @@ panels: [{
 	type:  "row"
 }, {
 	collapsed:  true
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	gridPos: {
 		h: 1
 		w: 24
@@ -2480,7 +2482,7 @@ panels: [{
 	}
 	id: 18
 	panels: [{
-		datasource:  "NetMeta ClickHouse"
+		datasource:  _datasource
 		description: ""
 		fieldConfig: {
 			defaults: {
@@ -2562,7 +2564,7 @@ panels: [{
 		transformations: []
 		type: "table"
 	}, {
-		datasource:  "NetMeta ClickHouse"
+		datasource:  _datasource
 		description: ""
 		fieldConfig: {
 			defaults: {
@@ -2646,7 +2648,7 @@ panels: [{
 	type:  "row"
 }, {
 	collapsed:  true
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	gridPos: {
 		h: 1
 		w: 24
@@ -2655,7 +2657,7 @@ panels: [{
 	}
 	id: 36
 	panels: [{
-		datasource:  "NetMeta ClickHouse"
+		datasource:  _datasource
 		description: ""
 		fieldConfig: {
 			defaults: {
@@ -2716,12 +2718,12 @@ panels: [{
 				  DstAddr,
 				  SrcPort,
 				  DstPort,
-				  dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS Proto,
+				  dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS ProtoName,
 				  sum(Bytes * SamplingRate) / 1024 as Bytes
 				FROM $table
 				WHERE $timeFilter
 				\(_genericFilter)
-				GROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, Proto
+				GROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, ProtoName
 				ORDER BY Bytes DESC
 				LIMIT 20
 
@@ -2764,7 +2766,7 @@ panels: [{
 			mode:        "spectrum"
 		}
 		dataFormat: "timeseries"
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -2846,7 +2848,7 @@ panels: [{
 			mode:        "spectrum"
 		}
 		dataFormat: "timeseries"
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -2928,7 +2930,7 @@ panels: [{
 			mode:        "spectrum"
 		}
 		dataFormat: "timeseries"
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -3010,7 +3012,7 @@ panels: [{
 			mode:        "spectrum"
 		}
 		dataFormat: "timeseries"
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -3109,7 +3111,7 @@ templating: list: [{
 		text:     "All"
 		value:    "$__all"
 	}
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	definition: "SELECT DISTINCT IPv6NumToString(SamplerAddress) FROM flows_raw WHERE $timeFilterByColumn(TimeReceived)"
 	error:      null
 	hide:       0
@@ -3135,7 +3137,7 @@ templating: list: [{
 		text:     "All"
 		value:    "$__all"
 	}
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	definition: """
 		SELECT toString(InIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), InIf)) || ')' AS __text, InIf AS __value FROM (SELECT DISTINCT SamplerAddress, InIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
 		UNION ALL
@@ -3163,7 +3165,7 @@ templating: list: [{
 	type:      "query"
 	useTags:   false
 }, {
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	error:      null
 	filters: []
 	hide:        0
