@@ -22,6 +22,8 @@ _genericFilter: """
 $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
 """
 
+_datasource: "NetMeta ClickHouse"
+
 #Panel: {
 	interval: #Config.interval
 	panels: [...#Panel]
@@ -44,7 +46,7 @@ gnetId:       null
 graphTooltip: 1
 links: []
 panels: [{
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: align: null
@@ -107,7 +109,7 @@ panels: [{
 	title:     "Filtered Flows "
 	type:      "stat"
 }, {
-	datasource:  "NetMeta ClickHouse"
+	datasource:  _datasource
 	description: "Does not include Kafka usage (which is capped by `goflowTopicRetention` config)."
 	fieldConfig: {
 		defaults: {
@@ -192,7 +194,7 @@ panels: [{
 	title:     "This is a preprovisioned dashboard"
 	type:      "text"
 }, {
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: align: null
@@ -253,7 +255,7 @@ panels: [{
 	title:     "Total Flows Stored"
 	type:      "stat"
 }, {
-	datasource:  "NetMeta ClickHouse"
+	datasource:  _datasource
 	description: ""
 	fieldConfig: {
 		defaults: {
@@ -343,7 +345,7 @@ panels: [{
 	type:      "text"
 }, {
 	collapsed:  false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	gridPos: {
 		h: 1
 		w: 24
@@ -359,7 +361,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -473,7 +475,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -586,7 +588,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -706,7 +708,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -820,7 +822,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -931,7 +933,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -1040,7 +1042,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -1155,7 +1157,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -1267,7 +1269,7 @@ panels: [{
 	}
 }, {
 	collapsed:  false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	gridPos: {
 		h: 1
 		w: 24
@@ -1279,7 +1281,7 @@ panels: [{
 	title: "Origin AS Stats"
 	type:  "row"
 }, {
-	datasource:  "NetMeta ClickHouse"
+	datasource:  _datasource
 	description: ""
 	fieldConfig: {
 		defaults: {
@@ -1377,7 +1379,7 @@ panels: [{
 	transformations: []
 	type: "table"
 }, {
-	datasource:  "NetMeta ClickHouse"
+	datasource:  _datasource
 	description: ""
 	fieldConfig: {
 		defaults: {
@@ -1478,7 +1480,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -1603,7 +1605,7 @@ panels: [{
 	bars:       false
 	dashLength: 10
 	dashes:     false
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	fieldConfig: {
 		defaults: {
 			custom: {}
@@ -1719,7 +1721,7 @@ panels: [{
 	}
 }, {
 	collapsed:  true
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	gridPos: {
 		h: 1
 		w: 24
@@ -1732,7 +1734,7 @@ panels: [{
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -1851,7 +1853,7 @@ panels: [{
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -1964,7 +1966,7 @@ panels: [{
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -2092,7 +2094,7 @@ panels: [{
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -2219,7 +2221,7 @@ panels: [{
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -2345,7 +2347,7 @@ panels: [{
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -2471,7 +2473,7 @@ panels: [{
 	type:  "row"
 }, {
 	collapsed:  true
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	gridPos: {
 		h: 1
 		w: 24
@@ -2480,7 +2482,7 @@ panels: [{
 	}
 	id: 18
 	panels: [{
-		datasource:  "NetMeta ClickHouse"
+		datasource:  _datasource
 		description: ""
 		fieldConfig: {
 			defaults: {
@@ -2562,7 +2564,7 @@ panels: [{
 		transformations: []
 		type: "table"
 	}, {
-		datasource:  "NetMeta ClickHouse"
+		datasource:  _datasource
 		description: ""
 		fieldConfig: {
 			defaults: {
@@ -2646,7 +2648,7 @@ panels: [{
 	type:  "row"
 }, {
 	collapsed:  true
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	gridPos: {
 		h: 1
 		w: 24
@@ -2655,7 +2657,7 @@ panels: [{
 	}
 	id: 36
 	panels: [{
-		datasource:  "NetMeta ClickHouse"
+		datasource:  _datasource
 		description: ""
 		fieldConfig: {
 			defaults: {
@@ -2764,7 +2766,7 @@ panels: [{
 			mode:        "spectrum"
 		}
 		dataFormat: "timeseries"
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -2846,7 +2848,7 @@ panels: [{
 			mode:        "spectrum"
 		}
 		dataFormat: "timeseries"
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -2928,7 +2930,7 @@ panels: [{
 			mode:        "spectrum"
 		}
 		dataFormat: "timeseries"
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -3010,7 +3012,7 @@ panels: [{
 			mode:        "spectrum"
 		}
 		dataFormat: "timeseries"
-		datasource: "NetMeta ClickHouse"
+		datasource: _datasource
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -3109,7 +3111,7 @@ templating: list: [{
 		text:     "All"
 		value:    "$__all"
 	}
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	definition: "SELECT DISTINCT IPv6NumToString(SamplerAddress) FROM flows_raw WHERE $timeFilterByColumn(TimeReceived)"
 	error:      null
 	hide:       0
@@ -3135,7 +3137,7 @@ templating: list: [{
 		text:     "All"
 		value:    "$__all"
 	}
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	definition: """
 		SELECT toString(InIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), InIf)) || ')' AS __text, InIf AS __value FROM (SELECT DISTINCT SamplerAddress, InIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
 		UNION ALL
@@ -3163,7 +3165,7 @@ templating: list: [{
 	type:      "query"
 	useTags:   false
 }, {
-	datasource: "NetMeta ClickHouse"
+	datasource: _datasource
 	error:      null
 	filters: []
 	hide:        0
