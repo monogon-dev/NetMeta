@@ -175,5 +175,7 @@ SELECT toDate(TimeReceived) AS Date,
           CAST(toFixedString(IPv6v4NullPadding || substr(DstAddr, 1, 4), 16) AS IPv6), DstAddr) AS DstAddr,
        if(endsWith(NextHop, IPv6v4NullPadding) and NextHop != IPv6Null,
           CAST(toFixedString(IPv6v4NullPadding || substr(NextHop, 1, 4), 16) AS IPv6), NextHop) AS NextHop,
+       if(SrcAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(SrcAddr))), SrcAS) as SrcAS,
+       if(DstAS == 0, dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(DstAddr))), DstAS) as DstAS,
        *
 FROM flows_queue;
