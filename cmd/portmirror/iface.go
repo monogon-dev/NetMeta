@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
+	"github.com/netsampler/goflow2/format"
+	flowmessage "github.com/netsampler/goflow2/pb"
+	"github.com/netsampler/goflow2/transport"
+	"log"
 	"strings"
 	"sync"
 
-	flowprotob "github.com/cloudflare/goflow/v3/pb"
-	"github.com/cloudflare/goflow/v3/transport"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/afpacket"
 	"github.com/google/gopacket/layers"
@@ -112,7 +114,7 @@ func (ti *tapInterface) Open() error {
 	return nil
 }
 
-func (ti *tapInterface) Run(ctx context.Context, wg *sync.WaitGroup, kafkaState *transport.KafkaState) {
+func (ti *tapInterface) Run(ctx context.Context, wg *sync.WaitGroup, format *format.Format, transport *transport.Transport) {
 	defer wg.Done()
 	defer func() {
 		ti.packet.Close()
@@ -128,7 +130,7 @@ func (ti *tapInterface) Run(ctx context.Context, wg *sync.WaitGroup, kafkaState 
 
 		data, ci, err := ti.packet.ZeroCopyReadPacketData()
 		if err != nil {
-			logrus.Fatal(err)
+			log.Panic(err)
 		}
 
 		if seqNum%*SampleRate != 0 {
@@ -147,8 +149,8 @@ func (ti *tapInterface) Run(ctx context.Context, wg *sync.WaitGroup, kafkaState 
 		}
 
 		info := readFrameInfo(gopacket.NewPacket(data, layers.LayerTypeEthernet, gopacket.Default))
-		msg := &flowprotob.FlowMessage{
-			Type:           flowprotob.FlowMessage_SFLOW_5,
+		msg := &flowmessage.FlowMessage{
+			Type:           flowmessage.FlowMessage_SFLOW_5,
 			TimeReceived:   uint64(ci.Timestamp.Unix()),
 			SequenceNum:    uint32(seqNum),
 			SamplingRate:   uint64(*SampleRate),
@@ -174,6 +176,15 @@ func (ti *tapInterface) Run(ctx context.Context, wg *sync.WaitGroup, kafkaState 
 			IPv6FlowLabel:  info.FlowLabel,
 		}
 
-		kafkaState.SendKafkaFlowMessage(msg)
+		key, data, err := format.Format(msg)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		if err := transport.Send(key, data); err != nil {
+			log.Println(err)
+			continue
+		}
 	}
 }

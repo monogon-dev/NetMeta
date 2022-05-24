@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"log"
 	"os"
 	"os/signal"
 	"sync"
@@ -10,18 +11,18 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/cloudflare/goflow/v3/transport"
+	"github.com/netsampler/goflow2/format"
+	"github.com/netsampler/goflow2/transport"
+	_ "github.com/netsampler/goflow2/transport/kafka"
 )
 
 var (
-	Interfaces  = flag.String("iface", "", "which interface to use in the following format: RX_NAME:TX_NAME,RX_NAME:TX_NAME")
-	SampleRate  = flag.Int("samplerate", 1000, "the samplerate to use")
-	LogLevel    = flag.String("loglevel", "info", "Log level")
-	FixedLength = flag.Bool("proto.fixedlen", false, "Enable fixed length protobuf")
+	Interfaces = flag.String("iface", "", "which interface to use in the following format: RX_NAME:TX_NAME,RX_NAME:TX_NAME")
+	SampleRate = flag.Int("samplerate", 1000, "the samplerate to use")
+	LogLevel   = flag.String("loglevel", "info", "Log level")
 )
 
 func main() {
-	transport.RegisterFlags()
 	flag.Parse()
 
 	lvl, _ := logrus.ParseLevel(*LogLevel)
@@ -29,11 +30,17 @@ func main() {
 
 	tapPairs := loadConfig()
 
-	kafkaState, err := transport.StartKafkaProducerFromArgs(logrus.StandardLogger())
+	ctx := context.Background()
+	transporter, err := transport.FindTransport(ctx, "kafka")
 	if err != nil {
-		logrus.Fatal(err)
+		log.Fatal(err)
 	}
-	kafkaState.FixedLengthProto = *FixedLength
+	defer transporter.Close(ctx)
+
+	fmt, err := format.FindFormat(ctx, "pb")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	for _, tp := range tapPairs {
 		if err := tp.RX.Open(); err != nil {
@@ -49,10 +56,10 @@ func main() {
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	for _, tp := range tapPairs {
 		wg.Add(1)
-		go tp.RX.Run(ctx, &wg, kafkaState)
+		go tp.RX.Run(ctx, &wg, fmt, transporter)
 
 		wg.Add(1)
-		go tp.TX.Run(ctx, &wg, kafkaState)
+		go tp.TX.Run(ctx, &wg, fmt, transporter)
 	}
 
 	c := make(chan os.Signal, 1)
