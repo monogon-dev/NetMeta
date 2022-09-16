@@ -9,7 +9,7 @@ import (
 	"strconv"
 
 	// Dashboards
-	dashboard_overview "github.com/monogon-dev/NetMeta/deploy/dashboards/netmeta"
+	dashboards_netmeta "github.com/monogon-dev/NetMeta/deploy/dashboards/netmeta"
 	dashboard_queries "github.com/monogon-dev/NetMeta/deploy/dashboards/clickhouse_queries"
 )
 
@@ -95,13 +95,15 @@ k8s: {
 
 	// Generated dashboards
 	configmaps: "grafana-dashboards-data": data: {
-		_dashboard_overview: dashboard_overview & {
+		_dashboards_netmeta: dashboards_netmeta & {
 			#Config: {
 				interval:      netmeta.config.dashboardDisplay.minInterval
 				maxPacketSize: netmeta.config.dashboardDisplay.maxPacketSize
 			}
 		}
-		"netmeta_overview.json":   json.Indent(json.Marshal(_dashboard_overview), "", " ")
+		for k, v in _dashboards_netmeta.dashboards {
+			"\(strings.ToLower(strings.Replace(k, " ", "_", -1))).json": json.Indent(json.Marshal(v), "", " ")
+		}
 		"clickhouse_queries.json": json.Indent(json.Marshal(dashboard_queries), "", " ")
 	}
 
