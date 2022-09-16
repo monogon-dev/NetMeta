@@ -1,4 +1,4 @@
-package netmeta_overview
+package netmeta
 
 #Config: {
 	// Minimum interval for all panels

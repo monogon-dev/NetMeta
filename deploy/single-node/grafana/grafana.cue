@@ -9,7 +9,7 @@ import (
 	"strconv"
 
 	// Dashboards
-	dashboard_overview "github.com/monogon-dev/NetMeta/deploy/dashboards/netmeta_overview"
+	dashboard_overview "github.com/monogon-dev/NetMeta/deploy/dashboards/netmeta"
 	dashboard_queries "github.com/monogon-dev/NetMeta/deploy/dashboards/clickhouse_queries"
 )
 
