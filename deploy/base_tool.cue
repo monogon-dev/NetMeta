@@ -20,6 +20,7 @@ objectSets: [
 	k8s.clickhouseinstallations,
 	k8s.ingressroutes,
 	k8s.ingressrouteudps,
+	k8s.tlsoptions,
 ]
 
 // Prerequisite objects to apply first, in a separate kubectl call.
