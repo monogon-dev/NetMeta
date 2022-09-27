@@ -183,7 +183,7 @@ k8s: {
 							},
 							{
 								name:  "GF_INSTALL_PLUGINS"
-								value: "vertamedia-clickhouse-datasource 2.3.1,netsage-sankey-panel 1.0.6"
+								value: "vertamedia-clickhouse-datasource 2.5.2,netsage-sankey-panel 1.0.6"
 							},
 							{
 								name:  "GF_SECURITY_ADMIN_PASSWORD"
