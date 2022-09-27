@@ -28,7 +28,7 @@ dashboards: "Traffic Relations": {
 			panels: []
 			targets: [
 				{
-					datasource: _datasource
+					datasource: "$datasource"
 					queryType:  "randomWalk"
 					refId:      "A"
 				},
@@ -100,7 +100,7 @@ dashboards: "Traffic Relations": {
 			targets: [
 				{
 					database:            "default"
-					datasource:          _datasource
+					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
 					dateTimeColDataType: "TimeReceived"
@@ -109,7 +109,7 @@ dashboards: "Traffic Relations": {
 					extrapolate:         true
 					format:              "time_series"
 					intervalFactor:      1
-					query: """
+					query:               """
 						SELECT
     $timeSeries as t,
     concat(substring(dictGetString('autnums', 'name', toUInt64(SrcAS)), 1, 25), ' AS', toString(SrcAS)) AS SrcASName,
@@ -131,11 +131,11 @@ GROUP BY
     SrcASName
 ORDER BY t, Bps
 """
-					refId:         "A"
-					round:         "0s"
-					skip_comments: true
-					table:         "flows_raw"
-					tableLoading:  false
+					refId:               "A"
+					round:               "0s"
+					skip_comments:       true
+					table:               "flows_raw"
+					tableLoading:        false
 				},
 			]
 			thresholds: []
@@ -219,7 +219,7 @@ ORDER BY t, Bps
 			targets: [
 				{
 					database:            "default"
-					datasource:          _datasource
+					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
 					dateTimeColDataType: "TimeReceived"
@@ -228,7 +228,7 @@ ORDER BY t, Bps
 					extrapolate:         true
 					format:              "time_series"
 					intervalFactor:      1
-					query: """
+					query:               """
 						SELECT
     $timeSeries as t,
     concat(substring(dictGetString('autnums', 'name', toUInt64(DstAS)), 1, 25), ' AS', toString(DstAS)) AS DstASName,
@@ -250,11 +250,11 @@ GROUP BY
     DstASName
 ORDER BY t, Bps
 """
-					refId:         "A"
-					round:         "0s"
-					skip_comments: true
-					table:         "flows_raw"
-					tableLoading:  false
+					refId:               "A"
+					round:               "0s"
+					skip_comments:       true
+					table:               "flows_raw"
+					tableLoading:        false
 				},
 			]
 			thresholds: []
@@ -301,8 +301,8 @@ ORDER BY t, Bps
 			panels: []
 			targets: [
 				{
-					datasource: _datasource
-					refId: "A"
+					datasource: "$datasource"
+					refId:      "A"
 				},
 			]
 			title: "AS Relations"
@@ -335,7 +335,7 @@ ORDER BY t, Bps
 			targets: [
 				{
 					database:            "default"
-					datasource:          _datasource
+					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
 					dateTimeColDataType: "TimeReceived"
@@ -344,7 +344,7 @@ ORDER BY t, Bps
 					extrapolate:         true
 					format:              "table"
 					intervalFactor:      1
-					query: """
+					query:               """
 						SELECT
   concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
   concat(dictGetString('autnums', 'name', toUInt64(DstAS)), ' AS', toString(DstAS)) AS DstASName,
@@ -357,11 +357,11 @@ ORDER BY Bytes DESC
 LIMIT 20
 
 """
-					refId:         "A"
-					round:         "0s"
-					skip_comments: true
-					table:         "flows_raw"
-					tableLoading:  false
+					refId:               "A"
+					round:               "0s"
+					skip_comments:       true
+					table:               "flows_raw"
+					tableLoading:        false
 				},
 			]
 			title: "Inbound traffic relations (Top 20)"
@@ -395,7 +395,7 @@ LIMIT 20
 			targets: [
 				{
 					database:            "default"
-					datasource:          _datasource
+					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
 					dateTimeColDataType: "TimeReceived"
@@ -404,7 +404,7 @@ LIMIT 20
 					extrapolate:         true
 					format:              "table"
 					intervalFactor:      1
-					query: """
+					query:               """
 						SELECT
   concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
   concat(dictGetString('autnums', 'name', toUInt64(DstAS)), ' AS', toString(DstAS)) AS DstASName,
@@ -417,11 +417,11 @@ ORDER BY Bytes DESC
 LIMIT 20
 
 """
-					refId:         "A"
-					round:         "0s"
-					skip_comments: true
-					table:         "flows_raw"
-					tableLoading:  false
+					refId:               "A"
+					round:               "0s"
+					skip_comments:       true
+					table:               "flows_raw"
+					tableLoading:        false
 				},
 			]
 			title: "Outbound traffic relations (Top 20)"
@@ -455,7 +455,7 @@ LIMIT 20
 			targets: [
 				{
 					database:            "default"
-					datasource:          _datasource
+					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
 					dateTimeColDataType: "TimeReceived"
@@ -464,7 +464,7 @@ LIMIT 20
 					extrapolate:         true
 					format:              "table"
 					intervalFactor:      1
-					query: """
+					query:               """
 						SELECT
   concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
   dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), InIf)) AS InIfName,
@@ -478,11 +478,11 @@ ORDER BY Bytes DESC
 LIMIT 30
 
 """
-					refId:         "A"
-					round:         "0s"
-					skip_comments: true
-					table:         "flows_raw"
-					tableLoading:  false
+					refId:               "A"
+					round:               "0s"
+					skip_comments:       true
+					table:               "flows_raw"
+					tableLoading:        false
 				},
 			]
 			title: "Inbound traffic relations via interface  (Top 30)"
@@ -516,7 +516,7 @@ LIMIT 30
 			targets: [
 				{
 					database:            "default"
-					datasource:          _datasource
+					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
 					dateTimeColDataType: "TimeReceived"
@@ -525,7 +525,7 @@ LIMIT 30
 					extrapolate:         true
 					format:              "table"
 					intervalFactor:      1
-					query: """
+					query:               """
 						SELECT
   concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
   dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), OutIf)) AS OutIfName,
@@ -539,11 +539,11 @@ ORDER BY Bytes DESC
 LIMIT 40
 
 """
-					refId:         "A"
-					round:         "0s"
-					skip_comments: true
-					table:         "flows_raw"
-					tableLoading:  false
+					refId:               "A"
+					round:               "0s"
+					skip_comments:       true
+					table:               "flows_raw"
+					tableLoading:        false
 				},
 			]
 			title: "Outbound traffic relations via interface (Top 30)"
@@ -564,8 +564,8 @@ LIMIT 40
 			panels: []
 			targets: [
 				{
-					datasource: _datasource
-					refId: "A"
+					datasource: "$datasource"
+					refId:      "A"
 				},
 			]
 			title: "Top Flows"
@@ -598,7 +598,7 @@ LIMIT 40
 			targets: [
 				{
 					database:            "default"
-					datasource:          _datasource
+					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
 					dateTimeColDataType: "TimeReceived"
@@ -607,7 +607,7 @@ LIMIT 40
 					extrapolate:         true
 					format:              "table"
 					intervalFactor:      1
-					query: """
+					query:               """
 						SELECT
   SrcAddr,
   DstAddr,
@@ -619,11 +619,11 @@ GROUP BY SrcAddr, DstAddr
 ORDER BY Bytes DESC
 LIMIT 30
 """
-					refId:         "A"
-					round:         "0s"
-					skip_comments: true
-					table:         "flows_raw"
-					tableLoading:  false
+					refId:               "A"
+					round:               "0s"
+					skip_comments:       true
+					table:               "flows_raw"
+					tableLoading:        false
 				},
 			]
 			title: "Top 30 Flows (per IP)"
@@ -657,7 +657,7 @@ LIMIT 30
 			targets: [
 				{
 					database:            "default"
-					datasource:          _datasource
+					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
 					dateTimeColDataType: "TimeReceived"
@@ -666,7 +666,7 @@ LIMIT 30
 					extrapolate:         true
 					format:              "table"
 					intervalFactor:      1
-					query: """
+					query:               """
 						SELECT
   concat(IPv6NumToString(SrcAddr), ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(SrcPort)) as Src,
   concat(IPv6NumToString(DstAddr), ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(DstPort)) as Dst,
@@ -679,11 +679,11 @@ ORDER BY Bytes DESC
 LIMIT 30
 
 """
-					refId:         "A"
-					round:         "0s"
-					skip_comments: true
-					table:         "flows_raw"
-					tableLoading:  false
+					refId:               "A"
+					round:               "0s"
+					skip_comments:       true
+					table:               "flows_raw"
+					tableLoading:        false
 				},
 			]
 			title: "Top 30 Flows (per IP+Port)"
@@ -706,7 +706,7 @@ LIMIT 30
 			panels: []
 			targets: [
 				{
-					datasource: _datasource
+					datasource: "$datasource"
 					refId:      "A"
 				},
 			]
@@ -740,7 +740,7 @@ LIMIT 30
 			targets: [
 				{
 					database:            "default"
-					datasource:          _datasource
+					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
 					dateTimeColDataType: "TimeReceived"
@@ -749,7 +749,7 @@ LIMIT 30
 					extrapolate:         true
 					format:              "table"
 					intervalFactor:      1
-					query: """
+					query:               """
 						SELECT
   concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
   concat(IPv6NumToString(DstAddr), ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(DstPort)) as Dst,
@@ -762,11 +762,11 @@ ORDER BY Bytes DESC
 LIMIT 30
 
 """
-					refId:         "A"
-					round:         "0s"
-					skip_comments: true
-					table:         "flows_raw"
-					tableLoading:  false
+					refId:               "A"
+					round:               "0s"
+					skip_comments:       true
+					table:               "flows_raw"
+					tableLoading:        false
 				},
 			]
 			title: "Top 30 ASN per service (inbound)"
@@ -800,7 +800,7 @@ LIMIT 30
 			targets: [
 				{
 					database:            "default"
-					datasource:          _datasource
+					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
 					dateTimeColDataType: "TimeReceived"
@@ -809,7 +809,7 @@ LIMIT 30
 					extrapolate:         true
 					format:              "table"
 					intervalFactor:      1
-					query: """
+					query:               """
 						SELECT
   concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
   concat(IPv6NumToString(DstAddr), ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(DstPort)) as Dst,
@@ -822,11 +822,11 @@ ORDER BY Bytes DESC
 LIMIT 30
 
 """
-					refId:         "A"
-					round:         "0s"
-					skip_comments: true
-					table:         "flows_raw"
-					tableLoading:  false
+					refId:               "A"
+					round:               "0s"
+					skip_comments:       true
+					table:               "flows_raw"
+					tableLoading:        false
 				},
 			]
 			title: "Top 30 ASN per service (outbound)"
@@ -838,16 +838,15 @@ LIMIT 30
 	schemaVersion: 37
 	style:         "dark"
 	tags: []
-	templating: list: [
-		{
-			hide: 2
-			name: "adhoc_query_filter"
-			query: """
-				SELECT database, table, name, type FROM system.columns WHERE table='flows_raw' ORDER BY database, table
-"""
-			skipUrlSync: false
-			type:        "constant"
-		},
+	templating: list: [{...}, {
+		hide: 2
+		name: "adhoc_query_filter"
+		query: """
+							SELECT database, table, name, type FROM system.columns WHERE table='flows_raw' ORDER BY database, table
+			"""
+		skipUrlSync: false
+		type:        "constant"
+	},
 		{
 			current: {
 				selected: false
@@ -862,8 +861,8 @@ LIMIT 30
 			name:       "sampler"
 			options: []
 			query: """
-				SELECT DISTINCT IPv6NumToString(SamplerAddress) FROM flows_raw WHERE $timeFilterByColumn(TimeReceived)
-"""
+								SELECT DISTINCT IPv6NumToString(SamplerAddress) FROM flows_raw WHERE $timeFilterByColumn(TimeReceived)
+				"""
 			refresh:        2
 			regex:          ""
 			skipUrlSync:    false
@@ -887,10 +886,10 @@ LIMIT 30
 			name:       "interface"
 			options: []
 			query: """
-SELECT toString(InIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), InIf)) || ')' AS __text, InIf AS __value FROM (SELECT DISTINCT SamplerAddress, InIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
-UNION ALL
-SELECT toString(OutIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), OutIf)) || ')' AS __text, OutIf AS __value FROM (SELECT DISTINCT SamplerAddress, OutIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
-"""
+				SELECT toString(InIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), InIf)) || ')' AS __text, InIf AS __value FROM (SELECT DISTINCT SamplerAddress, InIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
+				UNION ALL
+				SELECT toString(OutIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), OutIf)) || ')' AS __text, OutIf AS __value FROM (SELECT DISTINCT SamplerAddress, OutIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
+				"""
 			refresh:        2
 			regex:          ""
 			skipUrlSync:    false
@@ -925,7 +924,7 @@ SELECT toString(OutIf) || ' (' || dictGetString('InterfaceNames', 'Description',
 					value:    ""
 				},
 			]
-			query: ""
+			query:       ""
 			skipUrlSync: false
 			type:        "textbox"
 		},
@@ -945,7 +944,7 @@ SELECT toString(OutIf) || ' (' || dictGetString('InterfaceNames', 'Description',
 					value:    ""
 				},
 			]
-			query: ""
+			query:       ""
 			skipUrlSync: false
 			type:        "textbox"
 		},
@@ -965,7 +964,7 @@ SELECT toString(OutIf) || ' (' || dictGetString('InterfaceNames', 'Description',
 					value:    ""
 				},
 			]
-			query: ""
+			query:       ""
 			skipUrlSync: false
 			type:        "textbox"
 		},
@@ -985,7 +984,7 @@ SELECT toString(OutIf) || ' (' || dictGetString('InterfaceNames', 'Description',
 					value:    ""
 				},
 			]
-			query: ""
+			query:       ""
 			skipUrlSync: false
 			type:        "textbox"
 		},
@@ -1005,7 +1004,7 @@ SELECT toString(OutIf) || ' (' || dictGetString('InterfaceNames', 'Description',
 					value:    ""
 				},
 			]
-			query: ""
+			query:       ""
 			skipUrlSync: false
 			type:        "textbox"
 		},

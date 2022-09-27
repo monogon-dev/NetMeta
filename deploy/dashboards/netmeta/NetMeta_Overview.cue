@@ -6,7 +6,7 @@ dashboards: "NetMeta Overview": {
 	graphTooltip: 1
 	links: []
 	panels: [{
-		datasource: _datasource
+		datasource: "$datasource"
 		fieldConfig: {
 			defaults: {
 				custom: align: null
@@ -69,7 +69,7 @@ dashboards: "NetMeta Overview": {
 		title:     "Filtered Flows "
 		type:      "stat"
 	}, {
-		datasource:  _datasource
+		datasource:  "$datasource"
 		description: "Does not include Kafka usage (which is capped by `goflowTopicRetention` config)."
 		fieldConfig: {
 			defaults: {
@@ -154,7 +154,7 @@ dashboards: "NetMeta Overview": {
 		title:     "This is a preprovisioned dashboard"
 		type:      "text"
 	}, {
-		datasource: _datasource
+		datasource: "$datasource"
 		fieldConfig: {
 			defaults: {
 				custom: align: null
@@ -215,7 +215,7 @@ dashboards: "NetMeta Overview": {
 		title:     "Total Flows Stored"
 		type:      "stat"
 	}, {
-		datasource:  _datasource
+		datasource:  "$datasource"
 		description: ""
 		fieldConfig: {
 			defaults: {
@@ -305,7 +305,7 @@ dashboards: "NetMeta Overview": {
 		type:      "text"
 	}, {
 		collapsed:  false
-		datasource: _datasource
+		datasource: "$datasource"
 		gridPos: {
 			h: 1
 			w: 24
@@ -321,7 +321,7 @@ dashboards: "NetMeta Overview": {
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: _datasource
+		datasource: "$datasource"
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -435,7 +435,7 @@ dashboards: "NetMeta Overview": {
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: _datasource
+		datasource: "$datasource"
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -548,7 +548,7 @@ dashboards: "NetMeta Overview": {
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: _datasource
+		datasource: "$datasource"
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -668,7 +668,7 @@ dashboards: "NetMeta Overview": {
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: _datasource
+		datasource: "$datasource"
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -782,7 +782,7 @@ dashboards: "NetMeta Overview": {
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: _datasource
+		datasource: "$datasource"
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -893,7 +893,7 @@ dashboards: "NetMeta Overview": {
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: _datasource
+		datasource: "$datasource"
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -1002,7 +1002,7 @@ dashboards: "NetMeta Overview": {
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: _datasource
+		datasource: "$datasource"
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -1117,7 +1117,7 @@ dashboards: "NetMeta Overview": {
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: _datasource
+		datasource: "$datasource"
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -1229,7 +1229,7 @@ dashboards: "NetMeta Overview": {
 		}
 	}, {
 		collapsed:  false
-		datasource: _datasource
+		datasource: "$datasource"
 		gridPos: {
 			h: 1
 			w: 24
@@ -1241,7 +1241,7 @@ dashboards: "NetMeta Overview": {
 		title: "Origin AS Stats"
 		type:  "row"
 	}, {
-		datasource:  _datasource
+		datasource:  "$datasource"
 		description: ""
 		fieldConfig: {
 			defaults: {
@@ -1339,7 +1339,7 @@ dashboards: "NetMeta Overview": {
 		transformations: []
 		type: "table"
 	}, {
-		datasource:  _datasource
+		datasource:  "$datasource"
 		description: ""
 		fieldConfig: {
 			defaults: {
@@ -1440,7 +1440,7 @@ dashboards: "NetMeta Overview": {
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: _datasource
+		datasource: "$datasource"
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -1565,7 +1565,7 @@ dashboards: "NetMeta Overview": {
 		bars:       false
 		dashLength: 10
 		dashes:     false
-		datasource: _datasource
+		datasource: "$datasource"
 		fieldConfig: {
 			defaults: {
 				custom: {}
@@ -1681,7 +1681,7 @@ dashboards: "NetMeta Overview": {
 		}
 	}, {
 		collapsed:  true
-		datasource: _datasource
+		datasource: "$datasource"
 		gridPos: {
 			h: 1
 			w: 24
@@ -1694,7 +1694,7 @@ dashboards: "NetMeta Overview": {
 			bars:       false
 			dashLength: 10
 			dashes:     false
-			datasource: _datasource
+			datasource: "$datasource"
 			fieldConfig: {
 				defaults: {
 					custom: {}
@@ -1813,7 +1813,7 @@ dashboards: "NetMeta Overview": {
 			bars:       false
 			dashLength: 10
 			dashes:     false
-			datasource: _datasource
+			datasource: "$datasource"
 			fieldConfig: {
 				defaults: {
 					custom: {}
@@ -1926,7 +1926,7 @@ dashboards: "NetMeta Overview": {
 			bars:       false
 			dashLength: 10
 			dashes:     false
-			datasource: _datasource
+			datasource: "$datasource"
 			fieldConfig: {
 				defaults: {
 					custom: {}
@@ -2054,7 +2054,7 @@ dashboards: "NetMeta Overview": {
 			bars:       false
 			dashLength: 10
 			dashes:     false
-			datasource: _datasource
+			datasource: "$datasource"
 			fieldConfig: {
 				defaults: {
 					custom: {}
@@ -2181,7 +2181,7 @@ dashboards: "NetMeta Overview": {
 			bars:       false
 			dashLength: 10
 			dashes:     false
-			datasource: _datasource
+			datasource: "$datasource"
 			fieldConfig: {
 				defaults: {
 					custom: {}
@@ -2307,7 +2307,7 @@ dashboards: "NetMeta Overview": {
 			bars:       false
 			dashLength: 10
 			dashes:     false
-			datasource: _datasource
+			datasource: "$datasource"
 			fieldConfig: {
 				defaults: {
 					custom: {}
@@ -2433,7 +2433,7 @@ dashboards: "NetMeta Overview": {
 		type:  "row"
 	}, {
 		collapsed:  true
-		datasource: _datasource
+		datasource: "$datasource"
 		gridPos: {
 			h: 1
 			w: 24
@@ -2442,7 +2442,7 @@ dashboards: "NetMeta Overview": {
 		}
 		id: 18
 		panels: [{
-			datasource:  _datasource
+			datasource:  "$datasource"
 			description: ""
 			fieldConfig: {
 				defaults: {
@@ -2524,7 +2524,7 @@ dashboards: "NetMeta Overview": {
 			transformations: []
 			type: "table"
 		}, {
-			datasource:  _datasource
+			datasource:  "$datasource"
 			description: ""
 			fieldConfig: {
 				defaults: {
@@ -2608,7 +2608,7 @@ dashboards: "NetMeta Overview": {
 		type:  "row"
 	}, {
 		collapsed:  true
-		datasource: _datasource
+		datasource: "$datasource"
 		gridPos: {
 			h: 1
 			w: 24
@@ -2617,7 +2617,7 @@ dashboards: "NetMeta Overview": {
 		}
 		id: 36
 		panels: [{
-			datasource:  _datasource
+			datasource:  "$datasource"
 			description: ""
 			fieldConfig: {
 				defaults: {
@@ -2726,7 +2726,7 @@ dashboards: "NetMeta Overview": {
 				mode:        "spectrum"
 			}
 			dataFormat: "timeseries"
-			datasource: _datasource
+			datasource: "$datasource"
 			fieldConfig: {
 				defaults: {
 					custom: {}
@@ -2808,7 +2808,7 @@ dashboards: "NetMeta Overview": {
 				mode:        "spectrum"
 			}
 			dataFormat: "timeseries"
-			datasource: _datasource
+			datasource: "$datasource"
 			fieldConfig: {
 				defaults: {
 					custom: {}
@@ -2890,7 +2890,7 @@ dashboards: "NetMeta Overview": {
 				mode:        "spectrum"
 			}
 			dataFormat: "timeseries"
-			datasource: _datasource
+			datasource: "$datasource"
 			fieldConfig: {
 				defaults: {
 					custom: {}
@@ -2972,7 +2972,7 @@ dashboards: "NetMeta Overview": {
 				mode:        "spectrum"
 			}
 			dataFormat: "timeseries"
-			datasource: _datasource
+			datasource: "$datasource"
 			fieldConfig: {
 				defaults: {
 					custom: {}
@@ -3048,7 +3048,7 @@ dashboards: "NetMeta Overview": {
 	schemaVersion: 26
 	style:         "dark"
 	tags: []
-	templating: list: [{
+	templating: list: [{...}, {
 		current: {
 			text:  "SELECT database, table, name, type FROM system.columns WHERE table='flows_raw' ORDER BY database, table"
 			value: "SELECT database, table, name, type FROM system.columns WHERE table='flows_raw' ORDER BY database, table"
@@ -3071,7 +3071,7 @@ dashboards: "NetMeta Overview": {
 			text:     "All"
 			value:    "$__all"
 		}
-		datasource: _datasource
+		datasource: "$datasource"
 		definition: "SELECT DISTINCT IPv6NumToString(SamplerAddress) FROM flows_raw WHERE $timeFilterByColumn(TimeReceived)"
 		error:      null
 		hide:       0
@@ -3097,7 +3097,7 @@ dashboards: "NetMeta Overview": {
 			text:     "All"
 			value:    "$__all"
 		}
-		datasource: _datasource
+		datasource: "$datasource"
 		definition: """
 			SELECT toString(InIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), InIf)) || ')' AS __text, InIf AS __value FROM (SELECT DISTINCT SamplerAddress, InIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
 			UNION ALL
@@ -3125,7 +3125,7 @@ dashboards: "NetMeta Overview": {
 		type:      "query"
 		useTags:   false
 	}, {
-		datasource: _datasource
+		datasource: "$datasource"
 		error:      null
 		filters: []
 		hide:        0

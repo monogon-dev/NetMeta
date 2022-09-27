@@ -22,8 +22,6 @@ _genericFilter: """
 $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
 """
 
-_datasource: "NetMeta ClickHouse"
-
 #Panel: {
 	interval: #Config.interval
 	panels: [...#Panel]
@@ -48,4 +46,19 @@ dashboards: [T=string]: {
 		}
 		type: "dashboard"
 	}]
+	templating: list: [{
+		current: {
+			selected: false
+			text:     "NetMeta ClickHouse"
+			value:    "NetMeta ClickHouse"
+		}
+		hide:       0
+		includeAll: false
+		label:      "Datasource"
+		multi:      false
+		name:       "datasource"
+		query:      "vertamedia-clickhouse-datasource"
+		regex:      ""
+		type:       "datasource"
+	}, ...]
 }
