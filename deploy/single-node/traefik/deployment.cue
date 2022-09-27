@@ -23,7 +23,7 @@ k8s: deployments: traefik: {
 				serviceAccountName: "traefik-ingress-controller"
 				containers: [{
 					name:  "traefik"
-					image: "docker.io/traefik:v2.3.6@sha256:03e2149c3a844ca9543edd2a7a8cd0e4a1a9afb543486ad99e737323eb5c25f2"
+					image: "docker.io/traefik:v2.8.7@sha256:ad7914fcb229ba6569223535ca6574eda78f1eff237a20df2ba744f893cfeaef"
 
 					let _args = [
 						[

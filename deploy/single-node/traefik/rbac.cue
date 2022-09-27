@@ -17,9 +17,11 @@ k8s: clusterroles: "traefik-ingress-controller": rules: [{
 }, {
 	apiGroups: [
 		"extensions",
+		"networking.k8s.io",
 	]
 	resources: [
 		"ingresses",
+		"ingressclasses",
 	]
 	verbs: [
 		"get",
@@ -29,6 +31,7 @@ k8s: clusterroles: "traefik-ingress-controller": rules: [{
 }, {
 	apiGroups: [
 		"extensions",
+		"networking.k8s.io",
 	]
 	resources: [
 		"ingresses/status",
@@ -42,12 +45,14 @@ k8s: clusterroles: "traefik-ingress-controller": rules: [{
 	]
 	resources: [
 		"middlewares",
+		"middlewaretcps",
 		"ingressroutes",
 		"traefikservices",
 		"ingressroutetcps",
 		"ingressrouteudps",
 		"tlsoptions",
 		"tlsstores",
+		"serverstransports",
 	]
 	verbs: [
 		"get",

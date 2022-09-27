@@ -6,6 +6,7 @@ k8s: crds: [Name=string]: spec: {
 	scope:   "Namespaced"
 	names: {
 		kind:     string
+		listKind: "\(kind)List"
 		singular: string
 		plural:   "\(singular)s"
 	}
@@ -33,6 +34,18 @@ k8s: crds: "ingressrouteudps.traefik.containo.us": spec: names: {
 	kind:     "IngressRouteUDP"
 	plural:   "ingressrouteudps"
 	singular: "ingressrouteudp"
+}
+
+k8s: crds: "middlewaretcps.traefik.containo.us": spec: names: {
+	kind:     "MiddlewareTCP"
+	plural:   "middlewaretcps"
+	singular: "middlewaretcp"
+}
+
+k8s: crds: "serverstransports.traefik.containo.us": spec: names: {
+	kind:     "ServersTransport"
+	plural:   "serverstransports"
+	singular: "serverstransport"
 }
 
 k8s: crds: "tlsoptions.traefik.containo.us": spec: names: {
