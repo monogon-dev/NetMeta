@@ -28,6 +28,7 @@ if netmeta.config.portMirror != _|_ {
 								"-loglevel=debug",
 								"-iface=\(netmeta.config.portMirror.interfaces)",
 								"-samplerate=\(netmeta.config.portMirror.sampleRate)",
+								"-sampler-address=\(netmeta.config.portMirror.samplerAddress)",
 							]
 
 							// Workaround for mlock crashes until Go 1.16 is released.

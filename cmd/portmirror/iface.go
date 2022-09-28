@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"net"
 	"strings"
 	"sync"
 
@@ -22,8 +23,9 @@ type tapInterface struct {
 }
 
 type tapPair struct {
-	RX *tapInterface
-	TX *tapInterface
+	samplerAddress net.IP
+	RX             *tapInterface
+	TX             *tapInterface
 }
 
 type netClasses map[string]sysfs.NetClassIface
@@ -60,6 +62,11 @@ func loadConfig() []*tapPair {
 		logrus.Fatal("please provide interface pairs")
 	}
 
+	samplerAddress := net.ParseIP(*SamplerAddress)
+	if samplerAddress == nil {
+		logrus.Fatalf("invalid sampler-address provided: %q", *SamplerAddress)
+	}
+
 	netClasses, err := newNetClasses()
 	if err != nil {
 		logrus.Fatalf("loading net class info: %v", err)
@@ -74,6 +81,7 @@ func loadConfig() []*tapPair {
 		split := strings.Split(v, ":")
 		rxName, txName := split[0], split[1]
 		t := &tapPair{
+			samplerAddress: samplerAddress,
 			RX: &tapInterface{
 				name:     rxName,
 				sysIface: netClasses.getNetClass(rxName),
@@ -153,7 +161,7 @@ func (ti *tapInterface) Run(ctx context.Context, wg *sync.WaitGroup, kafkaState 
 			SequenceNum:    uint32(seqNum),
 			SamplingRate:   uint64(*SampleRate),
 			FlowDirection:  flowDirection,
-			SamplerAddress: []byte{127, 0, 0, 1},
+			SamplerAddress: ti.pair.samplerAddress,
 			TimeFlowStart:  uint64(ci.Timestamp.Unix()),
 			TimeFlowEnd:    uint64(ci.Timestamp.Unix()),
 			Bytes:          uint64(ci.Length),

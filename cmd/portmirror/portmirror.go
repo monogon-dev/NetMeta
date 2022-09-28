@@ -14,10 +14,11 @@ import (
 )
 
 var (
-	Interfaces  = flag.String("iface", "", "which interface to use in the following format: RX_NAME:TX_NAME,RX_NAME:TX_NAME")
-	SampleRate  = flag.Int("samplerate", 1000, "the samplerate to use")
-	LogLevel    = flag.String("loglevel", "info", "Log level")
-	FixedLength = flag.Bool("proto.fixedlen", false, "Enable fixed length protobuf")
+	Interfaces     = flag.String("iface", "", "which interface to use in the following format: RX_NAME:TX_NAME,RX_NAME:TX_NAME")
+	SampleRate     = flag.Int("samplerate", 1000, "the samplerate to use")
+	LogLevel       = flag.String("loglevel", "info", "Log level")
+	FixedLength    = flag.Bool("proto.fixedlen", false, "Enable fixed length protobuf")
+	SamplerAddress = flag.String("sampler-address", "127.0.0.1", "The address the instance use as SamplerAddress")
 )
 
 func main() {

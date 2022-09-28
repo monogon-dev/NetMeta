@@ -1,5 +1,9 @@
 package k8s
 
+import (
+	"net"
+)
+
 #GoogleAuth: {
 	// Get credentials at https://console.cloud.google.com/apis/credentials
 	// See https://grafana.com/docs/grafana/latest/auth/google for instructions.
@@ -28,7 +32,7 @@ package k8s
 }
 
 #InterfaceMap: {
-	// Router source address (IPv6 or pseudo-IPv4 mapped address like ::100.0.0.1)
+	// Router source address (IPv6 or pseudo-IPv4 mapped address like ::100.0.0.1, and for the portmirror ::ffff:100.0.0.1)
 	device: string
 	// Numeric interface Index (often known as the "SNMP ID")
 	idx: uint
@@ -50,6 +54,9 @@ package k8s
 }
 
 #PortMirrorConfig: {
+	// The address the instance use as SamplerAddress
+	samplerAddress: net.IP | *"127.0.0.1"
+
 	// The Interfaces to listen to. Multiple interface pairs can be set by seperating them with a comma.
 	interfaces: string | *"tap_rx:tap_tx"
 
