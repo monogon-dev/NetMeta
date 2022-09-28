@@ -53,3 +53,13 @@ select dictGetUInt32('risinfo', 'asnum', tuple(reinterpretAsFixedString(SrcAddr)
 
 select dictGetString('autnums', 'name', toUInt64(3320));
 select dictGetString('autnums', 'country', toUInt64(3320));
+
+Change portmirror sampleraddress data:
+create table flows_raw_old ENGINE = MergeTree() PARTITION BY Date ORDER BY (TimeReceived, FlowDirection, SamplerAddress, SrcAS, DstAS, SrcAddr, DstAddr) AS SELECT
+if(SamplerAddress == toIPv6('::OLD_ADDRESS'), toIPv6('::ffff:NEW_ADDRESS'), toIPv6('::0.0.0.0')) as SamplerAddress, * from flows_raw where SamplerAddress != toIPv6('::0.0.0.0');
+
+INSERT INTO flows_raw SELECT Date,FlowType,SequenceNum,TimeReceived,SamplingRate,FlowDirection,SamplerAddress,TimeFlowStart,TimeFlowEnd,Bytes,Packets,SrcAddr,DstAddr,EType,Proto,SrcPort,DstPort,InIf,OutIf,SrcMac,DstMac,SrcVlan,DstVlan,VlanId,IngressVrfId,EgressVrfId,IPTos,ForwardingStatus,IPTTL,TCPFlags,IcmpType,IcmpCode,IPv6FlowLabel,FragmentId,FragmentOffset,BiFlowDirection,SrcAS,DstAS,NextHop,NextHopAS,SrcNet,DstNet from flows_raw_old;
+
+ALTER TABLE flows_raw DELETE WHERE SamplerAddress = toIPv6('::OLD_ADDRESS') Settings mutations_sync=1;
+
+drop table flows_raw_old;
