@@ -45,7 +45,6 @@ dashboards: "NetMeta Overview": {
 		}
 		pluginVersion: "7.3.6"
 		targets: [{
-			database:            "default"
 			dateColDataType:     "Date"
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -109,7 +108,6 @@ dashboards: "NetMeta Overview": {
 		}
 		pluginVersion: "7.3.6"
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "FlowReceived"
@@ -193,7 +191,6 @@ dashboards: "NetMeta Overview": {
 		}
 		pluginVersion: "7.3.6"
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "FlowReceived"
@@ -255,7 +252,6 @@ dashboards: "NetMeta Overview": {
 		}
 		pluginVersion: "7.3.6"
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "FlowReceived"
@@ -366,7 +362,6 @@ dashboards: "NetMeta Overview": {
 		stack:       false
 		steppedLine: false
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -480,7 +475,6 @@ dashboards: "NetMeta Overview": {
 		stack:       false
 		steppedLine: false
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -599,7 +593,6 @@ dashboards: "NetMeta Overview": {
 		stack:       false
 		steppedLine: false
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -713,7 +706,6 @@ dashboards: "NetMeta Overview": {
 		stack:       false
 		steppedLine: false
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -823,7 +815,6 @@ dashboards: "NetMeta Overview": {
 		stack:       false
 		steppedLine: false
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -934,7 +925,6 @@ dashboards: "NetMeta Overview": {
 		stack:       false
 		steppedLine: false
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -1047,7 +1037,6 @@ dashboards: "NetMeta Overview": {
 		stack:       false
 		steppedLine: false
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -1162,7 +1151,6 @@ dashboards: "NetMeta Overview": {
 		stack:       false
 		steppedLine: false
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -1306,7 +1294,6 @@ dashboards: "NetMeta Overview": {
 		options: showHeader: true
 		pluginVersion: "7.3.6"
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -1404,7 +1391,6 @@ dashboards: "NetMeta Overview": {
 		options: showHeader: true
 		pluginVersion: "7.3.6"
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -1480,7 +1466,6 @@ dashboards: "NetMeta Overview": {
 		stack:       true
 		steppedLine: false
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -1605,7 +1590,6 @@ dashboards: "NetMeta Overview": {
 		stack:       true
 		steppedLine: false
 		targets: [{
-			database:            "default"
 			dateColDataType:     ""
 			dateLoading:         false
 			dateTimeColDataType: "TimeReceived"
@@ -1738,7 +1722,6 @@ dashboards: "NetMeta Overview": {
 			stack:       false
 			steppedLine: false
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"
@@ -1857,7 +1840,6 @@ dashboards: "NetMeta Overview": {
 			stack:       false
 			steppedLine: false
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"
@@ -1970,7 +1952,6 @@ dashboards: "NetMeta Overview": {
 			stack:       false
 			steppedLine: false
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"
@@ -2098,7 +2079,6 @@ dashboards: "NetMeta Overview": {
 			stack:       false
 			steppedLine: false
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"
@@ -2225,7 +2205,6 @@ dashboards: "NetMeta Overview": {
 			stack:       false
 			steppedLine: false
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"
@@ -2351,7 +2330,6 @@ dashboards: "NetMeta Overview": {
 			stack:       false
 			steppedLine: false
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"
@@ -2492,7 +2470,6 @@ dashboards: "NetMeta Overview": {
 			options: showHeader: true
 			pluginVersion: "7.3.6"
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"
@@ -2571,7 +2548,6 @@ dashboards: "NetMeta Overview": {
 			options: showHeader: true
 			pluginVersion: "7.3.6"
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"
@@ -2663,7 +2639,6 @@ dashboards: "NetMeta Overview": {
 			options: showHeader: true
 			pluginVersion: "7.0.0"
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"
@@ -2748,7 +2723,6 @@ dashboards: "NetMeta Overview": {
 			pluginVersion:   "7.3.6"
 			reverseYBuckets: false
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"
@@ -2830,7 +2804,6 @@ dashboards: "NetMeta Overview": {
 			pluginVersion:   "7.3.6"
 			reverseYBuckets: false
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"
@@ -2912,7 +2885,6 @@ dashboards: "NetMeta Overview": {
 			pluginVersion:   "7.3.6"
 			reverseYBuckets: false
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"
@@ -2994,7 +2966,6 @@ dashboards: "NetMeta Overview": {
 			pluginVersion:   "7.3.6"
 			reverseYBuckets: false
 			targets: [{
-				database:            "default"
 				dateColDataType:     ""
 				dateLoading:         false
 				dateTimeColDataType: "TimeReceived"

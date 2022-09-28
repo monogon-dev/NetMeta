@@ -99,7 +99,6 @@ dashboards: "Traffic Relations": {
 			steppedLine: false
 			targets: [
 				{
-					database:            "default"
 					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
@@ -218,7 +217,6 @@ ORDER BY t, Bps
 			steppedLine: false
 			targets: [
 				{
-					database:            "default"
 					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
@@ -334,7 +332,6 @@ ORDER BY t, Bps
 			pluginVersion: "8.3.2"
 			targets: [
 				{
-					database:            "default"
 					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
@@ -394,7 +391,6 @@ LIMIT 20
 			pluginVersion: "8.3.2"
 			targets: [
 				{
-					database:            "default"
 					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
@@ -454,7 +450,6 @@ LIMIT 20
 			pluginVersion: "8.3.2"
 			targets: [
 				{
-					database:            "default"
 					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
@@ -515,7 +510,6 @@ LIMIT 30
 			pluginVersion: "8.3.2"
 			targets: [
 				{
-					database:            "default"
 					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
@@ -597,7 +591,6 @@ LIMIT 40
 			pluginVersion: "8.3.2"
 			targets: [
 				{
-					database:            "default"
 					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
@@ -656,7 +649,6 @@ LIMIT 30
 			pluginVersion: "8.3.2"
 			targets: [
 				{
-					database:            "default"
 					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
@@ -739,7 +731,6 @@ LIMIT 30
 			pluginVersion: "8.3.2"
 			targets: [
 				{
-					database:            "default"
 					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
@@ -799,7 +790,6 @@ LIMIT 30
 			pluginVersion: "8.3.2"
 			targets: [
 				{
-					database:            "default"
 					datasource:          "$datasource"
 					dateColDataType:     ""
 					dateLoading:         false
