@@ -7,6 +7,13 @@ k8s: kafkas: "netmeta": spec: {
 		listeners: {
 			plain: {}
 			tls: {}
+			if netmeta.config.enableExternalKafkaListener {
+				external: {
+					type: "nodeport"
+					tls:  false
+					overrides: brokers: [{broker: 0, advertisedHost: netmeta.config.advertisedKafkaHost}]
+				}
+			}
 		}
 		config: {
 			"offsets.topic.replication.factor":         1

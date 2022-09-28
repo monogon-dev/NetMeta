@@ -121,6 +121,12 @@ import (
 	// Expose the ClickHouse HTTP query API on the port defined above.
 	enableClickhouseIngress: bool | *false
 
+	// Expose Kafka on a Nodeport
+	enableExternalKafkaListener: bool | *false
+
+	// The URL to advertise to hosts connecting over the external Kafka listener
+	advertisedKafkaHost: string | *"127.0.0.1"
+
 	// When set to a PortMirrorConfig, the PortMirror Tool will be deployed and
 	// listen to the defined interfaces.
 	portMirror?: #PortMirrorConfig
