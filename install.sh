@@ -35,6 +35,24 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+# check if jq is present
+if ! jq --version &> /dev/null
+then
+    echo "jq could not be found. Please install it."
+    exit 1
+else
+    echo "jq is installed"
+fi
+
+# check if gcc is present
+if ! gcc --version &> /dev/null
+then
+    echo "gcc could not be found. Please install it."
+    exit 1
+else
+    echo "gcc is installed"
+fi
+
 # Ensure that our binaries are not shadowed by the distribution.
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
 
