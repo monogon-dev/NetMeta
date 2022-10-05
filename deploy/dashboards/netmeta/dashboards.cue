@@ -6,6 +6,12 @@ package netmeta
 
 	// Maximum packet size for heatmaps (filter out spurious oversized packet from loopback interfaces)
 	maxPacketSize: uint | *1500
+
+	// The config for the FastNetMon integration
+	fastNetMon?: {
+		dataSource: string | *null
+		...
+	}
 }
 
 _genericFilterWithoutHost: """
@@ -47,7 +53,28 @@ dashboards: [T=string]: {
 			type: "dashboard"
 		}
 		type: "dashboard"
-	}]
+	},
+		if #Config.fastNetMon != _|_ {
+			{
+				datasource: {
+					type: "influxdb"
+					uid:  "${datasource_fnm}"
+				}
+				enable:     true
+				iconColor:  "red"
+				name:       "FastNetMon Attacks"
+				query:      "select title, tags, text from events where $timeFilter"
+				tagsColumn: "tags"
+				target: {
+					limit:    100
+					matchAny: false
+					tags: []
+					type: "dashboard"
+				}
+				textColumn: "text"
+			}
+		},
+	]
 	templating: list: [{
 		current: {
 			selected: false
@@ -62,13 +89,31 @@ dashboards: [T=string]: {
 		query:      "vertamedia-clickhouse-datasource"
 		regex:      ""
 		type:       "datasource"
-	}, {
-		hide: 2
-		name: "adhoc_query_filter"
-		query: "SELECT database, table, name, type FROM system.columns WHERE table='flows_raw' ORDER BY database, table"
-		skipUrlSync: false
-		type:        "constant"
 	},
+		if #Config.fastNetMon != _|_ {
+			{
+				current: {
+					selected: false
+					text:     #Config.fastNetMon.name
+					value:    #Config.fastNetMon.name
+				}
+				hide:       0
+				includeAll: false
+				label:      "Datasource"
+				multi:      false
+				name:       "datasource_fnm"
+				query:      "influxdb"
+				regex:      ""
+				type:       "datasource"
+			}
+		},
+		{
+			hide:        2
+			name:        "adhoc_query_filter"
+			query:       "SELECT database, table, name, type FROM system.columns WHERE table='flows_raw' ORDER BY database, table"
+			skipUrlSync: false
+			type:        "constant"
+		},
 		{
 			current: {
 				selected: false
@@ -82,7 +127,7 @@ dashboards: [T=string]: {
 			multi:      false
 			name:       "sampler"
 			options: []
-			query: "SELECT DISTINCT IPv6NumToString(SamplerAddress) FROM flows_raw WHERE $timeFilterByColumn(TimeReceived)"
+			query:          "SELECT DISTINCT IPv6NumToString(SamplerAddress) FROM flows_raw WHERE $timeFilterByColumn(TimeReceived)"
 			refresh:        2
 			regex:          ""
 			skipUrlSync:    false

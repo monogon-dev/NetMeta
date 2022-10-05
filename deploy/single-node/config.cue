@@ -53,6 +53,14 @@ import (
 	maxPacketSize: *1500 | uint
 }
 
+// The config for the FastNetMon integration
+#FastNetMonConfig: {
+	// Name of a FastNetMon InfluxDB datasource. If you use NetMeta alongside FastNetMon, attack
+	// notifications can be shown in NetMeta. You have to manually create the FastNetMon
+	// datasource and connect it to your instance.
+	dataSource: string | *"FastNetMon InfluxDB"
+}
+
 #PortMirrorConfig: {
 	// The address the instance use as SamplerAddress
 	samplerAddress: net.IP | *"127.0.0.1"
@@ -133,6 +141,9 @@ import (
 
 	// Defines if the goflow tool should be deployed
 	deployGoflow: bool | *true
+
+	// When set to a FastNetMonConfig, the FastNetMon integration for Grafana will be enabled
+	fastNetMon?: #FastNetMonConfig
 }
 
 #Image: {

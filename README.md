@@ -38,6 +38,9 @@ NetMeta captures, aggregates and analyzes events from a variety of data sources:
 
 The different pros/cons between these and a more informations about the ingest of events can be found [here](doc/ingest.md)
 
+NetMeta also allows to integrate FastNetMon Attack notifications on the Dashboards.
+The docs to setup this and other Grafana related settings can be found [here](doc/grafana.md)
+
 Sampling rate is detected automatically. Different devices with different sampling rates can be mixed.
 IPv6 is fully supported throughout the stack.
 

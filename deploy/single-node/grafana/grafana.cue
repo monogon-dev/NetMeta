@@ -99,6 +99,9 @@ k8s: {
 			#Config: {
 				interval:      netmeta.config.dashboardDisplay.minInterval
 				maxPacketSize: netmeta.config.dashboardDisplay.maxPacketSize
+				if netmeta.config.fastNetMon != _|_ {
+					fastNetMon: netmeta.config.fastNetMon
+				}
 			}
 		}
 		for k, v in _dashboards_netmeta.dashboards {
