@@ -12,6 +12,8 @@ _genericFilterWithoutHost: """
 	$conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
 	$conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
 	$conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
+	$conditionalTest(AND DstAS = '$dstAS', $dstAS)
+	$conditionalTest(AND SrcAS = '$srcAS', $srcAS)
 	$conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
 	$conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
 	$conditionalTest(AND ($extra), $extra)
@@ -198,6 +200,46 @@ dashboards: [T=string]: {
 			options: [
 				{
 					selected: true
+					text:     ""
+					value:    ""
+				},
+			]
+			query:       ""
+			skipUrlSync: false
+			type:        "textbox"
+		},
+		{
+			current: {
+				selected: false
+				text:     ""
+				value:    ""
+			}
+			hide:  0
+			label: "Src AS"
+			name:  "srcAS"
+			options: [
+				{
+					selected: false
+					text:     ""
+					value:    ""
+				},
+			]
+			query:       ""
+			skipUrlSync: false
+			type:        "textbox"
+		},
+		{
+			current: {
+				selected: false
+				text:     ""
+				value:    ""
+			}
+			hide:  0
+			label: "Dst AS"
+			name:  "dstAS"
+			options: [
+				{
+					selected: false
 					text:     ""
 					value:    ""
 				},
