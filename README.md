@@ -28,10 +28,9 @@ NetMeta captures, aggregates and analyzes events from a variety of data sources:
 
 * sFlow
 * NetFlow/IPFIX
-* Port Mirror
+* Port Mirror (AF_PACKET)
 * Linux NFLOG (soon)
 * Linux conntrack (soon)
-* Web server logs (soon)
 * Scamper traces (soon)
 * GCP VPC Flow Logs (soon)
 * AWS VPC Flow Logs (soon)
@@ -52,7 +51,7 @@ IPv6 is fully supported throughout the stack.
 
 ## 💥 API Stability
 
-NetMeta is **alpha software** and subject to change. It exposes the following APIs:
+NetMeta is **beta software** and subject to change. It exposes the following APIs:
 
 * The cluster configuration file for single-node deployments.
 * ClickHouse SQL schema for raw database access.
@@ -77,12 +76,12 @@ NetMeta can scale to millions of events per seconds in multi-node deployments.
 
 ### Multi-node deployment
 
-Work In Progress. Please contact us if you're interested in large-scale deployments.
+We are currently finalizing the design for multi-node deployments. Please contact us if you're interested in
+large-scale deployments - we want your feedback!
 
-### Monogon Metropolis
+### Monogon OS
 
-Stay tuned - NetMeta will be a first-class citizen on Monogon's [Metropolis](https://monogon.tech/metropolis.html)
-cluster operating system.
+NetMeta will be a first-class citizen on [Monogon OS](https://monogon.tech/monogon_os.html) - stay tuned!
 
 ### ☸️ Kubernetes
 
@@ -93,11 +92,17 @@ Note that we use two operators, which require cluster-admin permissions since CR
 ([Strimzi](https://strimzi.io/docs/master) for Kafka
 and [clickhouse-operator](https://github.com/Altinity/clickhouse-operator)).
 
-All pieces of NetMeta are installed into a single namespace. By default, this is ``default``, which is probably not what
+All pieces of NetMeta are installed into a single namespace. By default, this is ``default``, which is
+probably not what
 you want.
 You can change the target namespace in the deployment config.
 
 Please contact us if you need help porting NetMeta to an existing k8s cluster.
+
+## 💼 Support
+
+[Please contact us](https://monogon.tech/pricing.html)
+for support and consulting. If you are using NetMeta in production, we'd love to hear from you!
 
 ## 🧩 Related
 
@@ -135,7 +140,7 @@ flowchart TD;
 
 ---
 
-(C) 2021 [Monogon SE](https://monogon.tech).
+(C) 2022 [Monogon SE](https://monogon.tech).
 
 This software is provided "as-is" and
 without any express or implied warranties, including, without limitation, the implied warranties of
