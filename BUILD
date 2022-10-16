@@ -4,7 +4,6 @@ load("@io_bazel_rules_docker//container:bundle.bzl", "container_bundle")
 
 # gazelle:prefix github.com/monogon-dev/NetMeta
 # gazelle:exclude deploy
-# gazelle:exclude schema
 # gazelle:exclude third_party/tools
 gazelle(name = "gazelle")
 

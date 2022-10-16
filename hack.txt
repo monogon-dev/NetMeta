@@ -5,7 +5,14 @@ Kafka console consumer:
 kc exec netmeta-kafka-0 -c kafka -- bin/kafka-console-consumer.sh --bootstrap-server netmeta-kafka-bootstrap:9092 --topic flow-messages
 
 CentOS 8 iptables-legacy:
-cd toolbox
+```
+FROM fedora:32
+
+RUN INSTALL_PKGS="iptables" && \
+    dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    dnf clean all -y
+
+```
 podman build -t netmeta-toolbox:latest .
 podman run --privileged --rm --net=host netmeta-toolbox:latest iptables-legacy -S
 

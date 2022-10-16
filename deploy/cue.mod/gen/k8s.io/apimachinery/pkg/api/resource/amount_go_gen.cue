@@ -20,6 +20,18 @@ package resource
 	#Peta |
 	#Exa
 
+#values_Scale: {
+	Nano:  #Nano
+	Micro: #Micro
+	Milli: #Milli
+	Kilo:  #Kilo
+	Mega:  #Mega
+	Giga:  #Giga
+	Tera:  #Tera
+	Peta:  #Peta
+	Exa:   #Exa
+}
+
 #Nano:  #Scale & -9
 #Micro: #Scale & -6
 #Milli: #Scale & -3
@@ -29,3 +41,7 @@ package resource
 #Tera:  #Scale & 12
 #Peta:  #Scale & 15
 #Exa:   #Scale & 18
+
+// infDecAmount implements common operations over an inf.Dec that are specific to the quantity
+// representation.
+_#infDecAmount: string

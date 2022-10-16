@@ -1,4 +1,4 @@
 .idea
 *_local.cue
-deploy/out
+deploy/single-node/out
 .ijwb
