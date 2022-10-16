@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Generate an example deploy/single-node/config_local.cue file
 
 function mkpw() {

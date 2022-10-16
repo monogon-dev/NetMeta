@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Build container bundle using Bazel and import it to the local k3s image store.
 # This bypasses the need for a local registry for development, similar to the trickery minikube does.
 set -euo pipefail
@@ -22,7 +22,7 @@ function build() {
 cat <<EOF > deploy/single-node/images_local.cue
 package k8s
 
-netmeta: images: #NetMetaImages & {
+netmeta: images: {
   helloworld: $(build cmd/helloworld:helloworld)
   migrate: $(build schema:migrate)
   risinfo: $(build cmd/risinfo:risinfo)

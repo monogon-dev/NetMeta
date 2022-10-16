@@ -1,3 +1,5 @@
+//go:build goflow
+
 package goflow
 
 // Build goflow container

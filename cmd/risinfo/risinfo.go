@@ -12,7 +12,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
@@ -253,7 +252,7 @@ func handleRIB(w http.ResponseWriter, r *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	cf, err := ioutil.TempFile(*cacheDir, "rib.*.tsv")
+	cf, err := os.CreateTemp(*cacheDir, "rib.*.tsv")
 	if err != nil {
 		klog.Fatalf("failed to open cache file %s: %v", cacheFile, err)
 	}

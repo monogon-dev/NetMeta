@@ -60,10 +60,10 @@ NetMeta is **beta software** and subject to change. It exposes the following API
 One NetMeta has stabilized, these APIs will be stable and backwards compatible.
 
 ## 🛠 Deployment
-### [Single-node deployment](doc/single-node-deployment.md)
+### [Single-node deployment](deploy/single-node/README.md)
 
 NetMeta includes a production-ready single node deployment that scales to up to ~100k events/s and billions of database
-rows. More infos can be found [here](doc/single-node-deployment.md)
+rows. More infos can be found [here](deploy/single-node/README.md)
 
 Ingestion performance is limited by CPU performance and disk bandwidth.
 Query performance is limited by disk and memory bandwidth, as well as total amount of available memory for larger
