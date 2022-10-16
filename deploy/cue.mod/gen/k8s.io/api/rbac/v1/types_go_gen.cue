@@ -20,15 +20,15 @@ import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 // PolicyRule holds information that describes a policy rule, but does not contain information
 // about who the rule applies to or which namespace the rule applies to.
 #PolicyRule: {
-	// Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule.  VerbAll represents all kinds.
+	// Verbs is a list of Verbs that apply to ALL the ResourceKinds contained in this rule. '*' represents all verbs.
 	verbs: [...string] @go(Verbs,[]string) @protobuf(1,bytes,rep)
 
 	// APIGroups is the name of the APIGroup that contains the resources.  If multiple API groups are specified, any action requested against one of
-	// the enumerated resources in any API group will be allowed.
+	// the enumerated resources in any API group will be allowed. "" represents the core API group and "*" represents all API groups.
 	// +optional
 	apiGroups?: [...string] @go(APIGroups,[]string) @protobuf(2,bytes,rep)
 
-	// Resources is a list of resources this rule applies to.  ResourceAll represents all resources.
+	// Resources is a list of resources this rule applies to. '*' represents all resources.
 	// +optional
 	resources?: [...string] @go(Resources,[]string) @protobuf(3,bytes,rep)
 
@@ -45,6 +45,7 @@ import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 // Subject contains a reference to the object or user identities a role binding applies to.  This can either hold a direct API object reference,
 // or a value for non-objects such as user and group names.
+// +structType=atomic
 #Subject: {
 	// Kind of object being referenced. Values defined by this API group are "User", "Group", and "ServiceAccount".
 	// If the Authorizer does not recognized the kind value, the Authorizer should report an error.
@@ -66,6 +67,7 @@ import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 }
 
 // RoleRef contains information that points to the role being used
+// +structType=atomic
 #RoleRef: {
 	// APIGroup is the group for the resource being referenced
 	apiGroup: string @go(APIGroup) @protobuf(1,bytes,opt)

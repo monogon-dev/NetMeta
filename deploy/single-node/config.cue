@@ -81,7 +81,7 @@ import (
 	namespace: *"default" | string
 
 	// ClickHouse write credentials
-	clickhouseOperatorPassword: string
+	clickhouseAdminPassword: string
 
 	// Session secret for Prometheus and Grafana
 	sessionSecret: string
@@ -153,7 +153,6 @@ import (
 
 #NetMetaImages: {
 	helloworld: #Image
-	migrate:    #Image
 	risinfo:    #Image
 	goflow:     #Image
 	portmirror: #Image

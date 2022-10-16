@@ -36,27 +36,43 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # check if jq is present
-if ! jq --version &> /dev/null
-then
-    echo "jq could not be found. Please install it."
-    exit 1
+if ! jq --version &>/dev/null; then
+  echo "jq could not be found. Please install it."
+  exit 1
 else
-    echo "jq is installed"
+  echo "jq is installed"
 fi
 
 # check if gcc is present
-if ! gcc --version &> /dev/null
-then
-    echo "gcc could not be found. Please install it."
-    exit 1
+if ! gcc --version &>/dev/null; then
+  echo "gcc could not be found. Please install it."
+  exit 1
 else
-    echo "gcc is installed"
+  echo "gcc is installed"
 fi
 
 # Ensure that our binaries are not shadowed by the distribution.
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin
 
-ARCH=amd64
+ARCH=$(uname -m)
+case $ARCH in
+amd64)
+  ARCH=amd64
+  ;;
+x86_64)
+  ARCH=amd64
+  ;;
+arm64)
+  ARCH=arm64
+  ;;
+aarch64)
+  ARCH=arm64
+  ;;
+*)
+  fatal "Unsupported architecture $ARCH"
+  ;;
+esac
+
 GO=1.19.1
 
 (
@@ -86,6 +102,7 @@ GO=1.19.1
   cd third_party/tools
   go build -mod=readonly -o /usr/local/bin/cue cuelang.org/go/cmd/cue
   go build -mod=readonly -o /usr/local/bin/bazel github.com/bazelbuild/bazelisk
+  go build -mod=readonly -o /usr/local/bin/goose github.com/pressly/goose/v3/cmd/goose
 )
 
 # Install k3s. k3s is a minimal Kubernetes distribution we use to deploy the various pieces of NetMeta.
@@ -95,13 +112,13 @@ GO=1.19.1
 #
 # This leaves us with apiserver and kubelet on public ports, both of which are designed for public exposure.
 #
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.20.0+k3s2" INSTALL_K3S_EXEC="server
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.25.2+k3s1" INSTALL_K3S_EXEC="server
+  --disable traefik
   --disable-cloud-controller
-  --kube-scheduler-arg=address=127.0.0.1
-  --kube-controller-manager-arg=address=127.0.0.1
+  --kube-scheduler-arg=bind-address=127.0.0.1
+  --kube-controller-manager-arg=bind-address=127.0.0.1
   --kubelet-arg=eviction-hard=imagefs.available<1%,nodefs.available<1%
   --kubelet-arg=eviction-minimum-reclaim=imagefs.available=1%,nodefs.available=1%
-  --disable traefik
 " sh -s -
 
 while ! k3s kubectl get all; do

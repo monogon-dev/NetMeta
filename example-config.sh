@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Generate an example deploy/single-node/config_local.cue file
 
 function mkpw() {
@@ -12,7 +12,7 @@ package k8s
 
 netmeta: config: {
     grafanaInitialAdminPassword: "$(mkpw 18)"
-    clickhouseOperatorPassword:  "$(mkpw 18)"
+    clickhouseAdminPassword:  "$(mkpw 18)"
     sessionSecret:               "$(mkpw 32)"
 
     publicHostname: "$(hostname -f)"

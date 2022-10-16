@@ -52,10 +52,7 @@ dashboards: "Traffic Relations": {
 			bars:       false
 			dashLength: 10
 			dashes:     false
-			datasource: {
-				type: "datasource"
-				uid:  "grafana"
-			}
+			datasource: "$datasource"
 			fieldConfig: {
 				defaults: links: []
 				overrides: []
@@ -172,10 +169,7 @@ ORDER BY t, Bps
 			bars:       false
 			dashLength: 10
 			dashes:     false
-			datasource: {
-				type: "datasource"
-				uid:  "grafana"
-			}
+			datasource: "$datasource"
 			fieldConfig: {
 				defaults: links: []
 				overrides: []
@@ -307,10 +301,7 @@ ORDER BY t, Bps
 			type:  "row"
 		},
 		{
-			datasource: {
-				type: "datasource"
-				uid:  "grafana"
-			}
+			datasource:  "$datasource"
 			description: ""
 			gridPos: {
 				h: 21
@@ -366,10 +357,7 @@ LIMIT 20
 			type: "netsage-sankey-panel"
 		},
 		{
-			datasource: {
-				type: "datasource"
-				uid:  "grafana"
-			}
+			datasource: "$datasource"
 			description: ""
 			gridPos: {
 				h: 21
@@ -425,10 +413,7 @@ LIMIT 20
 			type: "netsage-sankey-panel"
 		},
 		{
-			datasource: {
-				type: "datasource"
-				uid:  "grafana"
-			}
+			datasource: "$datasource"
 			description: ""
 			gridPos: {
 				h: 21
@@ -485,10 +470,7 @@ LIMIT 30
 			type: "netsage-sankey-panel"
 		},
 		{
-			datasource: {
-				type: "datasource"
-				uid:  "grafana"
-			}
+			datasource: "$datasource"
 			description: ""
 			gridPos: {
 				h: 21
@@ -566,10 +548,7 @@ LIMIT 40
 			type:  "row"
 		},
 		{
-			datasource: {
-				type: "datasource"
-				uid:  "grafana"
-			}
+			datasource: "$datasource"
 			description: ""
 			gridPos: {
 				h: 22
@@ -624,10 +603,7 @@ LIMIT 30
 			type: "netsage-sankey-panel"
 		},
 		{
-			datasource: {
-				type: "datasource"
-				uid:  "grafana"
-			}
+			datasource: "$datasource"
 			description: ""
 			gridPos: {
 				h: 22
@@ -684,10 +660,7 @@ LIMIT 30
 		},
 		{
 			collapsed: false
-			datasource: {
-				type: "datasource"
-				uid:  "grafana"
-			}
+			datasource: "$datasource"
 			gridPos: {
 				h: 1
 				w: 24
@@ -706,10 +679,7 @@ LIMIT 30
 			type:  "row"
 		},
 		{
-			datasource: {
-				type: "datasource"
-				uid:  "grafana"
-			}
+			datasource: "$datasource"
 			description: ""
 			gridPos: {
 				h: 22
@@ -765,10 +735,7 @@ LIMIT 30
 			type: "netsage-sankey-panel"
 		},
 		{
-			datasource: {
-				type: "datasource"
-				uid:  "grafana"
-			}
+			datasource: "$datasource"
 			description: ""
 			gridPos: {
 				h: 22
