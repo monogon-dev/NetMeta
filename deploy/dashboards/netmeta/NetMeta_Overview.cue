@@ -988,6 +988,7 @@ dashboards: "NetMeta Overview": {
 			alignLevel: null
 		}
 	}, {
+		description: "The traffic based on the ingress interface. If you are using the portmirror, you'll see another interface with the ID 0. This is correct and is the sum of all outgoing traffic of the sampler"
 		aliasColors: {}
 		bars:       false
 		dashLength: 10
@@ -1102,6 +1103,7 @@ dashboards: "NetMeta Overview": {
 			alignLevel: null
 		}
 	}, {
+		description: "The traffic based on the egress interface. If you are using the portmirror, you'll see another interface with the ID 0. This is correct and is the sum of all incoming traffic of the sampler"
 		aliasColors: {}
 		bars:       false
 		dashLength: 10
