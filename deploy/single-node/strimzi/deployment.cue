@@ -106,11 +106,11 @@ k8s: deployments: "strimzi-cluster-operator": spec: {
 				resources: {
 					limits: {
 						cpu:    "1000m"
-						memory: "256Mi"
+						memory: "512Mi"
 					}
 					requests: {
 						cpu:    "200m"
-						memory: "256Mi"
+						memory: "512Mi"
 					}
 				}
 			}]
