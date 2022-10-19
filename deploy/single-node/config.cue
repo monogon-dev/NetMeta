@@ -126,6 +126,9 @@ import (
 	// List of router interfaces to resolve to names
 	interfaceMap: [...#InterfaceMap]
 
+  // List of routers to resolve to names
+	routerMap: [...#RouterMap]
+
 	// Expose the ClickHouse HTTP query API on the port defined above.
 	enableClickhouseIngress: bool | *false
 
