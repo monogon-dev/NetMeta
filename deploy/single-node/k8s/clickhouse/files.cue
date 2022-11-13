@@ -132,6 +132,35 @@ _files: VlanNames: {
 	}
 }
 
+// Dictionary for user-defined host name lookup
+_files: HostNames: {
+	data: strings.Join([ for s in #Config.sampler for h in s.host {
+		strings.Join([s.device, h.device, h.description], "\t")
+	}], "\n")
+
+	cfg: {
+		layout: complex_key_hashed: null
+		structure: {
+			key: [{
+				attribute: {
+					name: "Sampler"
+					type: "String"
+				}
+			}, {
+				attribute: {
+					name: "Device"
+					type: "String"
+				}
+			}]
+			attribute: {
+				name:       "Description"
+				type:       "String"
+				null_value: null
+			}
+		}
+	}
+}
+
 ClickHouseInstallation: netmeta: spec: configuration: files: "risinfo.conf": (xml.#Marshal & {in: {
 	yandex: dictionary: {
 		name: "risinfo"

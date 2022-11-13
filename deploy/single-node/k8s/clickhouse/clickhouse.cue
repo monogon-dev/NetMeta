@@ -17,6 +17,11 @@ import (
 		id:          int
 		description: string
 	}
+	host: [string]: {
+		device:      string
+		description: string
+	}
+	...
 }
 
 #Config: {

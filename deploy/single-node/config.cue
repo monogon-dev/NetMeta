@@ -76,6 +76,7 @@ import (
 	// Human-readable host description to show in the frontend
 	description: string | *""
 
+	// Interface names for the data from this sampler
 	interface: [ID=string]: {
 		// Numeric interface Index (often known as the "SNMP ID")
 		id: *strconv.Atoi(ID) | int
@@ -89,6 +90,16 @@ import (
 		id: *strconv.Atoi(ID) | int
 
 		// Human-readable vlan description to show in the frontend
+		description: string
+	}
+
+	// Host names for the data from this sampler
+	host: [DEVICE=string]: {
+		// Host source address (IPv6 or pseudo-IPv4 mapped address like ::100.0.0.1)
+		device: net.IP
+		device: DEVICE
+
+		// Human-readable host description to show in the frontend
 		description: string
 	}
 }

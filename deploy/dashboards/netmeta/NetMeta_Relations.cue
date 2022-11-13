@@ -581,13 +581,13 @@ LIMIT 40
 					intervalFactor:      1
 					query:               """
 						SELECT
-  SrcAddr,
-  DstAddr,
+  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(SrcAddr)), SrcAddr) AS Src,
+  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr) AS Dst,
   sum(Bytes * SamplingRate) / 1024 as Bytes
 FROM $table
 WHERE $timeFilter
 \(_genericFilter)
-GROUP BY SrcAddr, DstAddr
+GROUP BY Src, Dst
 ORDER BY Bytes DESC
 LIMIT 30
 """
@@ -636,8 +636,12 @@ LIMIT 30
 					intervalFactor:      1
 					query:               """
 						SELECT
-  concat(IPv6NumToString(SrcAddr), ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(SrcPort)) as Src,
-  concat(IPv6NumToString(DstAddr), ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(DstPort)) as Dst,
+  concat(
+  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(SrcAddr)), SrcAddr),
+   ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(SrcPort)) as Src,
+  concat(
+  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr),
+  ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(DstPort)) as Dst,
   sum(Bytes * SamplingRate) / 1024 as Bytes
 FROM $table
 WHERE $timeFilter
@@ -713,7 +717,9 @@ LIMIT 30
 					query:               """
 						SELECT
   concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
-  concat(IPv6NumToString(DstAddr), ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(DstPort)) as Dst,
+  concat(
+  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr),
+   ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(DstPort)) as Dst,
   sum(Bytes * SamplingRate) / 1024 as Bytes
 FROM $table
 WHERE $timeFilter AND FlowDirection != 1
@@ -769,7 +775,9 @@ LIMIT 30
 					query:               """
 						SELECT
   concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
-  concat(IPv6NumToString(DstAddr), ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(DstPort)) as Dst,
+  concat(
+  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr),
+   ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(DstPort)) as Dst,
   sum(Bytes * SamplingRate) / 1024 as Bytes
 FROM $table
 WHERE $timeFilter AND FlowDirection != 0
