@@ -69,9 +69,12 @@ import (
 	// Router source address (IPv6 or pseudo-IPv4 mapped address like ::100.0.0.1, and for the portmirror ::ffff:100.0.0.1)
 	device: DEVICE
 
+	// Sampling rate to override the sampling rate provided by the sampler
+	samplingRate: int | *0
+
 	interface: [ID=string]: {
 		// Numeric interface Index (often known as the "SNMP ID")
-		id:          *strconv.Atoi(ID) | int
+		id: *strconv.Atoi(ID) | int
 
 		// Human-readable interface description to show in the frontend
 		description: string

@@ -7,7 +7,8 @@ import (
 
 // A stripped down version of the #SamplerConfig found in deploy/single-node/config.cue
 #SamplerConfig: [string]: {
-	device: string
+	device:       string
+	samplingRate: int
 	interface: [string]: {
 		id:          int
 		description: string
@@ -17,7 +18,7 @@ import (
 #Config: {
 	clickhouseAdminPassword: string
 	enableClickhouseIngress: bool
-	sampler: #SamplerConfig
+	sampler:                 #SamplerConfig
 }
 
 ClickHouseInstallation: netmeta: spec: {

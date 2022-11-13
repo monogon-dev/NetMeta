@@ -22,6 +22,7 @@ _files: [NAME=string]: {
 				path:   "/etc/clickhouse-server/config.d/\(NAME).tsv"
 				format: "TSV"
 			}
+			settings: format_tsv_null_representation: "NULL"
 		}]
 		lifetime: 60
 	}
@@ -58,6 +59,37 @@ _files: InterfaceNames: {
 			attribute: {
 				name:       "Description"
 				type:       "String"
+				null_value: null
+			}
+		}
+	}
+}
+
+// Dictionary for user-defined sampler settings lookup
+_files: SamplerConfig: {
+	data: strings.Join([ for s in #Config.sampler {
+		let samplingRate = [
+			if s.samplingRate == 0 {
+				"NULL"
+			},
+			"\(s.samplingRate)",
+		][0]
+
+		strings.Join([s.device, samplingRate], "\t")
+	}], "\n")
+
+	cfg: {
+		layout: complex_key_hashed: null
+		structure: {
+			key: [{
+				attribute: {
+					name: "Device"
+					type: "String"
+				}
+			}]
+			attribute: {
+				name:       "SamplingRate"
+				type:       "Nullable(UInt64)"
 				null_value: null
 			}
 		}
