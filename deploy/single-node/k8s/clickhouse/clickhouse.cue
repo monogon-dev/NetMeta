@@ -13,6 +13,10 @@ import (
 		id:          int
 		description: string
 	}
+	vlan: [string]: {
+		id:          int
+		description: string
+	}
 }
 
 #Config: {

@@ -96,6 +96,35 @@ _files: SamplerConfig: {
 	}
 }
 
+// Dictionary for user-defined vlan name lookup
+_files: VlanNames: {
+	data: strings.Join([ for s in #Config.sampler for v in s.vlan {
+		strings.Join([s.device, "\(v.id)", v.description], "\t")
+	}], "\n")
+
+	cfg: {
+		layout: complex_key_hashed: null
+		structure: {
+			key: [{
+				attribute: {
+					name: "Device"
+					type: "String"
+				}
+			}, {
+				attribute: {
+					name: "Index"
+					type: "UInt32"
+				}
+			}]
+			attribute: {
+				name:       "Description"
+				type:       "String"
+				null_value: null
+			}
+		}
+	}
+}
+
 ClickHouseInstallation: netmeta: spec: configuration: files: "risinfo.conf": (xml.#Marshal & {in: {
 	yandex: dictionary: {
 		name: "risinfo"

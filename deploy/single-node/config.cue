@@ -79,6 +79,14 @@ import (
 		// Human-readable interface description to show in the frontend
 		description: string
 	}
+
+	vlan: [ID=string]: {
+		// Numeric VLAN ID
+		id: *strconv.Atoi(ID) | int
+
+		// Human-readable vlan description to show in the frontend
+		description: string
+	}
 }
 
 #NetMetaConfig: {

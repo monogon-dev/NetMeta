@@ -125,6 +125,8 @@ netmeta: config: {
     sampler: "::100.0.0.1": {
 		interface: "858": description:  "TRANSIT-ABC"
 		interface: "1126": description: "PEERING-YOLO-COLO"
+		
+		vlan: "42": description: "secure-net"
 	}
 }
 ```
