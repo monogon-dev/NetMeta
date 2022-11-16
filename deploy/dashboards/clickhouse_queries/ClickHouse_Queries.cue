@@ -1,5 +1,9 @@
 package clickhouse_queries
 
+dashboards: [T=string]: {
+	title: T
+}
+
 dashboards: "ClickHouse Queries": {
 	templating: list: [{
 		current: {
