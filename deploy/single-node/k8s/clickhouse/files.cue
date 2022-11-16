@@ -456,6 +456,6 @@ ClickHouseInstallation: netmeta: spec: configuration: files: "InterfaceNames.con
 	</yandex>
 	"""#
 
-ClickHouseInstallation: netmeta: spec: configuration: files: "InterfaceNames.tsv": strings.Join([ for e in #Config.interfaceMap {
-	strings.Join([e.device, "\(e.idx)", e.description], "\t")
+ClickHouseInstallation: netmeta: spec: configuration: files: "InterfaceNames.tsv": strings.Join([ for s in #Config.sampler for i in s.interface {
+	strings.Join([s.device, "\(i.id)", i.description], "\t")
 }], "\n")

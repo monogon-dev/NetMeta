@@ -65,7 +65,7 @@ k8s_list: [
 		#Config: {
 			clickhouseAdminPassword: netmeta.config.clickhouseAdminPassword
 			enableClickhouseIngress: netmeta.config.enableClickhouseIngress
-			interfaceMap:            netmeta.config.interfaceMap
+			sampler:                 netmeta.config.sampler
 		}
 	}),
 

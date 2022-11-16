@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"net"
+	"strconv"
 )
 
 #GoogleAuth: {
@@ -29,15 +30,6 @@ import (
 	netflowLegacy: int | *2056
 	// sFlow
 	sflow: int | *6343
-}
-
-#InterfaceMap: {
-	// Router source address (IPv6 or pseudo-IPv4 mapped address like ::100.0.0.1, and for the portmirror ::ffff:100.0.0.1)
-	device: string
-	// Numeric interface Index (often known as the "SNMP ID")
-	idx: uint
-	// Human-readable interface description to show in the frontend
-	description: string
 }
 
 #DashboardDisplayConfig: {
@@ -72,7 +64,24 @@ import (
 	sampleRate: int | *1000
 }
 
+// A struct containing sampler specific config parameters
+#SamplerConfig: [DEVICE=string]: {
+	// Router source address (IPv6 or pseudo-IPv4 mapped address like ::100.0.0.1, and for the portmirror ::ffff:100.0.0.1)
+	device: DEVICE
+
+	interface: [ID=string]: {
+		// Numeric interface Index (often known as the "SNMP ID")
+		id:          *strconv.Atoi(ID) | int
+
+		// Human-readable interface description to show in the frontend
+		description: string
+	}
+}
+
 #NetMetaConfig: {
+	// Allow the use of legacy config parameters
+	#LegacyNetMetaConfig
+
 	// Size of the goflow sFlow/IPFIX ingestion queue. Keeping
 	// a larger queue allows for backprocessing of longer periods of historical data.
 	goflowTopicRetention: *1_000_000_000 | int // GB
@@ -123,9 +132,6 @@ import (
 	// Default org role for new Grafana users
 	grafanaDefaultRole: string | *"Viewer"
 
-	// List of router interfaces to resolve to names
-	interfaceMap: [...#InterfaceMap]
-
 	// Expose the ClickHouse HTTP query API on the port defined above.
 	enableClickhouseIngress: bool | *false
 
@@ -144,6 +150,9 @@ import (
 
 	// When set to a FastNetMonConfig, the FastNetMon integration for Grafana will be enabled
 	fastNetMon?: #FastNetMonConfig
+
+	// Config parameter like interface names. See #SamplerConfig
+	sampler: #SamplerConfig
 }
 
 #Image: {

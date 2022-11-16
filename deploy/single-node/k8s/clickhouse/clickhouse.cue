@@ -5,19 +5,19 @@ import (
 	"encoding/hex"
 )
 
-#InterfaceMap: {
-	// Router source address (IPv6 or pseudo-IPv4 mapped address like ::100.0.0.1, and for the portmirror ::ffff:100.0.0.1)
+// A stripped down version of the #SamplerConfig found in deploy/single-node/config.cue
+#SamplerConfig: [string]: {
 	device: string
-	// Numeric interface Index (often known as the "SNMP ID")
-	idx: uint
-	// Human-readable interface description to show in the frontend
-	description: string
+	interface: [string]: {
+		id:          int
+		description: string
+	}
 }
 
 #Config: {
 	clickhouseAdminPassword: string
 	enableClickhouseIngress: bool
-	interfaceMap: [...#InterfaceMap]
+	sampler: #SamplerConfig
 }
 
 ClickHouseInstallation: netmeta: spec: {

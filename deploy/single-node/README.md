@@ -122,10 +122,10 @@ You can manually resolve numeric interface IDs (also known as "SNMP ID") to huma
 netmeta: config: {
     [...]
 
-    interfaceMap: [
-        {device: "::100.0.0.1", idx: 858, description:  "TRANSIT-ABC"},
-        {device: "::100.0.0.1", idx: 1126, description: "PEERING-YOLO-COLO"},
-    ]
+    sampler: "::100.0.0.1": {
+		interface: "858": description:  "TRANSIT-ABC"
+		interface: "1126": description: "PEERING-YOLO-COLO"
+	}
 }
 ```
 
