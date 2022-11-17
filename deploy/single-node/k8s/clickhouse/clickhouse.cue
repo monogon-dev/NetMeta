@@ -99,6 +99,5 @@ if #Config.enableClickhouseIngress {
 				]
 			},
 		]
-		tls: passthrough: true
 	}
 }
