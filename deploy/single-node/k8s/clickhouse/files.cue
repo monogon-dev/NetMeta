@@ -75,7 +75,14 @@ _files: SamplerConfig: {
 			"\(s.samplingRate)",
 		][0]
 
-		strings.Join([s.device, samplingRate], "\t")
+		let name = [
+			if s.name == "" {
+				"NULL"
+			},
+			"\(s.name)",
+		][0]
+
+		strings.Join([s.device, samplingRate, name], "\t")
 	}], "\n")
 
 	cfg: {

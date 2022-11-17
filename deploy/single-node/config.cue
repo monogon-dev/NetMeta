@@ -67,10 +67,14 @@ import (
 // A struct containing sampler specific config parameters
 #SamplerConfig: [DEVICE=string]: {
 	// Router source address (IPv6 or pseudo-IPv4 mapped address like ::100.0.0.1, and for the portmirror ::ffff:100.0.0.1)
+	device: net.IP
 	device: DEVICE
 
 	// Sampling rate to override the sampling rate provided by the sampler
 	samplingRate: int | *0
+
+	// Human-readable host description to show in the frontend
+	description: string | *""
 
 	interface: [ID=string]: {
 		// Numeric interface Index (often known as the "SNMP ID")

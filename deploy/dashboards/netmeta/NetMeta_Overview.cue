@@ -826,13 +826,13 @@ dashboards: "NetMeta Overview": {
 			SELECT
 			    $timeSeries as t,
 			    count(*) / $interval AS Flows,
-			    SamplerAddress
+			    dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(SamplerAddress), SamplerAddress) as Sampler
 			FROM $table
 			WHERE
 			    $timeFilter
 			    \(_genericFilter)
 			GROUP BY
-			    t, SamplerAddress
+			    t, Sampler
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -1048,14 +1048,14 @@ dashboards: "NetMeta Overview": {
 			query:               """
 			SELECT
 			    $timeSeries as t,
-			    SamplerAddress,
+			    dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(SamplerAddress), SamplerAddress) as Sampler,
 			    toString(InIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), InIf)) || ')' AS InIf,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, SamplerAddress, InIf, FlowDirectionStr
+			GROUP BY t, Sampler, InIf, FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -1163,14 +1163,14 @@ dashboards: "NetMeta Overview": {
 			query:               """
 			SELECT
 			    $timeSeries as t,
-			    SamplerAddress,
+			    dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(SamplerAddress), SamplerAddress) as Sampler,
 			    toString(OutIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), OutIf)) || ')' AS OutIf,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, SamplerAddress, OutIf, FlowDirectionStr
+			GROUP BY t, Sampler, OutIf, FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -2481,14 +2481,14 @@ dashboards: "NetMeta Overview": {
 				intervalFactor:      1
 				query:               """
 			SELECT
-			  SamplerAddress,
+			  dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(SamplerAddress), SamplerAddress) as Sampler,
 			  SrcAddr,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilterWithoutHost)
 			$conditionalTest(AND DstAddr = toIPv6('$hostIP'), $hostIP)
-			GROUP BY SamplerAddress, SrcAddr
+			GROUP BY Sampler, SrcAddr
 			ORDER BY Bytes DESC
 			LIMIT 20
 			"""
@@ -2559,14 +2559,14 @@ dashboards: "NetMeta Overview": {
 				intervalFactor:      1
 				query:               """
 			SELECT
-			  SamplerAddress,
+			  dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(SamplerAddress), SamplerAddress) as Sampler,
 			  DstAddr,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilterWithoutHost)
 			$conditionalTest(AND SrcAddr = toIPv6('$hostIP'), $hostIP)
-			GROUP BY SamplerAddress, DstAddr
+			GROUP BY Sampler, DstAddr
 			ORDER BY Bytes DESC
 			LIMIT 20
 
@@ -2650,7 +2650,7 @@ dashboards: "NetMeta Overview": {
 				intervalFactor:      1
 				query:               """
 				SELECT
-				  SamplerAddress,
+				  dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(SamplerAddress), SamplerAddress) as Sampler,
 				  SrcAddr,
 				  DstAddr,
 				  SrcPort,
@@ -2660,7 +2660,7 @@ dashboards: "NetMeta Overview": {
 				FROM $table
 				WHERE $timeFilter
 				\(_genericFilter)
-				GROUP BY SamplerAddress, SrcAddr, DstAddr, SrcPort, DstPort, ProtoName
+				GROUP BY Sampler, SrcAddr, DstAddr, SrcPort, DstPort, ProtoName
 				ORDER BY Bytes DESC
 				LIMIT 20
 
