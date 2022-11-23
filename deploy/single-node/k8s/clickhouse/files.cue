@@ -87,19 +87,26 @@ _files: SamplerConfig: {
 
 	cfg: {
 		layout: complex_key_hashed: null
-		structure: {
+		structure: [{
 			key: [{
 				attribute: {
 					name: "Device"
 					type: "String"
 				}
 			}]
+		}, {
 			attribute: {
 				name:       "SamplingRate"
 				type:       "Nullable(UInt64)"
 				null_value: null
 			}
-		}
+		}, {
+			attribute: {
+				name:       "Description"
+				type:       "String"
+				null_value: null
+			}
+		}]
 	}
 }
 
