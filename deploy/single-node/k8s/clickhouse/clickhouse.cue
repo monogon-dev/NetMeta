@@ -9,6 +9,7 @@ import (
 #SamplerConfig: [string]: {
 	device:       string
 	samplingRate: int
+	description:  string
 	interface: [string]: {
 		id:          int
 		description: string
