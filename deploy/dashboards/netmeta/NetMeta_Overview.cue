@@ -1852,7 +1852,7 @@ dashboards: "NetMeta Overview": {
 				query:               """
 			SELECT
 			    $timeSeries as t,
-			    dictGetStringOrDefault('VlanNames', 'Description', (IPv6NumToString(SamplerAddress), VlanId)), VlanId) AS Vlan,
+			    dictGetStringOrDefault('VlanNames', 'Description', (IPv6NumToString(SamplerAddress), VlanId), VlanId) AS Vlan,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
