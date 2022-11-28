@@ -108,7 +108,7 @@ dashboards: "Traffic Relations": {
 					query:               """
 						SELECT
     $timeSeries as t,
-    concat(substring(dictGetString('autnums', 'name', toUInt64(SrcAS)), 1, 25), ' AS', toString(SrcAS)) AS SrcASName,
+    ASNToString(SrcAS) AS SrcASName,
     sum(Bytes * SamplingRate) * 8 / $interval AS Bps
 FROM $table
 WHERE
@@ -223,7 +223,7 @@ ORDER BY t, Bps
 					query:               """
 						SELECT
     $timeSeries as t,
-    concat(substring(dictGetString('autnums', 'name', toUInt64(DstAS)), 1, 25), ' AS', toString(DstAS)) AS DstASName,
+    ASNToString(DstAS) AS DstASName,
     sum(Bytes * SamplingRate) * 8 / $interval AS Bps
 FROM $table
 WHERE
@@ -334,8 +334,8 @@ ORDER BY t, Bps
 					intervalFactor:      1
 					query:               """
 						SELECT
-  concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
-  concat(dictGetString('autnums', 'name', toUInt64(DstAS)), ' AS', toString(DstAS)) AS DstASName,
+  ASNToString(SrcAS) AS SrcASName,
+  ASNToString(DstAS) AS DstASName,
   sum(Bytes * SamplingRate) / 1024 as Bytes
 FROM $table
 WHERE $timeFilter AND FlowDirection != 1
@@ -390,8 +390,8 @@ LIMIT 20
 					intervalFactor:      1
 					query:               """
 						SELECT
-  concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
-  concat(dictGetString('autnums', 'name', toUInt64(DstAS)), ' AS', toString(DstAS)) AS DstASName,
+  ASNToString(SrcAS) AS SrcASName,
+  ASNToString(DstAS) AS DstASName,
   sum(Bytes * SamplingRate) / 1024 as Bytes
 FROM $table
 WHERE $timeFilter AND FlowDirection != 0
@@ -446,9 +446,9 @@ LIMIT 20
 					intervalFactor:      1
 					query:               """
 						SELECT
-  concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
-  dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), InIf)) AS InIfName,
-  concat(dictGetString('autnums', 'name', toUInt64(DstAS)), ' AS', toString(DstAS)) AS DstASName,
+  ASNToString(SrcAS) AS SrcASName,
+  InterfaceToString(SamplerAddress, InIf) AS InIfName,
+  ASNToString(DstAS) AS DstASName,
   sum(Bytes * SamplingRate) / 1024 as Bytes
 FROM $table
 WHERE $timeFilter AND FlowDirection != 1
@@ -503,9 +503,9 @@ LIMIT 30
 					intervalFactor:      1
 					query:               """
 						SELECT
-  concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
-  dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), OutIf)) AS OutIfName,
-  concat(dictGetString('autnums', 'name', toUInt64(DstAS)), ' AS', toString(DstAS)) AS DstASName,
+  ASNToString(SrcAS) AS SrcASName,
+  InterfaceToString(SamplerAddress, OutIf) AS OutIfName,
+  ASNToString(DstAS) AS DstASName,
   sum(Bytes * SamplingRate) / 1024 as Bytes
 FROM $table
 WHERE $timeFilter AND FlowDirection != 0
@@ -581,8 +581,8 @@ LIMIT 40
 					intervalFactor:      1
 					query:               """
 						SELECT
-  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(SrcAddr)), SrcAddr) AS Src,
-  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr) AS Dst,
+  HostToString(SamplerAddress, SrcAddr) AS Src,
+  HostToString(SamplerAddress, DstAddr) AS Dst,
   sum(Bytes * SamplingRate) / 1024 as Bytes
 FROM $table
 WHERE $timeFilter
@@ -637,10 +637,10 @@ LIMIT 30
 					query:               """
 						SELECT
   concat(
-  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(SrcAddr)), SrcAddr),
+  HostToString(SamplerAddress, SrcAddr),
    ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(SrcPort)) as Src,
   concat(
-  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr),
+  HostToString(SamplerAddress, DstAddr),
   ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(DstPort)) as Dst,
   sum(Bytes * SamplingRate) / 1024 as Bytes
 FROM $table
@@ -716,9 +716,9 @@ LIMIT 30
 					intervalFactor:      1
 					query:               """
 						SELECT
-  concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
+  ASNToString(SrcAS) AS SrcASName,
   concat(
-  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr),
+  HostToString(SamplerAddress, DstAddr),
    ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(DstPort)) as Dst,
   sum(Bytes * SamplingRate) / 1024 as Bytes
 FROM $table
@@ -774,9 +774,9 @@ LIMIT 30
 					intervalFactor:      1
 					query:               """
 						SELECT
-  concat(dictGetString('autnums', 'name', toUInt64(SrcAS)), ' AS', toString(SrcAS)) AS SrcASName,
+  ASNToString(SrcAS) AS SrcASName,
   concat(
-  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr),
+  HostToString(SamplerAddress, DstAddr),
    ' ', dictGetString('IPProtocols', 'Name', toUInt64(Proto)),toString(DstPort)) as Dst,
   sum(Bytes * SamplingRate) / 1024 as Bytes
 FROM $table

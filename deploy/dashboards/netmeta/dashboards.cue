@@ -151,9 +151,13 @@ dashboards: [T=string]: {
 			name:       "interface"
 			options: []
 			query: """
-				SELECT toString(InIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), InIf)) || ')' AS __text, InIf AS __value FROM (SELECT DISTINCT SamplerAddress, InIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
+				SELECT InterfaceToString(SamplerAddress, InIf) AS __text,
+								InIf AS __value
+				FROM (SELECT DISTINCT SamplerAddress, InIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
 				UNION ALL
-				SELECT toString(OutIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), OutIf)) || ')' AS __text, OutIf AS __value FROM (SELECT DISTINCT SamplerAddress, OutIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
+				SELECT InterfaceToString(SamplerAddress, OutIf) AS __text,
+								OutIf AS __value
+				FROM (SELECT DISTINCT SamplerAddress, OutIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived));
 				"""
 			refresh:        2
 			regex:          ""

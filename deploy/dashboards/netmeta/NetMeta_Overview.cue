@@ -826,7 +826,7 @@ dashboards: "NetMeta Overview": {
 			SELECT
 			    $timeSeries as t,
 			    count(*) / $interval AS Flows,
-			    dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(SamplerAddress), SamplerAddress) as Sampler
+			    SamplerToString(SamplerAddress) as Sampler
 			FROM $table
 			WHERE
 			    $timeFilter
@@ -1048,14 +1048,14 @@ dashboards: "NetMeta Overview": {
 			query:               """
 			SELECT
 			    $timeSeries as t,
-			    dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(SamplerAddress), SamplerAddress) as Sampler,
-			    toString(InIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), InIf)) || ')' AS InIf,
+			    SamplerToString(SamplerAddress) as Sampler,
+			    InterfaceToString(SamplerAddress, InIf) AS InIfName,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, Sampler, InIf, FlowDirectionStr
+			GROUP BY t, Sampler, InIfName, FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -1163,14 +1163,14 @@ dashboards: "NetMeta Overview": {
 			query:               """
 			SELECT
 			    $timeSeries as t,
-			    dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(SamplerAddress), SamplerAddress) as Sampler,
-			    toString(OutIf) || ' (' || dictGetString('InterfaceNames', 'Description', (IPv6NumToString(SamplerAddress), OutIf)) || ')' AS OutIf,
+			    SamplerToString(SamplerAddress) as Sampler,
+			    InterfaceToString(SamplerAddress, OutIf) AS OutIfName,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, Sampler, OutIf, FlowDirectionStr
+			GROUP BY t, Sampler, OutIfName, FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -1852,7 +1852,7 @@ dashboards: "NetMeta Overview": {
 				query:               """
 			SELECT
 			    $timeSeries as t,
-			    dictGetStringOrDefault('VlanNames', 'Description', (IPv6NumToString(SamplerAddress), VlanId), VlanId) AS Vlan,
+			    VLANToString(SamplerAddress, VlanId) AS Vlan,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
@@ -2481,7 +2481,7 @@ dashboards: "NetMeta Overview": {
 				intervalFactor:      1
 				query:               """
 			SELECT
-			  dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(SamplerAddress), SamplerAddress) as Sampler,
+			  SamplerToString(SamplerAddress) as Sampler,
 			  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(SrcAddr)), SrcAddr) AS Src,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
 			FROM $table
@@ -2559,7 +2559,7 @@ dashboards: "NetMeta Overview": {
 				intervalFactor:      1
 				query:               """
 			SELECT
-			  dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(SamplerAddress), SamplerAddress) as Sampler,
+			  SamplerToString(SamplerAddress) as Sampler,
 			  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr) AS Dst,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
 			FROM $table
@@ -2650,7 +2650,7 @@ dashboards: "NetMeta Overview": {
 				intervalFactor:      1
 				query:               """
 				SELECT
-				  dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(SamplerAddress), SamplerAddress) as Sampler,
+				  SamplerToString(SamplerAddress) as Sampler,
 				  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(SrcAddr)), SrcAddr) AS Src,
 				  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr) AS Dst,
 				  SrcPort,
