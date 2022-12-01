@@ -157,7 +157,7 @@ dashboards: [T=string]: {
 				UNION ALL
 				SELECT InterfaceToString(SamplerAddress, OutIf) AS __text,
 								OutIf AS __value
-				FROM (SELECT DISTINCT SamplerAddress, OutIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived));
+				FROM (SELECT DISTINCT SamplerAddress, OutIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
 				"""
 			refresh:        2
 			regex:          ""
