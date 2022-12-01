@@ -1048,14 +1048,13 @@ dashboards: "NetMeta Overview": {
 			query:               """
 			SELECT
 			    $timeSeries as t,
-			    SamplerToString(SamplerAddress) as Sampler,
 			    InterfaceToString(SamplerAddress, InIf) AS InIfName,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, Sampler, InIfName, FlowDirectionStr
+			GROUP BY t, InIfName, FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
@@ -1163,14 +1162,13 @@ dashboards: "NetMeta Overview": {
 			query:               """
 			SELECT
 			    $timeSeries as t,
-			    SamplerToString(SamplerAddress) as Sampler,
 			    InterfaceToString(SamplerAddress, OutIf) AS OutIfName,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
 			WHERE $timeFilter
 			\(_genericFilter)
-			GROUP BY t, Sampler, OutIfName, FlowDirectionStr
+			GROUP BY t, OutIfName, FlowDirectionStr
 			ORDER BY t
 			"""
 			refId:               "A"
