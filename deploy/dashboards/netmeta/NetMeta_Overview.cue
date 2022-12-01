@@ -2215,7 +2215,7 @@ dashboards: "NetMeta Overview": {
 				query:               """
 			SELECT
 			    $timeSeries as t,
-			    dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(SrcAddr)), SrcAddr) AS Src,
+			    HostToString(SamplerAddress, SrcAddr) AS Src,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
@@ -2340,7 +2340,7 @@ dashboards: "NetMeta Overview": {
 				query:               """
 			SELECT
 			    $timeSeries as t,
-			    dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr) AS Dst,
+			    HostToString(SamplerAddress, DstAddr) AS Dst,
 			    sum(Bytes * SamplingRate) * 8 / $interval AS Bps,
 			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
 			FROM $table
@@ -2480,7 +2480,7 @@ dashboards: "NetMeta Overview": {
 				query:               """
 			SELECT
 			  SamplerToString(SamplerAddress) as Sampler,
-			  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(SrcAddr)), SrcAddr) AS Src,
+			  HostToString(SamplerAddress, SrcAddr) AS Src,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
 			FROM $table
 			WHERE $timeFilter
@@ -2558,7 +2558,7 @@ dashboards: "NetMeta Overview": {
 				query:               """
 			SELECT
 			  SamplerToString(SamplerAddress) as Sampler,
-			  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr) AS Dst,
+			  HostToString(SamplerAddress, DstAddr) AS Dst,
 			  sum(Bytes * SamplingRate) / 1024 as Bytes
 			FROM $table
 			WHERE $timeFilter
@@ -2649,8 +2649,8 @@ dashboards: "NetMeta Overview": {
 				query:               """
 				SELECT
 				  SamplerToString(SamplerAddress) as Sampler,
-				  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(SrcAddr)), SrcAddr) AS Src,
-				  dictGetStringOrDefault('HostNames', 'Description', (IPv6NumToString(SamplerAddress), IPv6NumToString(DstAddr)), DstAddr) AS Dst,
+				  HostToString(SamplerAddress, SrcAddr) AS Src,
+				  HostToString(SamplerAddress, DstAddr) AS Dst,
 				  SrcPort,
 				  DstPort,
 				  dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS ProtoName,
