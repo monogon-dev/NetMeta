@@ -1484,7 +1484,10 @@ dashboards: "NetMeta Overview": {
 			    $conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
 			    $conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
 			    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
+			    $conditionalTest(AND isIPAddressInRange(toString(SrcAddr), '$srcNet') == 1, $srcNet)
+			    $conditionalTest(AND isIPAddressInRange(toString(DstAddr), '$dstNet') == 1, $dstNet)
 			    $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
+			    $conditionalTest(AND isIPAddressInRange(toString(SrcAddr), '$hostNet') == 1 OR isIPAddressInRange(toString(DstAddr), '$hostNet'), $hostNet)
 			    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
 			    $conditionalTest(AND ((toString(SamplerAddress) || '-' || toString(InIf)) = $interface OR (toString(SamplerAddress) || '-' || toString(OutIf)) = $interface), $interface)
 			    AND SrcAS IN (

@@ -18,6 +18,9 @@ _genericFilterWithoutHost: """
 	$conditionalTest(AND SamplerAddress = toIPv6($sampler), $sampler)
 	$conditionalTest(AND SrcAddr = toIPv6('$srcIP'), $srcIP)
 	$conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
+	$conditionalTest(AND isIPAddressInRange(toString(SrcAddr), '$srcNet') == 1, $srcNet)
+	$conditionalTest(AND isIPAddressInRange(toString(DstAddr), '$dstNet') == 1, $dstNet)
+	$conditionalTest(AND isIPAddressInRange(toString(SrcAddr), '$hostNet') == 1 OR isIPAddressInRange(toString(DstAddr), '$hostNet'), $hostNet)
 	$conditionalTest(AND DstAS = '$dstAS', $dstAS)
 	$conditionalTest(AND SrcAS = '$srcAS', $srcAS)
 	$conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
@@ -226,6 +229,66 @@ dashboards: [T=string]: {
 			hide:  0
 			label: "Src/Dst IPv6"
 			name:  "hostIP"
+			options: [
+				{
+					selected: true
+					text:     ""
+					value:    ""
+				},
+			]
+			query:       ""
+			skipUrlSync: false
+			type:        "textbox"
+		},
+		{
+			current: {
+				selected: false
+				text:     ""
+				value:    ""
+			}
+			hide:  0
+			label: "Src Subnet"
+			name:  "srcNet"
+			options: [
+				{
+					selected: false
+					text:     ""
+					value:    ""
+				},
+			]
+			query:       ""
+			skipUrlSync: false
+			type:        "textbox"
+		},
+		{
+			current: {
+				selected: false
+				text:     ""
+				value:    ""
+			}
+			hide:  0
+			label: "Dst Subnet"
+			name:  "dstNet"
+			options: [
+				{
+					selected: false
+					text:     ""
+					value:    ""
+				},
+			]
+			query:       ""
+			skipUrlSync: false
+			type:        "textbox"
+		},
+		{
+			current: {
+				selected: false
+				text:     ""
+				value:    ""
+			}
+			hide:  0
+			label: "Src/Dst Subnet"
+			name:  "hostNet"
 			options: [
 				{
 					selected: true
