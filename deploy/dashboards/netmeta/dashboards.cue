@@ -21,7 +21,7 @@ _genericFilterWithoutHost: """
 	$conditionalTest(AND DstAS = '$dstAS', $dstAS)
 	$conditionalTest(AND SrcAS = '$srcAS', $srcAS)
 	$conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-	$conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
+	$conditionalTest(AND ((toString(SamplerAddress) || '-' || toString(InIf)) = $interface OR (toString(SamplerAddress) || '-' || toString(OutIf)) = $interface), $interface)
 	$conditionalTest(AND ($extra), $extra)
 	"""
 
@@ -152,11 +152,11 @@ dashboards: [T=string]: {
 			options: []
 			query: """
 				SELECT InterfaceToString(SamplerAddress, InIf) AS __text,
-								InIf AS __value
+								(toString(SamplerAddress) || '-' || toString(InIf)) AS __value
 				FROM (SELECT DISTINCT SamplerAddress, InIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
 				UNION ALL
 				SELECT InterfaceToString(SamplerAddress, OutIf) AS __text,
-								OutIf AS __value
+								(toString(SamplerAddress) || '-' || toString(OutIf)) AS __value
 				FROM (SELECT DISTINCT SamplerAddress, OutIf FROM flows_raw WHERE $timeFilterByColumn(TimeReceived))
 				"""
 			refresh:        2

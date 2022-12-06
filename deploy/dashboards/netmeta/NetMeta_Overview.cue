@@ -1486,7 +1486,7 @@ dashboards: "NetMeta Overview": {
 			    $conditionalTest(AND DstAddr = toIPv6('$dstIP'), $dstIP)
 			    $conditionalTest(AND (SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
 			    $conditionalTest(AND NextHop = toIPv6('$nextHop'), $nextHop)
-			    $conditionalTest(AND (InIf = $interface OR OutIf = $interface), $interface)
+			    $conditionalTest(AND ((toString(SamplerAddress) || '-' || toString(InIf)) = $interface OR (toString(SamplerAddress) || '-' || toString(OutIf)) = $interface), $interface)
 			    AND SrcAS IN (
 			    SELECT SrcAS
 			    FROM $table
