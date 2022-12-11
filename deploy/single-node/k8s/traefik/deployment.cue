@@ -72,7 +72,7 @@ Deployment: traefik: {
 							[
 								"--certificatesresolvers.publicHostnameResolver.acme.tlschallenge",
 								"--certificatesresolvers.publicHostnameResolver.acme.email=\(#Config.letsencryptAccountMail)",
-								"--certificatesresolvers.publicHostnameResolver.acme.storage=/data/acme.json",
+								"--certificatesresolvers.publicHostnameResolver.acme.storage=/data/acme-\(#Config.letsencryptMode).json",
 							]
 						},
 						if #Config.letsencryptMode == "staging" {
