@@ -15,13 +15,11 @@ import (
 	grafanaBasicAuth:            bool
 	sessionSecret:               string
 	grafanaDefaultRole:          string
-	clickhouseAdminPassword:  string
+	clickhouseAdminPassword:     string
 
 	dashboards: [string]: _
 
-	fastNetMon?: {
-		dataSource: string
-	}
+	fastNetMon?: dataSource: string
 	grafanaGoogleAuth?: {
 		clientID:     string
 		clientSecret: string
@@ -37,7 +35,7 @@ import (
 	datasources: [...{
 		name:      string
 		type:      string
-		url:       string
+		url?:       string
 		access:    *"proxy" | "direct"
 		user?:     string
 		isDefault: *false | bool
@@ -82,7 +80,7 @@ ConfigMap: "grafana-datasources": data: "datasources.yaml": yaml.Marshal(#Dataso
 			url:  "http://prometheus:9090"
 		},
 		{
-			isDefault: true
+			isDefault: false
 			name:      "NetMeta ClickHouse"
 			type:      "vertamedia-clickhouse-datasource"
 			url:       "http://clickhouse-netmeta:8123"
@@ -93,6 +91,19 @@ ConfigMap: "grafana-datasources": data: "datasources.yaml": yaml.Marshal(#Dataso
 				xHeaderUser:                 "admin"
 				xHeaderKey:                  #Config.clickhouseAdminPassword
 			}
+		},
+		{
+			isDefault: false
+			name:      "ClickHouse"
+			type:      "grafana-clickhouse-datasource"
+			jsonData: {
+				defaultDatabase: "default"
+				port:            8123
+				protocol:        "http"
+				server:          "clickhouse-netmeta"
+				username:        "admin"
+			}
+			secureJsonData: password: #Config.clickhouseAdminPassword
 		},
 	]
 })
@@ -190,7 +201,7 @@ StatefulSet: grafana: spec: {
 						},
 						{
 							name:  "GF_INSTALL_PLUGINS"
-							value: "vertamedia-clickhouse-datasource 2.5.2,netsage-sankey-panel 1.0.6"
+							value: "vertamedia-clickhouse-datasource 2.5.2,netsage-sankey-panel 1.0.6,grafana-clickhouse-datasource 2.0.5"
 						},
 						{
 							name:  "GF_SECURITY_ADMIN_PASSWORD"
