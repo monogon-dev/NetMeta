@@ -6,7 +6,7 @@ _trafficStatisticQueries: {
 			SELECT
 			    $__timeInterval(TimeReceived) as time,
 			    (sum(Packets * SamplingRate) / $__interval_s) AS Value,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
+			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
@@ -18,7 +18,7 @@ _trafficStatisticQueries: {
 			SELECT
 			    $__timeInterval(TimeReceived) as time,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS Value,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
+			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
@@ -31,7 +31,7 @@ _trafficStatisticQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || ' (' || toString(Proto) || ')' AS ProtoName,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
+			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
@@ -44,7 +44,7 @@ _trafficStatisticQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    dictGetString('EtherTypes', 'Name', toUInt64(EType)) || ' (' || hex(EType) || ')' AS ETypeName,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
+			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
@@ -82,7 +82,7 @@ _trafficStatisticQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    InterfaceToString(SamplerAddress, InIf) AS InIfName,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
+			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
@@ -95,7 +95,7 @@ _trafficStatisticQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    InterfaceToString(SamplerAddress, OutIf) AS OutIfName,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
+			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
@@ -203,7 +203,7 @@ _originASStatisticQueries: {
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			AND FlowDirection = 0
+			AND isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 			GROUP BY SrcAS
 			ORDER BY Bytes DESC
 			LIMIT 100
@@ -219,7 +219,7 @@ _originASStatisticQueries: {
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			AND FlowDirection = 1
+			AND NOT isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 			GROUP BY DstAS
 			ORDER BY Bytes DESC
 			LIMIT 100
@@ -233,13 +233,13 @@ _originASStatisticQueries: {
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			AND FlowDirection = 0
+			AND isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 			AND SrcAS IN (
 			    SELECT SrcAS
 			    FROM flows_raw
 			    WHERE $__timeFilter(TimeReceived)
 			      \#(_filtersWithHost)
-			      AND FlowDirection = 0
+			      AND isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 			    GROUP BY SrcAS
 			    ORDER BY sum(Bytes) DESC
 			    LIMIT 10)
@@ -255,13 +255,13 @@ _originASStatisticQueries: {
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			AND FlowDirection = 1
+			AND NOT isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 			AND DstAS IN (
 			    SELECT DstAS
 			    FROM flows_raw
 			    WHERE $__timeFilter(TimeReceived)
 			    \#(_filtersWithHost)
-			    AND FlowDirection = 1
+			    AND NOT isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 			    GROUP BY DstAS
 			    ORDER BY sum(Bytes) DESC
 			    LIMIT 10)
@@ -372,7 +372,7 @@ _trafficDetailQueries: {
 			    || ' (' || toString(TCPFlags) || ')' AS TCPFlagsName,
 			
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS Value,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
+			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
@@ -387,7 +387,7 @@ _trafficDetailQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    VLANToString(SamplerAddress, VlanId) AS Vlan,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS Value,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
+			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
@@ -403,7 +403,7 @@ _trafficDetailQueries: {
 			    toString(SrcPort) AS SrcPortStr,
 			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS ProtoName,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS Value,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
+			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			  \#(_filtersWithHost)
@@ -427,7 +427,7 @@ _trafficDetailQueries: {
 			    toString(DstPort) AS DstPortStr,
 			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS ProtoName,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS Value,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
+			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE
 			  $__timeFilter(TimeReceived)
@@ -495,7 +495,7 @@ _topHostQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    HostToString(SamplerAddress, SrcAddr) AS Src,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
+			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			  \#(_filters)
@@ -518,7 +518,7 @@ _topHostQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    HostToString(SamplerAddress, DstAddr) AS Dst,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
-			    if(FlowDirection == 1, 'out', 'in') AS FlowDirectionStr
+			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			  \#(_filters)
