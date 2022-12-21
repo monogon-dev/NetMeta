@@ -10,7 +10,7 @@ SELECT
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
 \#(_filtersWithHost)
-AND FlowDirection != 1
+AND isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 GROUP BY SrcAS, DstAS
 ORDER BY Bytes DESC
 LIMIT 20
@@ -26,7 +26,7 @@ SELECT
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
 \#(_filtersWithHost)
-AND FlowDirection != 0
+AND NOT isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 GROUP BY SrcAS, DstAS, SamplerAddress, OutIf
 ORDER BY Bytes DESC
 LIMIT 20
@@ -42,7 +42,7 @@ SELECT
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
 \#(_filtersWithHost)
-AND FlowDirection != 1
+AND isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 GROUP BY SrcAS, DstAS, SamplerAddress, OutIf
 ORDER BY Bytes DESC
 LIMIT 20
@@ -57,7 +57,7 @@ SELECT
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
 \#(_filtersWithHost)
-AND FlowDirection != 0
+AND NOT isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 GROUP BY SrcAS, DstAS
 ORDER BY Bytes DESC
 LIMIT 20
@@ -174,7 +174,7 @@ SELECT
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
 \#(_filtersWithHost)
-AND FlowDirection != 1
+AND isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 GROUP BY SrcAS, SamplerAddress, DstAddr, Proto, DstPort
 ORDER BY Bytes DESC
 LIMIT 30
@@ -189,7 +189,7 @@ SELECT
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
 \#(_filtersWithHost)
-AND FlowDirection != 0
+AND NOT isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 GROUP BY SrcAS, SamplerAddress, DstAddr, Proto, DstPort
 ORDER BY Bytes DESC
 LIMIT 30
