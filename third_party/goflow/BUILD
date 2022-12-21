@@ -6,11 +6,3 @@ go_image(
     binary = "@com_github_cloudflare_goflow_v3//cmd/goflow:goflow",
     visibility = ["//visibility:public"],
 )
-
-go_library(
-    name = "go_default_library",
-    srcs = ["binaries.go"],
-    importpath = "github.com/monogon-dev/NetMeta/third_party/goflow",
-    visibility = ["//visibility:public"],
-    deps = ["@com_github_cloudflare_goflow_v3//cmd/goflow:go_default_library"],
-)

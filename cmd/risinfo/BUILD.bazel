@@ -1,20 +1,14 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("@io_bazel_rules_docker//go:image.bzl", "go_image")
 
-go_library(
-    name = "go_default_library",
+go_image(
+    name = "risinfo",
     srcs = ["risinfo.go"],
     importpath = "github.com/monogon-dev/NetMeta/cmd/risinfo",
-    visibility = ["//visibility:private"],
+    static = "on",
+    visibility = ["//visibility:public"],
     deps = [
         "@com_github_osrg_gobgp//pkg/packet/bgp:go_default_library",
         "@com_github_osrg_gobgp//pkg/packet/mrt:go_default_library",
         "@io_k8s_klog_v2//:go_default_library",
     ],
-)
-
-go_image(
-    name = "risinfo",
-    embed = [":go_default_library"],
-    visibility = ["//visibility:public"],
 )
