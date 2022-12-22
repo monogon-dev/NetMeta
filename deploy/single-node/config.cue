@@ -55,7 +55,7 @@ import (
 
 #PortMirrorConfig: {
 	// The address the instance use as SamplerAddress
-	samplerAddress: net.IP | *"127.0.0.1"
+	samplerAddress: #DeviceAddress | *"::ffff:127.0.0.1"
 
 	// The Interfaces to listen to. Multiple interface pairs can be set by seperating them with a comma.
 	interfaces: string | *"tap_rx:tap_tx"
@@ -64,11 +64,33 @@ import (
 	sampleRate: int | *1000
 }
 
+// IPv6 or pseudo-IPv4 mapped address like ::ffff:100.0.0.1
+#DeviceAddress: string & net.IP & !~"^:?:?[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$"
+
+// A small test to verify that #DeviceAddress forbids the old IP mapping
+_deviceAddressTest: {
+	IN=in: {
+		// Key is the value to test
+		// Value is the parsing result
+		"2001:0DB8::1":     true
+		"::ffff:127.0.0.1": true
+		"::ffff:127.0.0.1": true
+		"::127.0.0.1":      false
+		"127.0.0.1":        false
+	}
+
+	out: {
+		for k, v in IN {
+			"\(k)": v
+			"\(k)": (k & #DeviceAddress) != _|_
+		}
+	}
+}
+
 // A struct containing sampler specific config parameters
 #SamplerConfig: [DEVICE=string]: {
-	// Router source address (IPv6 or pseudo-IPv4 mapped address like ::100.0.0.1, and for the portmirror ::ffff:100.0.0.1)
-	device: net.IP
-	device: DEVICE
+	// Router source address
+	device: DEVICE & #DeviceAddress
 
 	// Sampling rate to override the sampling rate provided by the sampler
 	samplingRate: int | *0
@@ -95,9 +117,8 @@ import (
 
 	// Host names for the data from this sampler
 	host: [DEVICE=string]: {
-		// Host source address (IPv6 or pseudo-IPv4 mapped address like ::100.0.0.1)
-		device: net.IP
-		device: DEVICE
+		// Host source address
+		device: DEVICE & #DeviceAddress
 
 		// Human-readable host description to show in the frontend
 		description: string

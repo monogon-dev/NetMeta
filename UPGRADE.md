@@ -1,4 +1,5 @@
-# Upgrade from stable to main
+# Upgrade guidance
+## Upgrade from stable to main
 
 Upgrading from the stable branch to the main branch, or upgrading on the main branch from a commit before Oct 20, 2022, requires a manual migration with downtime.
 
@@ -43,4 +44,33 @@ GOOSE_MIGRATION_DIR="schema/" \
 goose up
 
 # If you access NetMeta from external infrastructure (e.g. your own Grafana), you have to change the username from `clickhouse_operator` to `admin`
+```
+
+## Migrate to IPv4-mapped IPv6 addresses
+This can take a long time...
+
+```clickhouse
+INSERT INTO flows_raw
+WITH
+    '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' AS IPv6v4NullPadding,
+    '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' AS IPv6Null,
+    '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff' AS IPv6v4RFCPadding
+SELECT * REPLACE (
+    if(startsWith(SamplerAddress, IPv6v4NullPadding),
+       reinterpret(toFixedString(IPv6v4RFCPadding || substr(SamplerAddress, 13, 16), 16), 'IPv6'), SamplerAddress) AS SamplerAddress,
+    if(startsWith(SrcAddr, IPv6v4NullPadding),
+       reinterpret(toFixedString(IPv6v4RFCPadding || substr(SrcAddr, 13, 16), 16), 'IPv6'), SrcAddr) AS SrcAddr,
+    if(startsWith(DstAddr, IPv6v4NullPadding),
+       reinterpret(toFixedString(IPv6v4RFCPadding || substr(DstAddr, 13, 16), 16), 'IPv6'), DstAddr) AS DstAddr,
+    if(startsWith(NextHop, IPv6v4NullPadding) and NextHop != IPv6Null,
+       reinterpret(toFixedString(IPv6v4RFCPadding || substr(NextHop, 13, 16), 16), 'IPv6'), NextHop) AS NextHop
+    )
+FROM flows_raw;
+
+-- Delete data with the old non-compliant mapping
+ALTER TABLE flows_raw
+DELETE WHERE
+    startsWith(SamplerAddress, '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00') OR
+    startsWith(SrcAddr, '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00') OR
+    startsWith(DstAddr, '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00');
 ```

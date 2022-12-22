@@ -173,7 +173,7 @@ func parseMRT(r io.Reader) (map[string]uint32, error) {
 				klog.V(1).Infof("ignoring IPv4 default route: %+v", body)
 				continue
 			}
-			prefix = fmt.Sprintf("::%s/%d", p.Prefix.String(), p.Length+96)
+			prefix = fmt.Sprintf("::ffff:%s/%d", p.Prefix.String(), p.Length+96)
 		case mrt.RIB_IPV6_UNICAST:
 			p := body.Prefix.(*bgp.IPv6AddrPrefix)
 			if p.Length == 0 {

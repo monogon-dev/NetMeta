@@ -1,7 +1,7 @@
 package k8s
 
 #InterfaceMap: {
-	// Router source address (IPv6 or pseudo-IPv4 mapped address like ::100.0.0.1, and for the portmirror ::ffff:100.0.0.1)
+	// Router source address (IPv6 or pseudo-IPv4 mapped address like ::ffff:100.0.0.1, and for the portmirror ::ffff:100.0.0.1)
 	device: string
 	// Numeric interface Index (often known as the "SNMP ID")
 	idx: uint
@@ -29,12 +29,12 @@ package k8s
 // A small test to verify that the #InterfaceMapConverter converts the structs correctly
 _interfaceMapConverterTest: #InterfaceMapConverter & {
 	in: [
-		{device: "::100.0.0.1", idx: 858, description:  "TRANSIT-ABC"},
-		{device: "::100.0.0.1", idx: 1126, description: "PEERING-YOLO-COLO"},
+		{device: "::ffff:100.0.0.1", idx: 858, description:  "TRANSIT-ABC"},
+		{device: "::ffff:100.0.0.1", idx: 1126, description: "PEERING-YOLO-COLO"},
 	]
 
 	out: close({
-		"::100.0.0.1": {
+		"::ffff:100.0.0.1": {
 			interface: "858": description:  "TRANSIT-ABC"
 			interface: "1126": description: "PEERING-YOLO-COLO"
 		}
