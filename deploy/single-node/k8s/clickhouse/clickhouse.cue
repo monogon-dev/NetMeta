@@ -7,9 +7,10 @@ import (
 
 // A stripped down version of the #SamplerConfig found in deploy/single-node/config.cue
 #SamplerConfig: [string]: {
-	device:       string
-	samplingRate: int
-	description:  string
+	device:          string
+	samplingRate:    int
+	censorAddresses: bool
+	description:     string
 	interface: [string]: {
 		id:          int
 		description: string
