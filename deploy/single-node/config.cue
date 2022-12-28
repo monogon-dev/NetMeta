@@ -98,6 +98,9 @@ _deviceAddressTest: {
 	// Human-readable host description to show in the frontend
 	description: string | *""
 
+	// anonymize the last 8byte for v6 addresses and 1byte for v4 addresses
+	anonymizeAddresses: bool | *false
+
 	// Interface names for the data from this sampler
 	interface: [ID=string]: {
 		// Numeric interface Index (often known as the "SNMP ID")

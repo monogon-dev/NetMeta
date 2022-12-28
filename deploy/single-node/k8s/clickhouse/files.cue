@@ -2,6 +2,7 @@ package clickhouse
 
 import (
 	"strings"
+	"strconv"
 	"netmeta.monogon.tech/xml"
 )
 
@@ -82,7 +83,7 @@ _files: SamplerConfig: {
 			"\(s.description)",
 		][0]
 
-		strings.Join([s.device, samplingRate, description], "\t")
+		strings.Join([s.device, samplingRate, description, strconv.FormatBool(s.anonymizeAddresses)], "\t")
 	}], "\n")
 
 	cfg: {
@@ -105,6 +106,12 @@ _files: SamplerConfig: {
 				name:       "Description"
 				type:       "String"
 				null_value: null
+			}
+		}, {
+			attribute: {
+				name:       "AnonymizeAddresses"
+				type:       "Bool"
+				null_value: false
 			}
 		}]
 	}
