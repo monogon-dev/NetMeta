@@ -19,9 +19,9 @@ _filters:
 		AND $__conditionalAll((SamplerAddress = toIPv6('$sampler')), $sampler)
 		AND $__conditionalAll((SrcAddr = toIPv6('$srcIP')), $srcIP)
 		AND $__conditionalAll((DstAddr = toIPv6('$dstIP')), $dstIP)
-		AND $__conditionalAll((isIPAddressInRange(toString(SrcAddr), '$srcNet')), $srcNet)
-		AND $__conditionalAll((isIPAddressInRange(toString(DstAddr), '$dstNet')), $dstNet)
-		AND $__conditionalAll((isIPAddressInRange(toString(SrcAddr), '$hostNet') OR isIPAddressInRange(toString(DstAddr), '$hostNet')), $hostNet)
+		AND $__conditionalAll((isIPAddressInRange(toString(SrcAddr), toIPv6Net('$srcNet'))), $srcNet)
+		AND $__conditionalAll((isIPAddressInRange(toString(DstAddr), toIPv6Net('$dstNet'))), $dstNet)
+		AND $__conditionalAll((isIPAddressInRange(toString(SrcAddr), toIPv6Net('$hostNet')) OR isIPAddressInRange(toString(DstAddr), '$hostNet')), $hostNet)
 		AND $__conditionalAll((DstAS = '$dstAS'), $dstAS)
 		AND $__conditionalAll((SrcAS = '$srcAS'), $srcAS)
 		AND $__conditionalAll((NextHop = toIPv6('$nextHop')), $nextHop)
@@ -134,13 +134,13 @@ _negativeYOut: {
 }
 
 _textBoxes: {
-	srcIP:   "Src IPv6"
-	dstIP:   "Dst IPv6"
-	hostIP:  "Src/Dst IPv6"
+	srcIP:   "Src IP"
+	dstIP:   "Dst IP"
+	hostIP:  "Src/Dst IP"
 	srcNet:  "Src Subnet"
 	dstNet:  "Dst Subnet"
 	hostNet: "Src/Dst Subnet"
-	nextHop: "Next Hop IPv6"
+	nextHop: "Next Hop IP"
 	srcAS:   "Src AS"
 	dstAS:   "Dst AS"
 	extra:   "Custom SQL"
