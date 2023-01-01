@@ -1,5 +1,7 @@
 package goflow
 
+import "strings"
+
 #Config: {
 	digest: string
 	image:  string
@@ -34,13 +36,17 @@ Deployment: goflow: {
 						command: []
 
 						args: [
-							"-kafka.brokers=netmeta-kafka-bootstrap:9092",
-							"-proto.fixedlen=true",
+							"-format=pb",
+							"-transport=kafka",
+							"-transport.kafka.brokers=netmeta-kafka-bootstrap:9092",
+							"-format.protobuf.fixedlen=true",
 							"-loglevel=debug",
 							"-metrics.addr=127.0.0.1:18080",
-							"-nf.port=\(#Config.ports.netflow)",
-							"-nfl.port=\(#Config.ports.netflowLegacy)",
-							"-sflow.port=\(#Config.ports.sflow)",
+							"-listen=" + strings.Join([
+								"sflow://:\(#Config.ports.sflow)",
+								"netflow://:\(#Config.ports.netflow)",
+								"nfl://:\(#Config.ports.netflowLegacy)",
+							], ","),
 						]
 
 						ports: [

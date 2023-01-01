@@ -31,9 +31,10 @@ Deployment: portmirror: {
 						image: #Config.image
 
 						args: [
-							"-kafka.brokers=netmeta-kafka-bootstrap:9092",
-							"-kafka.log.err=true",
-							"-proto.fixedlen=true",
+							"-transport.kafka.brokers=netmeta-kafka-bootstrap:9092",
+							"-transport.kafka.log.err=true",
+							"-transport.kafka.brokers=netmeta-kafka-bootstrap:9092",
+							"-format.protobuf.fixedlen=true",
 							"-loglevel=debug",
 							"-iface=\(#Config.interfaces)",
 							"-samplerate=\(#Config.sampleRate)",

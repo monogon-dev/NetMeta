@@ -9,9 +9,10 @@ import (
 	"sync"
 	"time"
 
+	_ "github.com/netsampler/goflow2/format/protobuf"
+	"github.com/netsampler/goflow2/transport"
+	_ "github.com/netsampler/goflow2/transport/kafka"
 	"github.com/sirupsen/logrus"
-
-	"github.com/cloudflare/goflow/v3/transport"
 )
 
 var (
@@ -29,14 +30,12 @@ func init() {
 	flag.StringVar(&interfaces, "iface", "", "which interface to use in the following format: RX_NAME:TX_NAME,RX_NAME:TX_NAME")
 	flag.IntVar(&sampleRate, "samplerate", 1000, "the samplerate to use")
 	flag.StringVar(&logLevel, "loglevel", "info", "Log level")
-	flag.BoolVar(&fixedLength, "proto.fixedlen", false, "Enable fixed length protobuf")
 	flag.IntVar(&workerCount, "workercount", 8, "Number of workers per interface")
 	flag.IntVar(&fanoutBase, "fanoutBase", 42, "fanout group base id")
 	flag.StringVar(&samplerAddressString, "sampler-address", "127.0.0.1", "The address the instance use as SamplerAddress")
 }
 
 func main() {
-	transport.RegisterFlags()
 	flag.Parse()
 
 	lvl, _ := logrus.ParseLevel(logLevel)
@@ -49,11 +48,10 @@ func main() {
 
 	tapPairs := loadConfig()
 
-	kafkaState, err := transport.StartKafkaProducerFromArgs(logrus.StandardLogger())
+	kafka, err := transport.FindTransport(context.Background(), "kafka")
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	kafkaState.FixedLengthProto = fixedLength
 
 	var startGroup, endGroup sync.WaitGroup
 	startGroup.Add(workerCount * len(tapPairs) * 2)
@@ -63,11 +61,11 @@ func main() {
 	for _, tp := range tapPairs {
 		logrus.Infof("Starting workers on pair: RX: %q - TX: %q", tp.RX.name, tp.TX.name)
 		for i := 0; i < workerCount; i++ {
-			go tp.TX.Worker(ctx, &startGroup, &endGroup, kafkaState)
+			go tp.TX.Worker(ctx, &startGroup, &endGroup, kafka)
 		}
 
 		for i := 0; i < workerCount; i++ {
-			go tp.RX.Worker(ctx, &startGroup, &endGroup, kafkaState)
+			go tp.RX.Worker(ctx, &startGroup, &endGroup, kafka)
 		}
 	}
 	logrus.Infof("Waiting for workers to become ready...")

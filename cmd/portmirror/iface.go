@@ -7,11 +7,12 @@ import (
 	"sync"
 	"sync/atomic"
 
-	flowprotob "github.com/cloudflare/goflow/v3/pb"
-	"github.com/cloudflare/goflow/v3/transport"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/afpacket"
 	"github.com/google/gopacket/layers"
+	"github.com/netsampler/goflow2/format"
+	"github.com/netsampler/goflow2/pb"
+	"github.com/netsampler/goflow2/transport"
 	"github.com/sirupsen/logrus"
 	"github.com/vishvananda/netlink"
 )
@@ -83,8 +84,13 @@ func loadConfig() []*tapPair {
 	return tapPairs
 }
 
-func (ti *tapInterface) Worker(ctx context.Context, startGroup *sync.WaitGroup, endGroup *sync.WaitGroup, kafkaState *transport.KafkaState) {
+func (ti *tapInterface) Worker(ctx context.Context, startGroup *sync.WaitGroup, endGroup *sync.WaitGroup, t *transport.Transport) {
 	defer endGroup.Done()
+
+	fmt, err := format.FindFormat(ctx, "pb")
+	if err != nil {
+		logrus.Fatalf("fetching formatter: %v", err)
+	}
 
 	handle, err := afpacket.NewTPacket(
 		afpacket.OptInterface(ti.name),
@@ -126,8 +132,8 @@ func (ti *tapInterface) Worker(ctx context.Context, startGroup *sync.WaitGroup, 
 		}
 
 		info := readFrameInfo(gopacket.NewPacket(data, layers.LayerTypeEthernet, gopacket.Default))
-		msg := &flowprotob.FlowMessage{
-			Type:           flowprotob.FlowMessage_SFLOW_5,
+		msg := &flowpb.FlowMessage{
+			Type:           flowpb.FlowMessage_SFLOW_5,
 			TimeReceived:   uint64(ci.Timestamp.Unix()),
 			SequenceNum:    info.SeqNum,
 			SamplingRate:   uint64(sampleRate),
@@ -153,6 +159,13 @@ func (ti *tapInterface) Worker(ctx context.Context, startGroup *sync.WaitGroup, 
 			IPv6FlowLabel:  info.FlowLabel,
 		}
 
-		kafkaState.SendKafkaFlowMessage(msg)
+		key, value, err := fmt.Format(msg)
+		if err != nil {
+			return
+		}
+
+		if err := t.Send(key, value); err != nil {
+			return
+		}
 	}
 }

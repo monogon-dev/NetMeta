@@ -14,8 +14,8 @@ go_image(
     static = "on",
     visibility = ["//visibility:public"],
     deps = [
-        "@com_github_clickhouse_clickhouse_go_v2//:go_default_library",
-        "@com_github_emicklei_proto//:go_default_library",
-        "@com_github_huandu_go_sqlbuilder//:go_default_library",
+        "@com_github_clickhouse_clickhouse_go_v2//:clickhouse-go",
+        "@com_github_emicklei_proto//:proto",
+        "@com_github_huandu_go_sqlbuilder//:go-sqlbuilder",
     ],
 )
