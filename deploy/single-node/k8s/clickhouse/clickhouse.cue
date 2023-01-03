@@ -27,9 +27,10 @@ import (
 }
 
 #Config: {
-	clickhouseAdminPassword: string
-	enableClickhouseIngress: bool
-	sampler:                 #SamplerConfig
+	clickhouseAdminPassword:    string
+	clickhouseReadonlyPassword: string
+	enableClickhouseIngress:    bool
+	sampler:                    #SamplerConfig
 }
 
 ClickHouseInstallation: netmeta: spec: {
@@ -55,8 +56,15 @@ ClickHouseInstallation: netmeta: spec: {
 			},
 		]
 		users: {
-			"admin/password_sha256_hex": hex.Encode(sha256.Sum256(#Config.clickhouseAdminPassword))
-			"admin/networks/ip":         "::/0"
+			"default/access_management":    1
+			"admin/password_sha256_hex":    hex.Encode(sha256.Sum256(#Config.clickhouseAdminPassword))
+			"admin/networks/ip":            "::/0"
+			"readonly/password_sha256_hex": hex.Encode(sha256.Sum256(#Config.clickhouseReadonlyPassword))
+			"readonly/networks/ip":         "::/0"
+			"readonly/profile":             "readonly"
+		}
+		profiles: {
+			"readonly/readonly": "1"
 		}
 		files: [string]: string
 	}
