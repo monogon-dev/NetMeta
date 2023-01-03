@@ -63,9 +63,10 @@ k8s_list: [
 	clickhouseOperator,
 	(clickhouse & {
 		#Config: {
-			clickhouseAdminPassword: netmeta.config.clickhouseAdminPassword
-			enableClickhouseIngress: netmeta.config.enableClickhouseIngress
-			sampler:                 netmeta.config.sampler
+			clickhouseAdminPassword:    netmeta.config.clickhouseAdminPassword
+			clickhouseReadonlyPassword: netmeta.config.clickhouseReadonlyPassword
+			enableClickhouseIngress:    netmeta.config.enableClickhouseIngress
+			sampler:                    netmeta.config.sampler
 		}
 	}),
 
@@ -92,7 +93,7 @@ k8s_list: [
 			grafanaBasicAuth:            netmeta.config.grafanaBasicAuth
 			sessionSecret:               netmeta.config.sessionSecret
 			grafanaDefaultRole:          netmeta.config.grafanaDefaultRole
-			clickhouseAdminPassword:     netmeta.config.clickhouseAdminPassword
+			clickhouseReadonlyPassword:  netmeta.config.clickhouseReadonlyPassword
 			fastNetMon:                  netmeta.config.fastNetMon
 			grafanaGoogleAuth:           netmeta.config.grafanaGoogleAuth
 			dashboards:                  netmeta.dashboards

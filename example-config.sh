@@ -12,7 +12,8 @@ package k8s
 
 netmeta: config: {
     grafanaInitialAdminPassword: "$(mkpw 18)"
-    clickhouseAdminPassword:  "$(mkpw 18)"
+    clickhouseAdminPassword:     "$(mkpw 18)"
+    clickhouseReadonlyPassword:  "$(mkpw 18)"
     sessionSecret:               "$(mkpw 32)"
 
     publicHostname: "$(hostname -f)"

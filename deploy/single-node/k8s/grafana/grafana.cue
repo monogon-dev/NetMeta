@@ -15,7 +15,7 @@ import (
 	grafanaBasicAuth:            bool
 	sessionSecret:               string
 	grafanaDefaultRole:          string
-	clickhouseAdminPassword:     string
+	clickhouseReadonlyPassword:  string
 
 	dashboards: [string]: _
 
@@ -35,7 +35,7 @@ import (
 	datasources: [...{
 		name:      string
 		type:      string
-		url?:       string
+		url?:      string
 		access:    *"proxy" | "direct"
 		user?:     string
 		isDefault: *false | bool
@@ -88,8 +88,8 @@ ConfigMap: "grafana-datasources": data: "datasources.yaml": yaml.Marshal(#Dataso
 			// https://github.com/Vertamedia/clickhouse-grafana/blob/1c736969cdac2e5858e5d1870480c2d2f5e59c0a/datasource.go#L81-L88
 			jsonData: {
 				useYandexCloudAuthorization: true
-				xHeaderUser:                 "admin"
-				xHeaderKey:                  #Config.clickhouseAdminPassword
+				xHeaderUser:                 "readonly"
+				xHeaderKey:                  #Config.clickhouseReadonlyPassword
 			}
 		},
 		{
@@ -101,9 +101,9 @@ ConfigMap: "grafana-datasources": data: "datasources.yaml": yaml.Marshal(#Dataso
 				port:            8123
 				protocol:        "http"
 				server:          "clickhouse-netmeta"
-				username:        "admin"
+				username:        "readonly"
 			}
-			secureJsonData: password: #Config.clickhouseAdminPassword
+			secureJsonData: password: #Config.clickhouseReadonlyPassword
 		},
 	]
 })

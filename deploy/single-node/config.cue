@@ -142,6 +142,9 @@ _deviceAddressTest: {
 	// ClickHouse write credentials
 	clickhouseAdminPassword: string
 
+	// ClickHouse readonly credentials
+	clickhouseReadonlyPassword: string
+
 	// Session secret for Prometheus and Grafana
 	sessionSecret: string
 
