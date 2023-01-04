@@ -35,7 +35,7 @@ _filtersWithHost:
 AND $__conditionalAll((SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP')), $hostIP)
 """#
 
-_disclamerPanels: [{
+_disclaimerPanels: [{
 	gridPos: {h: 6, w: 9, x: 10, y: 0}
 	options: {
 		feedUrl:   "https://netmeta-cache.leoluk.de/v1/releases.atom"

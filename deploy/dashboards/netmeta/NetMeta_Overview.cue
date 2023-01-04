@@ -827,7 +827,7 @@ _heatmaps: [{
 dashboards: "Overview": {
 	title:   "Overview"
 	uid:     "9Dw5dGzGk"
-	_panels: _disclamerPanels +
+	_panels: _disclaimerPanels +
 	_infoPanels +
 	_trafficStatistics +
 	_originASStatistics +
