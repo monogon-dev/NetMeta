@@ -36,6 +36,14 @@ AND $__conditionalAll((SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP'
 """#
 
 _disclamerPanels: [{
+	gridPos: {h: 6, w: 9, x: 10, y: 0}
+	options: {
+		feedUrl:   "https://netmeta-cache.leoluk.de/v1/releases.atom"
+		showImage: true
+	}
+	title: "NetMeta News"
+	type:  "news"
+}, {
 	title: "This is a preprovisioned dashboard"
 	type:  "text"
 	gridPos: {h: 3, w: 5, x: 19, y: 0}
