@@ -223,7 +223,7 @@ _flowsPerASN: [{
 dashboards: "Traffic Relations": {
 	title:   "Traffic Relations"
 	uid:     "5pH2j5ank"
-	_panels: _disclamerPanels +
+	_panels: _disclaimerPanels +
 		_infoPanels +
 		_asRelations +
 		_topFlowSankey +
