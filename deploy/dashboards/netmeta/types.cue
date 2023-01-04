@@ -97,7 +97,7 @@ package netmeta
 	...
 }
 
-#PanelStructs: [#TextPanel, #SingleStatPanel, #TimeSeriesPanel, #RowPanel, #TablePanel, #HeatmapPanel, #NetsageSankeyPanel]
+#PanelStructs: [#TextPanel, #SingleStatPanel, #TimeSeriesPanel, #RowPanel, #TablePanel, #HeatmapPanel, #NetsageSankeyPanel, #NewsPanel]
 #PanelTypes: {for _, v in #PanelStructs {"\(v.type)": v}}
 
 #BasePanel: V={
@@ -326,5 +326,14 @@ package netmeta
 		nodePadding: int | *30
 		nodeWidth:   int | *30
 	}
-	type:  "netsage-sankey-panel"
+	type: "netsage-sankey-panel"
+}
+
+#NewsPanel: {
+	#BasePanel
+	options: {
+		feedUrl:   string
+		showImage: *false | bool
+	}
+	type: "news"
 }
