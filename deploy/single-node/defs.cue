@@ -16,8 +16,7 @@ import (
 	kafka "github.com/monogon-dev/NetMeta/deploy/single-node/k8s/kafka"
 
 	// Dashboards
-	dashboards_netmeta "github.com/monogon-dev/NetMeta/deploy/dashboards/netmeta"
-	dashboards_clickhouse "github.com/monogon-dev/NetMeta/deploy/dashboards/clickhouse_queries"
+	grafana_dashboards "github.com/monogon-dev/NetMeta/deploy/dashboards"
 
 	grafana "github.com/monogon-dev/NetMeta/deploy/single-node/k8s/grafana"
 
@@ -31,18 +30,14 @@ import (
 netmeta: images: #NetMetaImages
 netmeta: config: #NetMetaConfig
 netmeta: dashboards: {
-	for k, v in dashboards_clickhouse.dashboards {
-		"\(k)": v
-	}
-
-	_dashboards_netmeta: (dashboards_netmeta & {
+	_dashboards: (grafana_dashboards & {
 		#Config: {
 			interval:      netmeta.config.dashboardDisplay.minInterval
 			maxPacketSize: netmeta.config.dashboardDisplay.maxPacketSize
 			fastNetMon:    netmeta.config.fastNetMon
 		}
 	})
-	for k, v in _dashboards_netmeta.dashboards {
+	for k, v in _dashboards.dashboards {
 		"\(k)": v
 	}
 }

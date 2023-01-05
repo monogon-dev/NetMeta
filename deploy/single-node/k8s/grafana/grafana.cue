@@ -65,7 +65,7 @@ import (
 
 		options: path: string
 
-		options: foldersFromFilesStructure: true
+		options: foldersFromFilesStructure: *true | bool
 	}]
 }
 
@@ -73,46 +73,29 @@ PersistentVolumeClaim: "grafana-data-claim": {}
 
 // Default prometheus config
 ConfigMap: "grafana-datasources": data: "datasources.yaml": yaml.Marshal(#DatasourceConfig & {
-	datasources: [
-		{
-			name: "Local Prometheus"
-			type: "prometheus"
-			url:  "http://prometheus:9090"
-		},
-		{
-			isDefault: false
-			name:      "NetMeta ClickHouse"
-			type:      "vertamedia-clickhouse-datasource"
-			url:       "http://clickhouse-netmeta:8123"
-			// Workaround for:
-			// https://github.com/Vertamedia/clickhouse-grafana/blob/1c736969cdac2e5858e5d1870480c2d2f5e59c0a/datasource.go#L81-L88
-			jsonData: {
-				useYandexCloudAuthorization: true
-				xHeaderUser:                 "readonly"
-				xHeaderKey:                  #Config.clickhouseReadonlyPassword
-			}
-		},
-		{
-			isDefault: false
-			name:      "ClickHouse"
-			type:      "grafana-clickhouse-datasource"
-			jsonData: {
-				defaultDatabase: "default"
-				port:            8123
-				protocol:        "http"
-				server:          "clickhouse-netmeta"
-				username:        "readonly"
-			}
-			secureJsonData: password: #Config.clickhouseReadonlyPassword
-		},
-	]
+	datasources: [{
+		name: "Local Prometheus"
+		type: "prometheus"
+		url:  "http://prometheus:9090"
+	}, {
+		isDefault: false
+		name:      "ClickHouse"
+		type:      "grafana-clickhouse-datasource"
+		jsonData: {
+			defaultDatabase: "default"
+			port:            8123
+			protocol:        "http"
+			server:          "clickhouse-netmeta"
+			username:        "readonly"
+		}
+		secureJsonData: password: #Config.clickhouseReadonlyPassword
+	}]
 })
 
 ConfigMap: "grafana-dashboards": data: "dashboards.yaml": yaml.Marshal(#DashboardConfig & {
 	providers: [
 		{
-			name:   "NetMeta Dashboards"
-			folder: "NetMeta"
+			name: "Dashboards"
 			options: path: "/var/lib/grafana/dashboards"
 		},
 	]
@@ -120,8 +103,17 @@ ConfigMap: "grafana-dashboards": data: "dashboards.yaml": yaml.Marshal(#Dashboar
 
 // Generated dashboards
 ConfigMap: "grafana-dashboards-data": data: {
-	for k, v in #Config.dashboards {
+	for k, v in #Config.dashboards if v.#folder == "General" {
 		"\(strings.ToLower(strings.Replace(k, " ", "_", -1))).json": json.Indent(json.Marshal(v), "", " ")
+	}
+}
+
+_folderNames: {for _, v in #Config.dashboards if v.#folder != "General" {"\(v.#folder)": true}}
+for folderName, _ in _folderNames {
+	ConfigMap: "grafana-dashboards-data-\(strings.ToLower(folderName))": data: {
+		for k, v in #Config.dashboards if v.#folder == folderName {
+			"\(strings.ToLower(strings.Replace(k, " ", "_", -1))).json": json.Indent(json.Marshal(v), "", " ")
+		}
 	}
 }
 
@@ -200,8 +192,12 @@ StatefulSet: grafana: spec: {
 							value: "https://\(#Config.publicHostname)"
 						},
 						{
+							name:  "GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH"
+							value: "/var/lib/grafana/dashboards/home.json"
+						},
+						{
 							name:  "GF_INSTALL_PLUGINS"
-							value: "vertamedia-clickhouse-datasource 2.5.2,netsage-sankey-panel 1.0.6,grafana-clickhouse-datasource 2.0.5"
+							value: "netsage-sankey-panel 1.0.6,grafana-clickhouse-datasource 2.0.5"
 						},
 						{
 							name:  "GF_SECURITY_ADMIN_PASSWORD"
@@ -251,7 +247,7 @@ StatefulSet: grafana: spec: {
 						name:          "grafana"
 					}]
 					volumeMounts: [
-						{
+							{
 							mountPath: "/var/lib/grafana"
 							name:      "grafana-data"
 						},
@@ -267,12 +263,15 @@ StatefulSet: grafana: spec: {
 							mountPath: "/var/lib/grafana/dashboards"
 							name:      "grafana-dashboards-data"
 						},
-					]
+					] + [ for folderName, _ in _folderNames {
+						mountPath: "/var/lib/grafana/dashboards/\(folderName)"
+						name:      "grafana-dashboards-data-\(strings.ToLower(folderName))"
+					}]
 				},
 			]
 			restartPolicy: "Always"
-			volumes: [
-				{
+			volumes:       [
+					{
 					name: "grafana-datasources"
 					configMap: name: "grafana-datasources"
 				},
@@ -288,7 +287,10 @@ StatefulSet: grafana: spec: {
 					name: "grafana-data"
 					persistentVolumeClaim: claimName: "grafana-data-claim"
 				},
-			]
+			] + [ for folderName, _ in _folderNames {
+				name: "grafana-dashboards-data-\(strings.ToLower(folderName))"
+				configMap: name: "grafana-dashboards-data-\(strings.ToLower(folderName))"
+			}]
 		}
 	}
 }

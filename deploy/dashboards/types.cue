@@ -1,4 +1,4 @@
-package netmeta
+package dashboards
 
 #Variable: V={
 	type:          string
@@ -97,7 +97,7 @@ package netmeta
 	...
 }
 
-#PanelStructs: [#TextPanel, #SingleStatPanel, #TimeSeriesPanel, #RowPanel, #TablePanel, #HeatmapPanel, #NetsageSankeyPanel, #NewsPanel]
+#PanelStructs: [#TextPanel, #SingleStatPanel, #TimeSeriesPanel, #RowPanel, #TablePanel, #HeatmapPanel, #NetsageSankeyPanel, #NewsPanel, #DashListPanel]
 #PanelTypes: {for _, v in #PanelStructs {"\(v.type)": v}}
 
 #BasePanel: V={
@@ -165,7 +165,7 @@ package netmeta
 			showMiniMap:     false
 		}
 		content: string
-		mode:    "markdown"
+		mode:    *"markdown" | "html"
 	}
 	type: "text"
 }
@@ -336,4 +336,19 @@ package netmeta
 		showImage: *false | bool
 	}
 	type: "news"
+}
+
+#DashListPanel: {
+	#BasePanel
+	options: {
+		folderId?:          0
+		maxItems:           0
+		query:              string | *""
+		showHeadings:       false
+		showRecentlyViewed: false
+		showSearch:         true
+		showStarred:        false
+		tags: [...string]
+	}
+	type: "dashlist"
 }

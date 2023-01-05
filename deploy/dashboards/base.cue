@@ -1,4 +1,4 @@
-package netmeta
+package dashboards
 
 #Config: {
 	// Minimum interval for all panels
@@ -36,29 +36,12 @@ AND $__conditionalAll((SrcAddr = toIPv6('$hostIP') OR DstAddr = toIPv6('$hostIP'
 """#
 
 _disclaimerPanels: [{
-	gridPos: {h: 6, w: 9, x: 10, y: 0}
-	options: {
-		feedUrl:   "https://netmeta-cache.leoluk.de/v1/releases.atom"
-		showImage: true
-	}
-	title: "NetMeta News"
-	type:  "news"
-}, {
 	title: "This is a preprovisioned dashboard"
 	type:  "text"
-	gridPos: {h: 3, w: 5, x: 19, y: 0}
+	gridPos: {h: 6, w: 5, x: 19, y: 0}
 	options: content: #"""
 		This dashboard is provisioned automatically and will be overwritten when you update NetMeta.
 		If you want to make persistent changes, please create a copy.
-		"""#
-}, {
-	title: "Contact and Support"
-	type:  "text"
-	gridPos: {h: 3, w: 5, x: 19, y: 3}
-	options: content: #"""
-		For questions, bug reports or feature requests please refer to https://github.com/monogon-dev/NetMeta or send a mail to netmeta@leoluk.de
-
-		Contributions are very welcome!
 		"""#
 }]
 
@@ -165,11 +148,13 @@ dashboards: [string]: D={
 
 	templating: T={
 		_list: [...#Variable]
-		list: [ for v in T._list {
-			for _, t in #VariableStructs if t.type == v.type {
-				(t & v)
-			}
-		}]
+		if D.#defaultParams {
+			list: [ for v in T._list {
+				for _, t in #VariableStructs if t.type == v.type {
+					(t & v)
+				}
+			}]
+		}
 	}
 }
 
@@ -251,53 +236,59 @@ dashboards: [string]: templating: _list: [{
 }]
 
 dashboards: [string]: {
-	annotations: list: [
-		{
-			builtIn: 1
-			datasource: {
-				type: "grafana"
-				uid:  "-- Grafana --"
-			}
-			enable:    true
-			hide:      true
-			iconColor: "rgba(0, 211, 255, 1)"
-			name:      "Annotations & Alerts"
-			target: {
-				limit:    100
-				matchAny: false
-				tags: []
-				type: "dashboard"
-			}
-			type: "dashboard"
-		},
-		if #Config.fastNetMon != _|_ {
+	#defaultParams: bool | *true
+	#folder:        string | *"General"
+	if #defaultParams {
+		annotations: list: [
 			{
+				builtIn: 1
 				datasource: {
-					type: "influxdb"
-					uid:  "${datasource_fnm}"
+					type: "grafana"
+					uid:  "-- Grafana --"
 				}
-				enable:     true
-				iconColor:  "red"
-				name:       "FastNetMon Attacks"
-				query:      "select title, tags, text from events where $timeFilter"
-				tagsColumn: "tags"
+				enable:    true
+				hide:      true
+				iconColor: "rgba(0, 211, 255, 1)"
+				name:      "Annotations & Alerts"
 				target: {
 					limit:    100
 					matchAny: false
 					tags: []
 					type: "dashboard"
 				}
-				textColumn: "text"
-			}
-		},
-	]
+				type: "dashboard"
+			},
+			if #Config.fastNetMon != _|_ {
+				{
+					datasource: {
+						type: "influxdb"
+						uid:  "${datasource_fnm}"
+					}
+					enable:     true
+					iconColor:  "red"
+					name:       "FastNetMon Attacks"
+					query:      "select title, tags, text from events where $timeFilter"
+					tagsColumn: "tags"
+					target: {
+						limit:    100
+						matchAny: false
+						tags: []
+						type: "dashboard"
+					}
+					textColumn: "text"
+				}
+			},
+		]
+	}
 	editable:             true
 	fiscalYearStartMonth: 0
 	graphTooltip:         0
 	liveNow:              false
 	schemaVersion:        37
 	style:                "dark"
-	tags: ["netmeta"]
+	if #defaultParams {
+		tags: ["netmeta"]
+	}
 	time: {
 		from: "now-6h"
 		to:   "now"
@@ -306,20 +297,22 @@ dashboards: [string]: {
 	timezone:  ""
 	version:   1
 	weekStart: ""
-	links: [{
-		asDropdown:  false
-		icon:        "external link"
-		includeVars: true
-		keepTime:    true
-		tags: [
-			"netmeta",
-		]
-		targetBlank: false
-		title:       "NetMeta Dashboards"
-		tooltip:     ""
-		type:        "dashboards"
-		url:         ""
-	}]
+	if #defaultParams {
+		links: [{
+			asDropdown:  false
+			icon:        "external link"
+			includeVars: true
+			keepTime:    true
+			tags: [
+				"netmeta",
+			]
+			targetBlank: false
+			title:       "NetMeta Dashboards"
+			tooltip:     ""
+			type:        "dashboards"
+			url:         ""
+		}]
+	}
 }
 
 postData: {

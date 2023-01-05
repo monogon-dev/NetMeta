@@ -1,4 +1,4 @@
-package netmeta
+package dashboards
 
 _trafficStatisticQueries: {
 	Packets:
@@ -824,15 +824,16 @@ _heatmaps: [{
 	}]
 }]
 
-dashboards: "Overview": {
+dashboards: Overview: {
+	#folder: "NetMeta"
 	title:   "Overview"
 	uid:     "9Dw5dGzGk"
 	_panels: _disclaimerPanels +
-	_infoPanels +
-	_trafficStatistics +
-	_originASStatistics +
-	_trafficDetails +
-	_topHosts +
-	_topFlows +
-	_heatmaps
+		_infoPanels +
+		_trafficStatistics +
+		_originASStatistics +
+		_trafficDetails +
+		_topHosts +
+		_topFlows +
+		_heatmaps
 }

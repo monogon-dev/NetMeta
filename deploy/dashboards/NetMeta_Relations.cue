@@ -1,4 +1,4 @@
-package netmeta
+package dashboards
 
 _asRelationQueries: {
 	"Inbound traffic relations (Top 20)":
@@ -74,7 +74,7 @@ _asRelations: [{
 	gridPos: {h: 24, w: 12, x: 0, y: 7}
 	options: nodePadding: 6
 	options: nodeWidth:   23
-	options: iteration:  15
+	options: iteration:   15
 	targets: [{
 		rawSql: _asRelationQueries[title]
 	}]
@@ -84,7 +84,7 @@ _asRelations: [{
 	gridPos: {h: 24, w: 12, x: 12, y: 7}
 	options: nodePadding: 6
 	options: nodeWidth:   23
-	options: iteration:  15
+	options: iteration:   15
 	targets: [{
 		rawSql: _asRelationQueries[title]
 	}]
@@ -94,7 +94,7 @@ _asRelations: [{
 	gridPos: {h: 24, w: 12, x: 0, y: 31}
 	options: nodePadding: 6
 	options: nodeWidth:   23
-	options: iteration:  15
+	options: iteration:   15
 	targets: [{
 		rawSql: _asRelationQueries[title]
 	}]
@@ -104,7 +104,7 @@ _asRelations: [{
 	gridPos: {h: 24, w: 12, x: 12, y: 31}
 	options: nodePadding: 6
 	options: nodeWidth:   23
-	options: iteration:  15
+	options: iteration:   15
 	targets: [{
 		rawSql: _asRelationQueries[title]
 	}]
@@ -221,6 +221,7 @@ _flowsPerASN: [{
 }]
 
 dashboards: "Traffic Relations": {
+	#folder: "NetMeta"
 	title:   "Traffic Relations"
 	uid:     "5pH2j5ank"
 	_panels: _disclaimerPanels +
