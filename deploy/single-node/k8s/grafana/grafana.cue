@@ -196,6 +196,10 @@ StatefulSet: grafana: spec: {
 							value: "/var/lib/grafana/dashboards/home.json"
 						},
 						{
+							name:  "GF_FEATURE_TOGGLES_ENABLE"
+							value: "topnav"
+						},
+						{
 							name:  "GF_INSTALL_PLUGINS"
 							value: "netsage-sankey-panel 1.0.6,grafana-clickhouse-datasource 2.0.5"
 						},
