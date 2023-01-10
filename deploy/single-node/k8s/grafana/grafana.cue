@@ -144,7 +144,7 @@ StatefulSet: grafana: spec: {
 			containers: [
 				{
 					name:            "grafana"
-					image:           "docker.io/grafana/grafana:9.2.0@sha256:ff2663d4f014903a70a8446e55131b69041bc259066d6115e158de4ee8bc67a2"
+					image:           "docker.io/grafana/grafana:9.3.2@sha256:cf66ad28334ee6d2349813f193e8a82e5aea6ae94916dd72df3d0a07b0660ccb"
 					imagePullPolicy: "IfNotPresent"
 
 					_googleAuth: [...]
