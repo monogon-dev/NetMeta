@@ -1,12 +1,14 @@
 package dashboards
 
+import "strings"
+
 #Variable: V={
 	type:          string
 	_validateType: #VariableTypes[V.type].type
 	...
 }
 
-#VariableStructs: [#ConstantVariable, #TextboxVariable, #AdHocVariable, #QueryVariable, #DatasourceVariable]
+#VariableStructs: [#ConstantVariable, #TextboxVariable, #AdHocVariable, #QueryVariable, #DatasourceVariable, #CustomVariable]
 #VariableTypes: {for _, v in #VariableStructs {"\(v.type)": v}}
 
 #ConstantVariable: {
@@ -87,6 +89,29 @@ package dashboards
 	regex:       string | *""
 	skipUrlSync: bool | *false
 	type:        "datasource"
+}
+
+#CustomVariable: V={
+	current: {
+		_option:  [ for _, v in V.options if v.selected {v}, {text: "", value: ""}][0]
+		selected: false
+		text:     _option.text
+		value:    _option.value
+	}
+	hide:       0
+	includeAll: false
+	label:      string
+	multi:      false
+	name:       string
+	options: [...{
+		selected: bool
+		text:     string
+		value:    string
+	}]
+	query:       strings.Join([ for _, v in V.options {"\(v.text) : \(v.value)"}], ",")
+	queryValue:  ""
+	skipUrlSync: false
+	type:        "custom"
 }
 
 // ---

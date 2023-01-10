@@ -114,8 +114,8 @@ _topFlowSankeyQueries: {
 	"Top 30 Flows (per IP)":
 		#"""
 SELECT
-  HostToString(SamplerAddress, SrcAddr) AS Src,
-  HostToString(SamplerAddress, DstAddr) AS Dst,
+  if($showHostnames, HostToString(SamplerAddress, SrcAddr), IPv6ToString(SrcAddr)) AS Src,
+  if($showHostnames, HostToString(SamplerAddress, DstAddr), IPv6ToString(DstAddr)) AS Dst,
   (sum(Bytes * SamplingRate) / 1024) as Bytes
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
@@ -128,8 +128,8 @@ LIMIT 30
 	"Top 30 Flows (per IP+Port)":
 		#"""
 SELECT
-  HostToString(SamplerAddress, SrcAddr) || ' ' || dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || toString(SrcPort) as Src,
-  HostToString(SamplerAddress, DstAddr) || ' ' || dictGetString('IPProtocols', 'Name', toUInt64(Proto)) ||  toString(DstPort) as Dst,
+  if($showHostnames, HostToString(SamplerAddress, SrcAddr), IPv6ToString(SrcAddr)) || ' ' || dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || toString(SrcPort) as Src,
+  if($showHostnames, HostToString(SamplerAddress, DstAddr), IPv6ToString(DstAddr)) || ' ' || dictGetString('IPProtocols', 'Name', toUInt64(Proto)) ||  toString(DstPort) as Dst,
   (sum(Bytes * SamplingRate) / 1024) as Bytes
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
@@ -169,7 +169,7 @@ _flowsPerASNQueries: {
 		#"""
 SELECT
   ASNToString(SrcAS) AS SrcASName,
-  HostToString(SamplerAddress, DstAddr) || ' ' || dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || toString(DstPort) as Dst,
+  if($showHostnames, HostToString(SamplerAddress, DstAddr), IPv6ToString(DstAddr)) || ' ' || dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || toString(DstPort) as Dst,
   (sum(Bytes * SamplingRate) / 1024) as Bytes
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
@@ -184,7 +184,7 @@ LIMIT 30
 		#"""
 SELECT
   ASNToString(SrcAS) AS SrcASName,
-  HostToString(SamplerAddress, DstAddr) || ' ' || dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || toString(DstPort) as Dst,
+  if($showHostnames, HostToString(SamplerAddress, DstAddr), IPv6ToString(DstAddr)) || ' ' || dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || toString(DstPort) as Dst,
   (sum(Bytes * SamplingRate) / 1024) as Bytes
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
