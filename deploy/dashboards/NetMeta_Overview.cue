@@ -56,7 +56,7 @@ _trafficStatisticQueries: {
 			SELECT
 			    $__timeInterval(TimeReceived) as time,
 			    (count(*) / $__interval_s) AS Flows,
-			    SamplerToString(SamplerAddress) as Sampler
+			    if($showHostnames, SamplerToString(SamplerAddress), IPv6ToString(SamplerAddress)) as Sampler
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
@@ -493,7 +493,7 @@ _topHostQueries: {
 		#"""
 			SELECT
 			    $__timeInterval(TimeReceived) as time,
-			    HostToString(SamplerAddress, SrcAddr) AS Src,
+			    if($showHostnames, HostToString(SamplerAddress, SrcAddr), IPv6ToString(SrcAddr)) AS Src,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
 			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
@@ -516,7 +516,7 @@ _topHostQueries: {
 		#"""
 			SELECT
 			    $__timeInterval(TimeReceived) as time,
-			    HostToString(SamplerAddress, DstAddr) AS Dst,
+			    if($showHostnames, HostToString(SamplerAddress, DstAddr), IPv6ToString(DstAddr)) AS Dst,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
 			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
@@ -538,8 +538,8 @@ _topHostQueries: {
 	"Top 100 Source IPs":
 		#"""
 			SELECT
-			    SamplerToString(SamplerAddress) as Sampler,
-			    HostToString(SamplerAddress, SrcAddr) AS Src,
+			    if($showHostnames, SamplerToString(SamplerAddress), IPv6ToString(SamplerAddress)) as Sampler,
+			    if($showHostnames, HostToString(SamplerAddress, SrcAddr), IPv6ToString(SrcAddr)) AS Src,
 			    sum(Bytes * SamplingRate) as Bytes
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
@@ -553,8 +553,8 @@ _topHostQueries: {
 	"Top 100 Destination IPs":
 		#"""
 			SELECT
-			    SamplerToString(SamplerAddress) as Sampler,
-			    HostToString(SamplerAddress, DstAddr) AS Dst,
+			    if($showHostnames, SamplerToString(SamplerAddress), IPv6ToString(SamplerAddress)) as Sampler,
+			    if($showHostnames, HostToString(SamplerAddress, DstAddr), IPv6ToString(DstAddr)) AS Dst,
 			    sum(Bytes * SamplingRate) as Bytes
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
@@ -630,9 +630,9 @@ _topHosts: [{
 _topFlowQueries: "Top 100 Flows":
 	#"""
 		SELECT
-		    SamplerToString(SamplerAddress) as Sampler,
-		    HostToString(SamplerAddress, SrcAddr) AS Src,
-		    HostToString(SamplerAddress, DstAddr) AS Dst,
+		    if($showHostnames, SamplerToString(SamplerAddress), IPv6ToString(SamplerAddress)) as Sampler,
+		    if($showHostnames, HostToString(SamplerAddress, SrcAddr), IPv6ToString(SrcAddr)) AS Src,
+		    if($showHostnames, HostToString(SamplerAddress, DstAddr), IPv6ToString(DstAddr)) AS Dst,
 		    toString(SrcPort) AS SrcPortStr,
 		    toString(DstPort) AS DstPortStr,
 		    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS ProtoName,

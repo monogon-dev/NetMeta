@@ -225,6 +225,19 @@ dashboards: [string]: templating: _list: [{
 				)
 				"""#
 	}, {
+		label: "Show Hostnames"
+		name:  "showHostnames"
+		options: [{
+			selected: true
+			text:     "show"
+			value:    "true"
+		}, {
+			selected: false
+			text:     "hide"
+			value:    "false"
+		}]
+		type: "custom"
+	}, {
 		name:  "ad_hoc_query"
 		label: "Custom Filters"
 		type:  "adhoc"
