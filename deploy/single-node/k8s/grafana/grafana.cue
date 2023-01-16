@@ -10,6 +10,9 @@ import (
 )
 
 #Config: {
+	digest: string
+	image:  string
+
 	publicHostname:              string
 	grafanaInitialAdminPassword: string
 	grafanaBasicAuth:            bool
@@ -133,6 +136,9 @@ StatefulSet: grafana: spec: {
 	selector: matchLabels: app: "grafana"
 	serviceName: "grafana"
 	template: {
+		// Trigger redeployment when digest changes.
+		metadata: annotations: "meta/local-image-digest": #Config.digest
+
 		metadata: {
 			labels: app: "grafana"
 			name: "grafana"
@@ -143,9 +149,8 @@ StatefulSet: grafana: spec: {
 		spec: {
 			containers: [
 				{
-					name:            "grafana"
-					image:           "docker.io/grafana/grafana:9.3.2@sha256:cf66ad28334ee6d2349813f193e8a82e5aea6ae94916dd72df3d0a07b0660ccb"
-					imagePullPolicy: "IfNotPresent"
+					name:  "grafana"
+					image: #Config.image
 
 					_googleAuth: [...]
 
@@ -198,10 +203,6 @@ StatefulSet: grafana: spec: {
 						{
 							name:  "GF_FEATURE_TOGGLES_ENABLE"
 							value: "topnav"
-						},
-						{
-							name:  "GF_INSTALL_PLUGINS"
-							value: "netsage-sankey-panel 1.0.6,grafana-clickhouse-datasource 2.0.5"
 						},
 						{
 							name:  "GF_SECURITY_ADMIN_PASSWORD"

@@ -116,3 +116,21 @@ llvm_toolchain(
 load("@llvm_toolchain//:toolchains.bzl", "llvm_register_toolchains")
 
 llvm_register_toolchains()
+
+load("@io_bazel_rules_docker//container:container.bzl", "container_pull")
+
+container_pull(
+    name = "grafana",
+    digest = "sha256:cf66ad28334ee6d2349813f193e8a82e5aea6ae94916dd72df3d0a07b0660ccb",
+    registry = "index.docker.io",
+    repository = "grafana/grafana",
+    tag = "9.3.2",
+)
+
+load("//third_party/grafana:grafana_plugin.bzl", "grafana_plugin")
+load("//third_party/grafana:container.bzl", "PLUGINS")
+
+[grafana_plugin(
+    name = name,
+    version = version,
+) for name, version in PLUGINS.items()]

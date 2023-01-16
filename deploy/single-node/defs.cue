@@ -83,6 +83,8 @@ k8s_list: [
 
 	(grafana & {
 		#Config: {
+			image:                       netmeta.images.grafana.image
+			digest:                      netmeta.images.grafana.digest
 			publicHostname:              netmeta.config.publicHostname
 			grafanaInitialAdminPassword: netmeta.config.grafanaInitialAdminPassword
 			grafanaBasicAuth:            netmeta.config.grafanaBasicAuth
