@@ -2,7 +2,7 @@ load("@io_bazel_rules_docker//container:container.bzl", "container_image", "cont
 
 PLUGINS = {
     "netsage-sankey-panel": "1.0.6",
-    "grafana-clickhouse-datasource": "2.0.5",
+    "grafana-clickhouse-datasource": "2.0.7",
 }
 
 def grafana_plugin_layer(name):
