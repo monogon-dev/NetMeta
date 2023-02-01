@@ -244,6 +244,11 @@ StatefulSet: grafana: spec: {
 							name:  "GF_ANALYTICS_CHECK_FOR_UPDATES"
 							value: "false"
 						},
+						{
+							// Override data path to allow usage of bundled plugins
+							name: "GF_PATHS_DATA"
+							value: "/var/lib/grafana/data"
+						}
 					] + _googleAuth
 
 					ports: [{
@@ -253,7 +258,7 @@ StatefulSet: grafana: spec: {
 					}]
 					volumeMounts: [
 							{
-							mountPath: "/var/lib/grafana"
+							mountPath: "/var/lib/grafana/data"
 							name:      "grafana-data"
 						},
 						{
