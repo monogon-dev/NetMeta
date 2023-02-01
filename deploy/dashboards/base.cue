@@ -25,7 +25,7 @@ _filters:
 		AND $__conditionalAll((DstAS = '$dstAS'), $dstAS)
 		AND $__conditionalAll((SrcAS = '$srcAS'), $srcAS)
 		AND $__conditionalAll((NextHop = toIPv6('$nextHop')), $nextHop)
-		AND $__conditionalAll(((toString(SamplerAddress) || '-' || toString(InIf)) = '$interface' OR (toString(SamplerAddress) || '-' || toString(OutIf)) = '$interface'), '$interface')
+		AND $__conditionalAll(((toString(SamplerAddress) || '-' || toString(InIf)) = '$interface' OR (toString(SamplerAddress) || '-' || toString(OutIf)) = '$interface'), $interface)
 		AND $__conditionalAll(($extra), $extra)
 		"""#
 
