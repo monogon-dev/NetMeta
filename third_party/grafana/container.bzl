@@ -11,6 +11,7 @@ def grafana_plugin_layer(name):
         files = [
             "@{}//:files".format(name),
         ],
+        data_path = ".",
         directory = "/var/lib/grafana/plugins/{}".format(name),
     )
 
