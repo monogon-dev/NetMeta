@@ -218,4 +218,5 @@ _deviceAddressTest: {
 	risinfo:    #Image
 	goflow:     #Image
 	portmirror: #Image
+	grafana:    #Image
 }
