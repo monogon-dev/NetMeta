@@ -63,7 +63,7 @@ _trafficStatisticQueries: {
 			GROUP BY time, SamplerAddress
 			ORDER BY time
 			"""#
-	"Traffic per Next Hop":
+	"Top 100 Next Hop":
 		#"""
 			SELECT
 			    $__timeInterval(TimeReceived) as time,
@@ -75,6 +75,7 @@ _trafficStatisticQueries: {
 			AND NextHop != toIPv6('::')
 			GROUP BY time, NextHop
 			ORDER BY time
+			LIMIT 100
 			"""#
 	"Traffic per Ingress Interface":
 		#"""
@@ -159,11 +160,12 @@ _trafficStatistics: [{
 		rawSql: _trafficStatisticQueries[title]
 	}]
 }, {
-	title: "Traffic per Next Hop"
+	title: "Top 100 Next Hop"
 	type:  "timeseries"
 	gridPos: {h: 12, w: 12, x: 12, y: 31}
 	fieldConfig: overrides: [_negativeYOut]
 	fieldConfig: defaults: unit: "bps"
+	fieldConfig: defaults: displayName: "${__field.labels.NextHop}"
 	targets: [{
 		rawSql: _trafficStatisticQueries[title]
 	}]
