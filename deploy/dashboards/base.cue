@@ -185,6 +185,7 @@ dashboards: [string]: templating: _list: [{
 		name:       "sampler"
 		type:       "query"
 		includeAll: true
+		refresh:    2
 		query:
 			#"""
 				SELECT
@@ -202,6 +203,7 @@ dashboards: [string]: templating: _list: [{
 		name:       "interface"
 		type:       "query"
 		includeAll: true
+		refresh:    2
 		query:
 			#"""
 				SELECT
