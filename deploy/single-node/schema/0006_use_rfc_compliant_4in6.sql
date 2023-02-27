@@ -4,7 +4,7 @@ DROP VIEW IF EXISTS flows_raw_view;
 
 CREATE FUNCTION ParseAddress AS(Address) -> if(
     -- endsWith IPv6v4NullPadding
-        endsWith(Address, repeat('\x00', 12)),
+        endsWith(reinterpret(Address, 'FixedString(16)'), repeat('\x00', 12)),
     -- prepend ::ffff:
         reinterpret(toFixedString(repeat('\x00', 10) || repeat('\xff', 2) || substr(Address, 1, 4), 16), 'IPv6'),
         Address

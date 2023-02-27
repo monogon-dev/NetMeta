@@ -5,8 +5,8 @@ DROP VIEW IF EXISTS flows_raw_view;
 CREATE MATERIALIZED VIEW flows_raw_view TO flows_raw
 AS
 SELECT * REPLACE (
-    if(dictGet('SamplerConfig', 'AnonymizeAddresses', IPv6NumToString(SamplerAddress)), cutIPv6(SrcAddr, 8, 1), SrcAddr) AS SrcAddr,
-    if(dictGet('SamplerConfig', 'AnonymizeAddresses', IPv6NumToString(SamplerAddress)), cutIPv6(DstAddr, 8, 1), DstAddr) AS DstAddr
+    if(dictGet('SamplerConfig', 'AnonymizeAddresses', IPv6NumToString(SamplerAddress)), toIPv6(cutIPv6(SrcAddr, 8, 1)), SrcAddr) AS SrcAddr,
+    if(dictGet('SamplerConfig', 'AnonymizeAddresses', IPv6NumToString(SamplerAddress)), toIPv6(cutIPv6(DstAddr, 8, 1)), DstAddr) AS DstAddr
     )
 FROM (
          SELECT toDate(TimeReceived) AS Date,
