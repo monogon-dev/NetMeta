@@ -37,6 +37,7 @@ Kafka: "netmeta": spec: {
 					port: 9094
 					type: "nodeport"
 					tls:  false
+					configuration: bootstrap: nodePort: 32100
 					configuration: brokers: [{broker: 0, advertisedHost: #Config.advertisedKafkaHost}]
 				}
 			},
