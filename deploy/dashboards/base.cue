@@ -21,7 +21,7 @@ _filters:
 		AND $__conditionalAll((DstAddr = toIPv6('$dstIP')), $dstIP)
 		AND $__conditionalAll((isIPAddressInRange(toString(SrcAddr), toIPv6Net('$srcNet'))), $srcNet)
 		AND $__conditionalAll((isIPAddressInRange(toString(DstAddr), toIPv6Net('$dstNet'))), $dstNet)
-		AND $__conditionalAll((isIPAddressInRange(toString(SrcAddr), toIPv6Net('$hostNet')) OR isIPAddressInRange(toString(DstAddr), '$hostNet')), $hostNet)
+		AND $__conditionalAll((isIPAddressInRange(toString(SrcAddr), toIPv6Net('$hostNet')) OR isIPAddressInRange(toString(DstAddr), toIPv6Net('$hostNet'))), $hostNet)
 		AND $__conditionalAll((DstAS = '$dstAS'), $dstAS)
 		AND $__conditionalAll((SrcAS = '$srcAS'), $srcAS)
 		AND $__conditionalAll((NextHop = toIPv6('$nextHop')), $nextHop)
