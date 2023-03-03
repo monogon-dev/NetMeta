@@ -32,6 +32,7 @@ netmeta: images: {
   risinfo: $(build cmd/risinfo:risinfo)
   goflow: $(build third_party/goflow:goflow)
   portmirror: $(build cmd/portmirror:portmirror)
+  reconciler: $(build cmd/reconciler:reconciler)
   grafana: $(build third_party/grafana:grafana)
 }
 EOF

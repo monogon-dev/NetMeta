@@ -42,9 +42,10 @@ ClickHouseInstallation: netmeta: spec: {
 	}
 	configuration: {
 		settings: {
-			format_schema_path:  "/etc/clickhouse-server/config.d/"
-			dictionaries_config: "config.d/*.conf"
-			http_port:           8123
+			format_schema_path:                       "/etc/clickhouse-server/config.d/"
+			dictionaries_config:                      "config.d/*.conf"
+			user_defined_executable_functions_config: "config.d/*_function.xml"
+			http_port:                                8123
 		}
 		clusters: [
 			{

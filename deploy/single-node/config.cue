@@ -219,4 +219,5 @@ _deviceAddressTest: {
 	goflow:     #Image
 	portmirror: #Image
 	grafana:    #Image
+	reconciler: #Image
 }

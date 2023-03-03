@@ -22,9 +22,9 @@ command: dump_dashboards: {
 	for k, v in netmeta.dashboards {
 		let fileName = "\(strings.ToLower(strings.Replace(k, " ", "_", -1))).json"
 		"\(outDir.path)/\(fileName)": file.Create & {
-			$after: outDir
+			$after:   outDir
 			filename: "\(outDir.path)/\(fileName)"
-			contents:  json.Indent(json.Marshal(v), "", " ")
+			contents: json.Indent(json.Marshal(v), "", " ")
 		}
 	}
 }

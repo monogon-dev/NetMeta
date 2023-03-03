@@ -1,0 +1,1 @@
+// To allow the use of go:linkname a placeholder asm file is required

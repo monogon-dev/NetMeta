@@ -20,6 +20,9 @@ import (
 
 	grafana "github.com/monogon-dev/NetMeta/deploy/single-node/k8s/grafana"
 
+	schema "github.com/monogon-dev/NetMeta/deploy/single-node/schema"
+	reconciler "github.com/monogon-dev/NetMeta/deploy/single-node/k8s/reconciler"
+
 	risinfo "github.com/monogon-dev/NetMeta/deploy/single-node/k8s/risinfo"
 
 	goflow "github.com/monogon-dev/NetMeta/deploy/single-node/k8s/goflow"
@@ -94,6 +97,23 @@ k8s_list: [
 			fastNetMon:                  netmeta.config.fastNetMon
 			grafanaGoogleAuth:           netmeta.config.grafanaGoogleAuth
 			dashboards:                  netmeta.dashboards
+		}
+	}),
+
+	(reconciler & {
+		#Config: {
+			image:        netmeta.images.reconciler.image
+			digest:       netmeta.images.reconciler.digest
+			databaseHost: "clickhouse-netmeta:9000"
+			databaseUser: "admin"
+			databasePass: netmeta.config.clickhouseAdminPassword
+			config: {
+				database: "default"
+				functions: [ for _, v in schema.function {v}]
+				materialized_views: [ for _, v in schema.view {v}]
+				source_tables: [ for _, v in schema.table {v}]
+			}
+			files: schema.file
 		}
 	}),
 

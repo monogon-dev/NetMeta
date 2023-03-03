@@ -1,0 +1,21 @@
+load("@io_bazel_rules_docker//go:image.bzl", "go_image")
+
+go_image(
+    name = "reconciler",
+    srcs = [
+        "config.go",
+        "main.go",
+        "placeholder.s",
+        "quote.go",
+        "reconciler.go",
+        "visitor.go",
+    ],
+    importpath = "github.com/monogon-dev/NetMeta/cmd/reconciler",
+    static = "on",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_clickhouse_clickhouse_go_v2//:go_default_library",
+        "@com_github_emicklei_proto//:go_default_library",
+        "@com_github_huandu_go_sqlbuilder//:go_default_library",
+    ],
+)

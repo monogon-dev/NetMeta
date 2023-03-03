@@ -222,3 +222,18 @@ ClickHouseInstallation: netmeta: spec: configuration: files: "autnums.conf": (xm
 		}]
 	}
 }}).out
+
+ClickHouseInstallation: netmeta: spec: configuration: files: "format_function.xml": (xml.#Marshal & {in: {
+	yandex: functions: {
+		type:        "executable"
+		name:        "formatQuery"
+		return_type: "String"
+		argument: [{
+			type: "String"
+			name: "query"
+		}]
+		format:         "LineAsString"
+		command:        "clickhouse format --oneline"
+		execute_direct: "0"
+	}
+}}).out
