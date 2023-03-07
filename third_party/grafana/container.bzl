@@ -22,4 +22,5 @@ def grafana_image():
         name = "grafana",
         base = "@grafana//image",
         layers = [grafana_plugin_layer(name) for name, _ in PLUGINS.items()],
+        visibility = ["//visibility:public"],
     )
