@@ -2,3 +2,6 @@ build --incompatible_use_python_toolchains
 test --incompatible_use_python_toolchains
 
 build --@io_bazel_rules_go//go/config:static
+
+build --stamp
+build --workspace_status_command scripts/print-workspace-status.sh
