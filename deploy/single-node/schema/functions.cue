@@ -56,7 +56,7 @@ function: IPv6ToString: {
 	query: #"""
 		if(
 		  startsWith(Address, repeat('\x00', 10) || repeat('\xff', 2)),
-		  IPv4NumToString(reinterpret(reverse(substring(Address, 13, 16)), 'IPv4')),
+		  IPv4NumToString(reinterpret(reverse(substring(reinterpret(Address, 'FixedString(16)'), 13, 16)), 'IPv4')),
 		  IPv6NumToString(Address)
 		)
 		"""#
@@ -69,7 +69,7 @@ function: ParseAddress: {
 		  -- endsWith IPv6v4NullPadding
 		  endsWith(reinterpret(Address, 'FixedString(16)'), repeat('\x00', 12)),
 		  -- prepend ::ffff:
-		  reinterpret(toFixedString(repeat('\x00', 10) || repeat('\xff', 2) || substr(Address, 1, 4), 16), 'IPv6'),
+		  reinterpret(toFixedString(repeat('\x00', 10) || repeat('\xff', 2) || substr(reinterpret(Address, 'FixedString(16)'), 1, 4), 16), 'IPv6'),
 		  Address
 		);
 		"""#
