@@ -45,6 +45,13 @@ netmeta: dashboards: {
 	}
 }
 
+_schema: (schema & {
+	#Config: {
+		fastNetMon: netmeta.config.fastNetMon
+	}
+})
+
+
 k8s_list: [
 	traefikBase,
 	(traefik & {
@@ -74,6 +81,7 @@ k8s_list: [
 			goflowTopicRetention:        netmeta.config.goflowTopicRetention
 			enableExternalKafkaListener: netmeta.config.enableExternalKafkaListener
 			advertisedKafkaHost:         netmeta.config.advertisedKafkaHost
+			fastNetMon:                  netmeta.config.fastNetMon
 		}
 	}),
 
@@ -109,11 +117,11 @@ k8s_list: [
 			databasePass: netmeta.config.clickhouseAdminPassword
 			config: {
 				database: "default"
-				functions: [ for _, v in schema.function {v}]
-				materialized_views: [ for _, v in schema.view {v}]
-				source_tables: [ for _, v in schema.table {v}]
+				functions: [ for _, v in _schema.function {v}]
+				materialized_views: [ for _, v in _schema.view {v}]
+				source_tables: [ for _, v in _schema.table {v}]
 			}
-			files: schema.file
+			files: _schema.file
 		}
 	}),
 

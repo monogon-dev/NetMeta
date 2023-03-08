@@ -141,3 +141,93 @@ file: "FlowMessage.proto":
 		  // uint32 MyCustomField = 1000;
 		}
 		"""#
+
+// FastNetMon traffic format
+// https://github.com/pavel-odintsov/fastnetmon/blob/master/src/traffic_output_formats/protobuf/traffic_data.proto
+file: "traffic_data.proto":
+	// language=proto
+	#"""
+		syntax = "proto3";
+		
+		enum TrafficDirection {
+		    // Value is not set
+		    TRAFFIC_DIRECTION_UNKNOWN  = 0;
+		    
+		    // Traffic is coming to our address space
+		    TRAFFIC_DIRECTION_INCOMING = 1;
+		
+		    // Traffic is coming from our address space
+		    TRAFFIC_DIRECTION_OUTGOING = 2;
+		    
+		    // Traffic where both source and destination IPs do not belong to our address space or non IP traffic (for example ARP)
+		    TRAFFIC_DIRECTION_OTHER    = 3;
+		
+		    // Traffic is going from our address space to our address space
+		    TRAFFIC_DIRECTION_INTERNAL = 4;
+		};
+		
+		enum TelemetryType {
+		    TELEMETRY_TYPE_UNKNOWN   = 0;
+		    TELEMETRY_TYPE_MIRROR    = 1;
+		    TELEMETRY_TYPE_SFLOW     = 2;
+		    TELEMETRY_TYPE_NETFLOW   = 3;
+		    TELEMETRY_TYPE_TERA_FLOW = 4;
+		}   
+		
+		// Our unified flow - packet message 
+		message TrafficData {
+		    // Timestamp in seconds
+		    uint64 timestamp_seconds = 1; 
+		
+		    // Timestamp in milliseconds
+		    uint64 timestamp_milliseconds = 2;
+		
+		    // Type of plugin which received traffic
+		    TelemetryType telemetry_type = 3;
+		
+		    // IP protocol version: 4 or 6
+		    uint32 ip_version = 4;
+		
+		    TrafficDirection traffic_direction = 5;
+		
+		    // Sampling ratio
+		    uint64 sampling_ratio = 6;
+		   
+		    // Protocol field from IP packet
+		    uint32 protocol = 7;
+		
+		    // Source and destination IPs for IPv4 (4 bytes) and IPv6 (16 bytes)
+		    bytes source_ip      = 8;
+		    bytes destination_ip = 9;
+		
+		    // Ports for UDP and TCP protocols
+		    uint32 source_port      = 10;
+		    uint32 destination_port = 11;
+		
+		    // Number of transferred packets
+		    uint64 packets = 12; 
+		
+		    // Total length in bytes for transferred packets
+		    uint64 octets = 13;
+		
+		    // TTL for IPv4 or Hop Limit for IPv6 
+		    uint32 ttl = 14;
+		
+		    // TCP flags encoded in bit set
+		    uint32 tcp_flags = 15;
+		
+		    bool ip_fragmented    = 16;
+		    bool ip_dont_fragment = 17;
+		
+		    // Input and output interfaces
+		    uint64 input_interface  = 18;
+		    uint64 output_interface = 19;
+		
+		    // Autonomous system numbers
+		    uint32 source_asn      = 20;
+		    uint32 destination_asn = 21;
+		
+		    // IPv4 or IPv6 address of device which sent traffic data
+		    bytes agent_address = 22;
+		}
+		"""#

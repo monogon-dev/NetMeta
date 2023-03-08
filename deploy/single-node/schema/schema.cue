@@ -2,6 +2,12 @@ package schema
 
 import reconciler "github.com/monogon-dev/NetMeta/reconciler:main"
 
+#Config: {
+	fastNetMon?: {
+		...
+	}
+}
+
 function: [NAME=string]: reconciler.#Function & {
 	name: NAME
 }

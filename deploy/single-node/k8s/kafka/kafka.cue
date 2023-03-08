@@ -4,6 +4,10 @@ package kafka
 	goflowTopicRetention:        int
 	enableExternalKafkaListener: bool
 	advertisedKafkaHost:         string
+	fastNetMon?: {
+		topicRetention: int
+		...
+	}
 }
 
 KafkaTopic: "flow-messages": {
@@ -12,6 +16,17 @@ KafkaTopic: "flow-messages": {
 		partitions: 1
 		replicas:   1
 		config: "retention.bytes": "\(#Config.goflowTopicRetention)"
+	}
+}
+
+if #Config.fastNetMon.topicRetention != _|_ {
+	KafkaTopic: "fastnetmon": {
+		metadata: labels: "strimzi.io/cluster": "netmeta"
+		spec: {
+			partitions: 1
+			replicas:   1
+			config: "retention.bytes": "\(#Config.fastNetMon.topicRetention)"
+		}
 	}
 }
 

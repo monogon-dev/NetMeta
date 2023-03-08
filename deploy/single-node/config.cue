@@ -51,6 +51,10 @@ import (
 	// notifications can be shown in NetMeta. You have to manually create the FastNetMon
 	// datasource and connect it to your instance.
 	dataSource: string | *"FastNetMon InfluxDB"
+
+	// Size of the FastNetMon ingestion queue. Keeping
+	// a larger queue allows for backprocessing of longer periods of historical data.
+	topicRetention: *1_000_000_000 | int // GB
 }
 
 #PortMirrorConfig: {

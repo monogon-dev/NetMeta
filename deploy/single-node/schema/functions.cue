@@ -62,7 +62,7 @@ function: IPv6ToString: {
 		"""#
 }
 
-function: ParseAddress: {
+function: ParseGoFlowAddress: {
 	arguments: ["Address"]
 	query: #"""
 		if(
@@ -71,6 +71,29 @@ function: ParseAddress: {
 		  -- prepend ::ffff:
 		  reinterpret(toFixedString(repeat('\x00', 10) || repeat('\xff', 2) || substr(reinterpret(Address, 'FixedString(16)'), 1, 4), 16), 'IPv6'),
 		  Address
-		);
+		)
+		"""#
+}
+
+function: switchEndian: {
+	arguments: ["s"]
+	query:
+		#"""
+			unhex(
+				arrayStringConcat(
+					arrayMap(x -> substring(hex(s), x, 2), reverse(range(1, length(s) * 2, 2)))
+				)
+			)
+			"""#
+}
+
+function: ParseFastNetMonAddress: {
+	arguments: ["Address"]
+	query: #"""
+		if(
+		  length(Address) == 4,
+		  IPv4ToIPv6(CAST(reinterpret(switchEndian(Address), 'UInt32') AS IPv4)),
+		  reinterpret(toFixedString(Address, 16), 'IPv6')
+		)
 		"""#
 }
