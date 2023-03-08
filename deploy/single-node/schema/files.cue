@@ -20,9 +20,7 @@ file: "FlowMessage.proto":
 	#"""
 		syntax = "proto3";
 		package netmeta;
-		
-		import "DBManager.proto";
-		
+
 		// Adapter from/compatible with cloudflare/goflow.
 		
 		message FlowMessage {
