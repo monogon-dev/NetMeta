@@ -104,21 +104,27 @@ func loadTableSchema(schema string, builder *sqlbuilder.CreateTableBuilder) erro
 		return err
 	}
 
-	var msg *proto.Message
-	proto.Walk(definition, proto.WithMessage(func(message *proto.Message) {
-		if message.Name == msgName {
-			msg = message
-			return
-		}
-	}))
-	if msg == nil {
-		return fmt.Errorf("can't find message inside %q: %v", path, msgName)
-	}
-
 	cv := &clickhouseVisitor{
 		enumTypes: make(map[string]map[string]int),
 		builder:   builder,
 	}
+
+	var msg *proto.Message
+	proto.Walk(definition,
+		proto.WithEnum(func(e *proto.Enum) {
+			e.Accept(cv)
+		}),
+		proto.WithMessage(func(message *proto.Message) {
+			if message.Name == msgName {
+				msg = message
+			}
+		}))
+	if msg == nil {
+		return fmt.Errorf("can't find message inside %q: %v", path, msgName)
+	}
+
+	// we have to evaluate the message after the proto.Walk
+	// else it's not guaranteed that all enums are discovered
 	msg.Accept(cv)
 
 	return nil
