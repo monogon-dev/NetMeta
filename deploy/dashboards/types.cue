@@ -75,8 +75,8 @@ import "strings"
 #DatasourceVariable: {
 	current: {
 		selected: false
-		text:     "ClickHouse"
-		value:    "ClickHouse"
+		text:     string | *"ClickHouse"
+		value:    string | *"ClickHouse"
 	}
 	hide:       int | *0
 	includeAll: bool | *false
@@ -84,7 +84,7 @@ import "strings"
 	multi:      bool | *false
 	name:       string
 	options: []
-	query:       "grafana-clickhouse-datasource"
+	query:       string | *"grafana-clickhouse*-datasource"
 	refresh:     int | *1
 	regex:       string | *""
 	skipUrlSync: bool | *false

@@ -9,7 +9,7 @@ package dashboards
 
 	// The config for the FastNetMon integration
 	fastNetMon?: {
-		dataSource: string | *null
+		dataSource: string
 		...
 	}
 }
@@ -168,8 +168,9 @@ dashboards: [string]: templating: _list: [{
 		{
 			current: {
 				selected: false
-				text:     #Config.fastNetMon.name
-				value:    #Config.fastNetMon.name
+				// we wrap the variable into a string to enforce previous declared defaults to be evaluated
+				text:     "\(#Config.fastNetMon.dataSource)"
+				value:    "\(#Config.fastNetMon.dataSource)"
 			}
 			label: "Datasource"
 			name:  "datasource_fnm"
