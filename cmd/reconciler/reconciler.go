@@ -14,6 +14,12 @@ type Reconciler struct {
 }
 
 func (r *Reconciler) Reconcile() error {
+	for _, function := range r.cfg.Functions {
+		if err := r.reconcileFunction(function); err != nil {
+			return err
+		}
+	}
+
 	for _, table := range r.cfg.SourceTables {
 		if err := r.reconcileTable(table); err != nil {
 			return err
@@ -22,12 +28,6 @@ func (r *Reconciler) Reconcile() error {
 
 	for _, view := range r.cfg.MaterializedViews {
 		if err := r.reconcileMaterializedView(view); err != nil {
-			return err
-		}
-	}
-
-	for _, function := range r.cfg.Functions {
-		if err := r.reconcileFunction(function); err != nil {
 			return err
 		}
 	}
