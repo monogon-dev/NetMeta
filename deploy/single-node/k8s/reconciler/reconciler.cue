@@ -3,6 +3,8 @@ package reconciler
 import (
 	reconciler "github.com/monogon-dev/NetMeta/reconciler:main"
 	"encoding/json"
+	"encoding/hex"
+	"crypto/sha256"
 )
 
 #Config: {
@@ -32,6 +34,7 @@ Deployment: reconciler: {
 
 			// Trigger redeployment when digest changes.
 			metadata: annotations: "meta/local-image-digest": #Config.digest
+			metadata: annotations: "meta/config-digest": hex.Encode(sha256.Sum256(json.Marshal(ConfigMap["reconciler-config"].data)))
 
 			spec: containers: [{
 				name:            "reconciler"
