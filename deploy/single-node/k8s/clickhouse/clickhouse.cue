@@ -67,7 +67,7 @@ ClickHouseInstallation: netmeta: spec: {
 		}
 		profiles: {
 			"readonly/readonly":                                                    "1"
-			"readonly/constraints/additional_table_filters/changeable_in_readonly": null
+			"readonly/constraints/additional_table_filters/changeable_in_readonly": ""
 		}
 		files: [string]: string
 	}
