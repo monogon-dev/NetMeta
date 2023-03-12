@@ -42,10 +42,11 @@ ClickHouseInstallation: netmeta: spec: {
 	}
 	configuration: {
 		settings: {
-			format_schema_path:                       "/etc/clickhouse-server/config.d/"
-			dictionaries_config:                      "config.d/*.conf"
-			user_defined_executable_functions_config: "config.d/*_function.xml"
-			http_port:                                8123
+			format_schema_path:                                                  "/etc/clickhouse-server/config.d/"
+			dictionaries_config:                                                 "config.d/*.conf"
+			user_defined_executable_functions_config:                            "config.d/*_function.xml"
+			http_port:                                                           8123
+			"access_control_improvements/settings_constraints_replace_previous": true
 		}
 		clusters: [
 			{
@@ -65,7 +66,8 @@ ClickHouseInstallation: netmeta: spec: {
 			"readonly/profile":             "readonly"
 		}
 		profiles: {
-			"readonly/readonly": "1"
+			"readonly/readonly":                                                    "1"
+			"readonly/constraints/additional_table_filters/changeable_in_readonly": null
 		}
 		files: [string]: string
 	}
