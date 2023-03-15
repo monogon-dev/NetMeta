@@ -129,7 +129,7 @@ function: IPv6ToString: {
 	query: #"""
 		if(
 		  startsWith(Address, repeat('\x00', 10) || repeat('\xff', 2)),
-		  IPv4NumToString(reinterpret(reverse(substring(reinterpret(Address, 'FixedString(16)'), 13, 16)), 'IPv4')),
+		  IPv4NumToString(CAST(reinterpret(reverse(substring(reinterpret(Address, 'FixedString(16)'), 13, 16)), 'UInt32') AS IPv4)),
 		  IPv6NumToString(Address)
 		)
 		"""#
@@ -142,7 +142,7 @@ function: ParseGoFlowAddress: {
 		  -- endsWith IPv6v4NullPadding
 		  endsWith(reinterpret(Address, 'FixedString(16)'), repeat('\x00', 12)),
 		  -- prepend ::ffff:
-		  reinterpret(toFixedString(repeat('\x00', 10) || repeat('\xff', 2) || substr(reinterpret(Address, 'FixedString(16)'), 1, 4), 16), 'IPv6'),
+		  CAST(toFixedString(repeat('\x00', 10) || repeat('\xff', 2) || substr(reinterpret(Address, 'FixedString(16)'), 1, 4), 16) AS IPv6),
 		  Address
 		)
 		"""#
@@ -166,7 +166,7 @@ function: ParseFastNetMonAddress: {
 		if(
 		  length(Address) == 4,
 		  IPv4ToIPv6(CAST(reinterpret(switchEndian(Address), 'UInt32') AS IPv4)),
-		  reinterpret(toFixedString(Address, 16), 'IPv6')
+		  CAST(toFixedString(Address, 16) AS IPv6)
 		)
 		"""#
 }
