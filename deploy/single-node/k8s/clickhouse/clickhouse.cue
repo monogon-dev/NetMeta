@@ -99,7 +99,7 @@ ClickHouseInstallation: netmeta: spec: {
 				}
 				containers: [{
 					name:  "clickhouse"
-					image: "docker.io/clickhouse/clickhouse-server:22.9.7.34-alpine@sha256:ffdc00357f084f060f1703d84add385400905003cacc64afd61ab9c563d35326"
+					image: "docker.io/clickhouse/clickhouse-server:23.2.4.12-alpine@sha256:0a63183a4da2923868cc0e58285e404a4a60e1be657c5b7005e736e91cfd4da9"
 					resources: {}
 				}]
 			}

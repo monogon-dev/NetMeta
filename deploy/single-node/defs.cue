@@ -52,7 +52,6 @@ _schema: (schema & {
 	}
 })
 
-
 k8s_list: [
 	traefikBase,
 	(traefik & {
@@ -173,6 +172,7 @@ k8s: close({
 	StatefulSet: [string]:                apps_v1.#StatefulSet & {apiVersion:    "apps/v1"}
 	Service: [string]:                    core_v1.#Service & {apiVersion:        "v1"}
 	ConfigMap: [string]:                  core_v1.#ConfigMap & {apiVersion:      "v1"}
+	Secret: [string]:                     core_v1.#Secret & {apiVersion:         "v1"}
 	ServiceAccount: [string]:             core_v1.#ServiceAccount & {apiVersion: "v1"}
 	PersistentVolumeClaim: [NANE=string]: core_v1.#PersistentVolumeClaim & {
 		apiVersion: "v1"
