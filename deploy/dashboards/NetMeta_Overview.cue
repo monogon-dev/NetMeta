@@ -6,11 +6,11 @@ _trafficStatisticQueries: {
 			SELECT
 			    $__timeInterval(TimeReceived) as time,
 			    (sum(Packets * SamplingRate) / $__interval_s) AS Value,
-			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
+			    if(isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			GROUP BY time, FlowDirection
+			GROUP BY time, FlowDirectionStr
 			ORDER BY time
 			"""#
 	Throughput:
@@ -18,11 +18,11 @@ _trafficStatisticQueries: {
 			SELECT
 			    $__timeInterval(TimeReceived) as time,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS Value,
-			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
+			    if(isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			GROUP BY time, FlowDirection
+			GROUP BY time, FlowDirectionStr
 			ORDER BY time
 			"""#
 	"IP Proto":
@@ -31,11 +31,11 @@ _trafficStatisticQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) || ' (' || toString(Proto) || ')' AS ProtoName,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
-			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
+			    if(isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			GROUP BY time, Proto, FlowDirection
+			GROUP BY time, Proto, FlowDirectionStr
 			ORDER BY time
 			"""#
 	"Ethernet Type":
@@ -44,11 +44,11 @@ _trafficStatisticQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    dictGetString('EtherTypes', 'Name', toUInt64(EType)) || ' (' || hex(EType) || ')' AS ETypeName,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
-			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
+			    if(isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			GROUP BY time, EType, FlowDirection
+			GROUP BY time, EType, FlowDirectionStr
 			ORDER BY time
 			"""#
 	"Raw Flows/s Per Host":
@@ -83,11 +83,11 @@ _trafficStatisticQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    InterfaceToString(SamplerAddress, InIf) AS InIfName,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
-			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
+			    if(isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			GROUP BY time, SamplerAddress, InIf, FlowDirection
+			GROUP BY time, SamplerAddress, InIf, FlowDirectionStr
 			ORDER BY time
 			"""#
 	"Traffic per Egress Interface":
@@ -96,11 +96,11 @@ _trafficStatisticQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    InterfaceToString(SamplerAddress, OutIf) AS OutIfName,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
-			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
+			    if(isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			GROUP BY time, SamplerAddress, OutIf, FlowDirection
+			GROUP BY time, SamplerAddress, OutIf, FlowDirectionStr
 			ORDER BY time
 			"""#
 }
@@ -205,7 +205,7 @@ _originASStatisticQueries: {
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			AND isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
+			AND isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection)
 			GROUP BY SrcAS
 			ORDER BY Bytes DESC
 			LIMIT 100
@@ -221,7 +221,7 @@ _originASStatisticQueries: {
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			AND NOT isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
+			AND NOT isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection)
 			GROUP BY DstAS
 			ORDER BY Bytes DESC
 			LIMIT 100
@@ -235,13 +235,13 @@ _originASStatisticQueries: {
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			AND isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
+			AND isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection)
 			AND SrcAS IN (
 			    SELECT SrcAS
 			    FROM flows_raw
 			    WHERE $__timeFilter(TimeReceived)
 			      \#(_filtersWithHost)
-			      AND isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
+			      AND isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection)
 			    GROUP BY SrcAS
 			    ORDER BY sum(Bytes) DESC
 			    LIMIT 10)
@@ -257,13 +257,13 @@ _originASStatisticQueries: {
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
-			AND NOT isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
+			AND NOT isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection)
 			AND DstAS IN (
 			    SELECT DstAS
 			    FROM flows_raw
 			    WHERE $__timeFilter(TimeReceived)
 			    \#(_filtersWithHost)
-			    AND NOT isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
+			    AND NOT isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection)
 			    GROUP BY DstAS
 			    ORDER BY sum(Bytes) DESC
 			    LIMIT 10)
@@ -374,12 +374,12 @@ _trafficDetailQueries: {
 			    || ' (' || toString(TCPFlags) || ')' AS TCPFlagsName,
 			
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS Value,
-			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
+			    if(isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
 			AND Proto = 6
-			GROUP BY time, TCPFlags, FlowDirection
+			GROUP BY time, TCPFlags, FlowDirectionStr
 			ORDER BY time
 			"""#
 
@@ -389,12 +389,12 @@ _trafficDetailQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    VLANToString(SamplerAddress, VlanId) AS Vlan,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS Value,
-			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
+			    if(isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
 			AND Proto = 6
-			GROUP BY time, SamplerAddress, VlanId, FlowDirection
+			GROUP BY time, SamplerAddress, VlanId, FlowDirectionStr
 			ORDER BY time
 			"""#
 
@@ -405,7 +405,7 @@ _trafficDetailQueries: {
 			    toString(SrcPort) AS SrcPortStr,
 			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS ProtoName,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS Value,
-			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
+			    if(isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			  \#(_filtersWithHost)
@@ -418,7 +418,7 @@ _trafficDetailQueries: {
 						    ORDER BY sum(Bytes * SamplingRate) DESC
 						    LIMIT 10
 			  )
-			GROUP BY time, Proto, SrcPort, FlowDirection
+			GROUP BY time, Proto, SrcPort, FlowDirectionStr
 			ORDER BY time
 			"""#
 
@@ -429,7 +429,7 @@ _trafficDetailQueries: {
 			    toString(DstPort) AS DstPortStr,
 			    dictGetString('IPProtocols', 'Name', toUInt64(Proto)) AS ProtoName,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS Value,
-			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
+			    if(isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE
 			  $__timeFilter(TimeReceived)
@@ -443,7 +443,7 @@ _trafficDetailQueries: {
 						    ORDER BY sum(Bytes * SamplingRate) DESC
 						    LIMIT 10
 			  )
-			GROUP BY time, Proto, DstPort, FlowDirection
+			GROUP BY time, Proto, DstPort, FlowDirectionStr
 			ORDER BY time
 			"""#
 }
@@ -497,7 +497,7 @@ _topHostQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    if($showHostnames, HostToString(SamplerAddress, SrcAddr), IPv6ToString(SrcAddr)) AS Src,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
-			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
+			    if(isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			  \#(_filters)
@@ -510,7 +510,7 @@ _topHostQueries: {
 						    ORDER BY sum(Bytes * SamplingRate) DESC
 						    LIMIT 10
 			  )
-			GROUP BY time, SamplerAddress, SrcAddr, FlowDirection
+			GROUP BY time, SamplerAddress, SrcAddr, FlowDirectionStr
 			ORDER BY time
 			"""#
 
@@ -520,7 +520,7 @@ _topHostQueries: {
 			    $__timeInterval(TimeReceived) as time,
 			    if($showHostnames, HostToString(SamplerAddress, DstAddr), IPv6ToString(DstAddr)) AS Dst,
 			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
-			    if(isIncomingFlow(FlowDirection, SrcAddr, DstAddr), 'in', 'out') AS FlowDirectionStr
+			    if(isIncomingFlow(SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection), 'in', 'out') AS FlowDirectionStr
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			  \#(_filters)
@@ -533,7 +533,7 @@ _topHostQueries: {
 						    ORDER BY sum(Bytes * SamplingRate) DESC
 						    LIMIT 10
 			  )
-			GROUP BY time, SamplerAddress, DstAddr, FlowDirection
+			GROUP BY time, SamplerAddress, DstAddr, FlowDirectionStr
 			ORDER BY time
 			"""#
 
