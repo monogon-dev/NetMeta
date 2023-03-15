@@ -91,6 +91,12 @@ _deviceAddressTest: {
 	}
 }
 
+// for COLUMN you can use the following columns:
+// SamplerAddress, SrcAddr, DstAddr, SrcAS, DstAS, FlowDirection
+// additionally it is possible to use these with a valid CIDR
+// SamplerAddressInRange, SrcAddrInRange, DstAddrInRange
+#ColumnExpression: [COLUMN=string]: string | int
+
 // A struct containing sampler specific config parameters
 #SamplerConfig: [DEVICE=string]: {
 	// Router source address
@@ -104,6 +110,11 @@ _deviceAddressTest: {
 
 	// anonymize the last 8byte for v6 addresses and 1byte for v4 addresses
 	anonymizeAddresses: bool | *false
+
+	// how to detect an incoming flow
+	// each array entry is connected by an OR statement
+	// everything inside a #ColumnExpression is connected with AND
+	isIncomingFlow: [...#ColumnExpression]
 
 	// Interface names for the data from this sampler
 	interface: [ID=string]: {

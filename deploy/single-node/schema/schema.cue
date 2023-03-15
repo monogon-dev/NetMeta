@@ -6,6 +6,7 @@ import reconciler "github.com/monogon-dev/NetMeta/reconciler:main"
 	fastNetMon?: {
 		...
 	}
+	sampler: [DEVICE=string]: isIncomingFlow: [...{[COLUMN=string]: string | int}]
 }
 
 function: [NAME=string]: reconciler.#Function & {

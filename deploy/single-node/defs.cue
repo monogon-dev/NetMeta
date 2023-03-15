@@ -48,6 +48,7 @@ netmeta: dashboards: {
 _schema: (schema & {
 	#Config: {
 		fastNetMon: netmeta.config.fastNetMon
+		sampler:    netmeta.config.sampler
 	}
 })
 
