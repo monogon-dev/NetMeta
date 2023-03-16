@@ -142,7 +142,7 @@ function: ParseGoFlowAddress: {
 		  -- endsWith IPv6v4NullPadding
 		  endsWith(reinterpret(Address, 'FixedString(16)'), repeat(unhex('00'), 12)),
 		  -- prepend ::ffff:
-		  CAST(toFixedString(repeat(unhex('00'), 10) || repeat(unhex('FF'), 2) || substr(reinterpret(Address, 'FixedString(16)'), 1, 4), 16) AS IPv6),
+		  CAST(toFixedString(repeat(unhex('00'), 10) || repeat(unhex('FF'), 2) || substring(reinterpret(Address, 'FixedString(16)'), 1, 4), 16) AS IPv6),
 		  CAST(Address AS IPv6)
 		)
 		"""#
