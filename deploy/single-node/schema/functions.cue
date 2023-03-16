@@ -143,7 +143,7 @@ function: ParseGoFlowAddress: {
 		  endsWith(reinterpret(Address, 'FixedString(16)'), repeat('\x00', 12)),
 		  -- prepend ::ffff:
 		  CAST(toFixedString(repeat('\x00', 10) || repeat('\xff', 2) || substr(reinterpret(Address, 'FixedString(16)'), 1, 4), 16) AS IPv6),
-		  Address
+		  CAST(Address AS IPv6)
 		)
 		"""#
 }

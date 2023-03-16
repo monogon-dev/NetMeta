@@ -40,7 +40,7 @@ file: "FlowMessage.proto":
 		  uint32 FlowDirection = 42 [(column_type) = "UInt8"];
 		
 		  // Sampler information
-		  bytes SamplerAddress = 11 [(column_type) = "IPv6"];;
+		  bytes SamplerAddress = 11 [(column_type) = "FixedString(16)"];;
 		
 		  // Found inside packet
 		  uint64 TimeFlowStart = 38;
@@ -51,8 +51,8 @@ file: "FlowMessage.proto":
 		  uint64 Packets = 10;
 		
 		  // Source/destination addresses
-		  bytes SrcAddr = 6 [(column_type) = "IPv6"];
-		  bytes DstAddr = 7 [(column_type) = "IPv6"];
+		  bytes SrcAddr = 6 [(column_type) = "FixedString(16)"];
+		  bytes DstAddr = 7 [(column_type) = "FixedString(16)"];
 		
 		  // Layer 3 protocol (IPv4/IPv6/ARP/MPLS...)
 		  uint32 Etype = 30 [(column_type) = "UInt16"];
@@ -101,7 +101,7 @@ file: "FlowMessage.proto":
 		  uint32 SrcAS = 14;
 		  uint32 DstAS = 15;
 		
-		  bytes NextHop = 12 [(column_type) = "IPv6"];
+		  bytes NextHop = 12 [(column_type) = "FixedString(16)"];
 		  uint32 NextHopAS = 13;
 		
 		  // Prefix size
