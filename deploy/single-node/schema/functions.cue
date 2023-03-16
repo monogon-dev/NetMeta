@@ -128,7 +128,7 @@ function: IPv6ToString: {
 	arguments: ["Address"]
 	query: #"""
 		if(
-		  startsWith(Address, repeat('\x00', 10) || repeat('\xff', 2)),
+		  startsWith(reinterpret(Address, 'FixedString(16)'), repeat('\x00', 10) || repeat('\xff', 2)),
 		  IPv4NumToString(CAST(reinterpret(reverse(substring(reinterpret(Address, 'FixedString(16)'), 13, 16)), 'UInt32') AS IPv4)),
 		  IPv6NumToString(Address)
 		)
