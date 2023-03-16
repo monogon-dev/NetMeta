@@ -25,7 +25,7 @@ view: flows_raw_view: {
 		             if(
 		                         NextHop != toFixedString('', 16),
 		                         ParseGoFlowAddress(NextHop),
-		                         NextHop
+		                         toIPv6('::')
 		                 ) AS NextHop,
 		             if(
 		                         SrcAS == 0,
