@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"crypto/sha256"
 	"database/sql"
+	"encoding/hex"
 	"fmt"
 	"github.com/ClickHouse/clickhouse-go/v2"
 	"log"
@@ -71,20 +73,17 @@ func (r *Reconciler) reconcileTable(t Table) error {
 }
 
 func (r *Reconciler) reconcileMaterializedView(mv MaterializedView) error {
-	currentQuery, err := r.fetchMaterializedView(mv.Name)
+	currentHashString, err := r.fetchMaterializedView(mv.Name)
 	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
 
-	if currentQuery != "" {
-		// fetchMaterializedView returns the SELECT part of the materialized view
-		equal, err := r.isEqual(mv.SelectQuery(r.cfg.Database), currentQuery)
-		if err != nil {
-			return err
-		}
+	newHash := sha256.Sum256([]byte(mv.CreateQuery(r.cfg.Database)))
+	newHashString := hex.EncodeToString(newHash[:])
 
+	if err != sql.ErrNoRows {
 		// current mv is equal -> skip
-		if equal {
+		if newHashString == currentHashString {
 			log.Printf("materializedview %q is equal: skipping", mv.Name)
 			return nil
 		}
@@ -97,7 +96,11 @@ func (r *Reconciler) reconcileMaterializedView(mv MaterializedView) error {
 
 	log.Printf("materializedview %q is missing: creating", mv.Name)
 	// create missing view
-	return r.conn.Exec(context.Background(), mv.CreateQuery(r.cfg.Database))
+	if err := r.conn.Exec(context.Background(), mv.CreateQuery(r.cfg.Database)); err != nil {
+		return err
+	}
+
+	return r.conn.Exec(context.Background(), fmt.Sprintf("ALTER TABLE %s.%s MODIFY COMMENT ?", r.cfg.Database, mv.Name), newHashString)
 }
 
 func (r *Reconciler) reconcileFunction(f Function) error {
@@ -162,18 +165,18 @@ func (r *Reconciler) fetchFunction(name string) (string, error) {
 
 func (r *Reconciler) fetchMaterializedView(name string) (string, error) {
 	row := r.conn.QueryRow(context.Background(),
-		"SELECT as_select FROM system.tables WHERE database = ? AND name = ?",
+		"SELECT comment FROM system.tables WHERE database = ? AND name = ?",
 		"default", name)
 	if err := row.Err(); err != nil {
 		return "", err
 	}
 
-	var asSelect string
-	if err := row.Scan(&asSelect); err != nil {
+	var comment string
+	if err := row.Scan(&comment); err != nil {
 		return "", err
 	}
 
-	return asSelect, nil
+	return comment, nil
 }
 
 func (r *Reconciler) formatQuery(query string) (string, error) {
