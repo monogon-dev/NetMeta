@@ -19,8 +19,8 @@ LIMIT 20
 	"Outbound traffic relations (Top 20)":
 		#"""
 SELECT
-  ASNToString(SrcAS) AS SrcASName,
   ASNToString(DstAS) AS DstASName,
+  ASNToString(SrcAS) AS SrcASName,
   (sum(Bytes * SamplingRate) / 1024) as Bytes
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
@@ -50,9 +50,9 @@ LIMIT 30
 	"Outbound traffic relations via interface (Top 30)":
 		#"""
 SELECT
-  ASNToString(SrcAS) AS SrcASName,
-  InterfaceToString(SamplerAddress, OutIf) AS OutIfName,
   ASNToString(DstAS) AS DstASName,
+  InterfaceToString(SamplerAddress, OutIf) AS OutIfName,
+  ASNToString(SrcAS) AS SrcASName,
   (sum(Bytes * SamplingRate) / 1024) as Bytes
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
