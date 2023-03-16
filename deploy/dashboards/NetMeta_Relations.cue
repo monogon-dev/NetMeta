@@ -20,14 +20,13 @@ LIMIT 20
 		#"""
 SELECT
   ASNToString(SrcAS) AS SrcASName,
-  InterfaceToString(SamplerAddress, OutIf) AS OutIfName,
   ASNToString(DstAS) AS DstASName,
   (sum(Bytes * SamplingRate) / 1024) as Bytes
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
 \#(_filtersWithHost)
 AND NOT isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
-GROUP BY SrcAS, DstAS, SamplerAddress, OutIf
+GROUP BY SrcAS, DstAS
 ORDER BY Bytes DESC
 LIMIT 20
 """#
@@ -45,22 +44,23 @@ WHERE $__timeFilter(TimeReceived)
 AND isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
 GROUP BY SrcAS, DstAS, SamplerAddress, OutIf
 ORDER BY Bytes DESC
-LIMIT 20
+LIMIT 30
 """#
 
 	"Outbound traffic relations via interface (Top 30)":
 		#"""
 SELECT
   ASNToString(SrcAS) AS SrcASName,
+  InterfaceToString(SamplerAddress, OutIf) AS OutIfName,
   ASNToString(DstAS) AS DstASName,
   (sum(Bytes * SamplingRate) / 1024) as Bytes
 FROM flows_raw
 WHERE $__timeFilter(TimeReceived)
 \#(_filtersWithHost)
 AND NOT isIncomingFlow(FlowDirection, SrcAddr, DstAddr)
-GROUP BY SrcAS, DstAS
+GROUP BY SrcAS, DstAS, SamplerAddress, OutIf
 ORDER BY Bytes DESC
-LIMIT 20
+LIMIT 30
 """#
 }
 
