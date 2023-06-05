@@ -12,7 +12,7 @@ view: flows_raw_view: {
 		        ) AS SrcAddr,
 		    if(
 		            dictGet('SamplerConfig', 'AnonymizeAddresses', IPv6NumToString(SamplerAddress)),
-		            toIPv6(cutIPv6(SrcAddr, 8, 1)),
+		            toIPv6(cutIPv6(DstAddr, 8, 1)),
 		            DstAddr
 		        ) AS DstAddr
 		    )
