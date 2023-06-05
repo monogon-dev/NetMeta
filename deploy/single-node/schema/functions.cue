@@ -11,7 +11,7 @@ function: HostToString: {
 
 function: SamplerToString: {
 	arguments: ["Sampler"]
-	query: "dictGetStringOrDefault('SamplerConfig', 'Description', IPv6NumToString(Sampler), Sampler)"
+	query: "coalesce(dictGet('SamplerConfig', 'Description', IPv6NumToString(Sampler)), IPv6ToString(Sampler))"
 }
 
 function: ASNToString: {

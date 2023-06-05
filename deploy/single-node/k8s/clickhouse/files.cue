@@ -104,7 +104,7 @@ _files: SamplerConfig: {
 		}, {
 			attribute: {
 				name:       "Description"
-				type:       "String"
+				type:       "Nullable(String)"
 				null_value: null
 			}
 		}, {
