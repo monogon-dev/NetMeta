@@ -314,7 +314,6 @@ _originASStatistics: [{
 	type:  "table"
 	gridPos: {h: 12, w: 12, x: 12, y: 56}
 	fieldConfig: defaults: color: mode: "fixed"
-	fieldConfig: defaults: unit: "bytes"
 	fieldConfig: overrides: [{
 		matcher: {
 			id:      "byName"
