@@ -35,7 +35,7 @@ netmeta: config: #NetMetaConfig
 netmeta: dashboards: {
 	_dashboards: (grafana_dashboards & {
 		#Config: {
-			interval:      netmeta.config.dashboardDisplay.minInterval
+			minInterval:      netmeta.config.dashboardDisplay.minInterval
 			maxPacketSize: netmeta.config.dashboardDisplay.maxPacketSize
 			fastNetMon:    netmeta.config.fastNetMon
 		}
