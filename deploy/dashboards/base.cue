@@ -2,7 +2,7 @@ package dashboards
 
 #Config: {
 	// Minimum interval for all panels
-	interval: string | null
+	minInterval: string | null
 
 	// Maximum packet size for heatmaps (filter out spurious oversized packet from loopback interfaces)
 	maxPacketSize: uint | *1500
@@ -141,6 +141,7 @@ dashboards: [string]: D={
 	_panels: [...#Panel]
 	panels: [ for i, v in D._panels {
 		id: i
+		interval: #Config.minInterval
 		for _, t in #PanelStructs if t.type == v.type {
 			(t & v)
 		}
