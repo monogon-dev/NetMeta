@@ -175,6 +175,31 @@ _files: HostNames: {
 	}
 }
 
+_files: user_autnums: {
+	data: strings.Join([ for _, e in #Config.userData.autnums {
+		strings.Join(["\(e.asn)", e.name, e.country], "\t")
+	}], "\n")
+
+	cfg: {
+		layout: flat: null
+		structure: [{
+			id: name: "asnum"
+		}, {
+			attribute: {
+				name:       "name"
+				type:       "String"
+				null_value: null
+			}
+		}, {
+			attribute: {
+				name:       "country"
+				type:       "String"
+				null_value: null
+			}
+		}]
+	}
+}
+
 ClickHouseInstallation: netmeta: spec: configuration: files: "risinfo.conf": (xml.#Marshal & {in: {
 	yandex: dictionary: {
 		name: "risinfo"
@@ -199,6 +224,37 @@ ClickHouseInstallation: netmeta: spec: configuration: files: "risinfo.conf": (xm
 ClickHouseInstallation: netmeta: spec: configuration: files: "autnums.conf": (xml.#Marshal & {in: {
 	yandex: dictionary: {
 		name: "autnums"
+		source: clickhouse: {
+			query:
+				#"""
+					SELECT * FROM dictionaries.risinfo_autnums 
+					UNION ALL
+					SELECT * FROM dictionaries.user_autnums
+					"""#
+		}
+		lifetime: 3600
+		layout: flat: null
+		structure: [{
+			id: name: "asnum"
+		}, {
+			attribute: {
+				name:       "name"
+				type:       "String"
+				null_value: null
+			}
+		}, {
+			attribute: {
+				name:       "country"
+				type:       "String"
+				null_value: null
+			}
+		}]
+	}
+}}).out
+
+ClickHouseInstallation: netmeta: spec: configuration: files: "risinfo_autnums.conf": (xml.#Marshal & {in: {
+	yandex: dictionary: {
+		name: "risinfo_autnums"
 		source: http: {
 			url:    "http://risinfo/autnums.tsv"
 			format: "TabSeparated"

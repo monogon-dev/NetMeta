@@ -72,6 +72,7 @@ k8s_list: [
 			clickhouseReadonlyPassword: netmeta.config.clickhouseReadonlyPassword
 			enableClickhouseIngress:    netmeta.config.enableClickhouseIngress
 			sampler:                    netmeta.config.sampler
+			userData:                   netmeta.config.userData
 		}
 	}),
 

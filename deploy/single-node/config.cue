@@ -143,6 +143,15 @@ _deviceAddressTest: {
 	}
 }
 
+#UserData: {
+	// Custom ASNs
+	autnums: [ASN=string]: {
+		asn: *strconv.Atoi(ASN) | int
+		name: string
+		country: string
+	}
+}
+
 #NetMetaConfig: {
 	// Allow the use of legacy config parameters
 	#LegacyNetMetaConfig
@@ -221,6 +230,9 @@ _deviceAddressTest: {
 
 	// Config parameter like interface names. See #SamplerConfig
 	sampler: #SamplerConfig
+
+	// Userprovided data like custom ASNs
+	userData: #UserData
 }
 
 #Image: {

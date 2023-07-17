@@ -26,11 +26,20 @@ import (
 	...
 }
 
+#UserData: {
+	autnums: [string]: {
+		asn:     int
+		name:    string
+		country: string
+	}
+}
+
 #Config: {
 	clickhouseAdminPassword:    string
 	clickhouseReadonlyPassword: string
 	enableClickhouseIngress:    bool
 	sampler:                    #SamplerConfig
+	userData:                   #UserData
 }
 
 ClickHouseInstallation: netmeta: spec: {
