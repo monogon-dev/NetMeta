@@ -66,6 +66,18 @@ _infoPanelQueries: {
 		#"""
 			select (toUnixTimestamp(now()) - TimeReceived) from flows_raw ORDER BY TimeReceived limit 1
 			"""#
+	"TTL Active":
+		#"""
+			SELECT if(min(delete_ttl_info_min) == 0, 'No', 'Yes')
+			FROM system.parts
+			WHERE (database = 'default') AND (table = 'flows_raw')
+			"""#
+	"TTL next deletion":
+		#"""
+			SELECT min(delete_ttl_info_min)
+			FROM system.parts
+			WHERE (database = 'default') AND (table = 'flows_raw')
+			"""#
 }
 
 _infoPanels: [{
@@ -109,6 +121,28 @@ _infoPanels: [{
 	targets: [{
 		rawSql: _infoPanelQueries[title]
 	}]
+}, {
+	title: "TTL Active"
+	type:  "stat"
+	gridPos: {h: 3, w: 5, x: 10, y: 0}
+	fieldConfig: defaults: unit: "short"
+	fieldConfig: defaults: color: fixedColor: "purple"
+	fieldConfig: defaults: color: mode:       "fixed"
+	options: reduceOptions: fields: "/.*/"
+	targets: [{
+		rawSql: _infoPanelQueries[title]
+	}]
+}, {
+	title: "TTL next deletion"
+	type:  "stat"
+	gridPos: {h: 3, w: 5, x: 10, y: 3}
+	fieldConfig: defaults: unit: "short"
+	fieldConfig: defaults: color: fixedColor: "purple"
+	fieldConfig: defaults: color: mode:       "fixed"
+	options: reduceOptions: fields: "/.*/"
+	targets: [{
+		rawSql: _infoPanelQueries[title]
+	}]
 }]
 
 _negativeYOut: {
@@ -140,7 +174,7 @@ _textBoxes: {
 dashboards: [string]: D={
 	_panels: [...#Panel]
 	panels: [ for i, v in D._panels {
-		id: i
+		id:       i
 		interval: #Config.minInterval
 		for _, t in #PanelStructs if t.type == v.type {
 			(t & v)
@@ -170,8 +204,8 @@ dashboards: [string]: templating: _list: [{
 			current: {
 				selected: false
 				// we wrap the variable into a string to enforce previous declared defaults to be evaluated
-				text:     "\(#Config.fastNetMon.dataSource)"
-				value:    "\(#Config.fastNetMon.dataSource)"
+				text:  "\(#Config.fastNetMon.dataSource)"
+				value: "\(#Config.fastNetMon.dataSource)"
 			}
 			label: "Datasource"
 			name:  "datasource_fnm"

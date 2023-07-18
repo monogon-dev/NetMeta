@@ -207,7 +207,7 @@ import "strings"
 			calcs: [
 				"lastNotNull",
 			]
-			fields: ""
+			fields: *"" | string
 			values: false
 		}
 		textMode: "auto"
