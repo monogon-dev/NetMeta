@@ -93,21 +93,23 @@ k8s_list: [
 		}
 	}),
 
-	(grafana & {
-		#Config: {
-			image:                       netmeta.images.grafana.image
-			digest:                      netmeta.images.grafana.digest
-			publicHostname:              netmeta.config.publicHostname
-			grafanaInitialAdminPassword: netmeta.config.grafanaInitialAdminPassword
-			grafanaBasicAuth:            netmeta.config.grafanaBasicAuth
-			sessionSecret:               netmeta.config.sessionSecret
-			grafanaDefaultRole:          netmeta.config.grafanaDefaultRole
-			clickhouseReadonlyPassword:  netmeta.config.clickhouseReadonlyPassword
-			fastNetMon:                  netmeta.config.fastNetMon
-			grafanaGoogleAuth:           netmeta.config.grafanaGoogleAuth
-			dashboards:                  netmeta.dashboards
-		}
-	}),
+	if netmeta.config.deployGrafana {
+		(grafana & {
+			#Config: {
+				image:                       netmeta.images.grafana.image
+				digest:                      netmeta.images.grafana.digest
+				publicHostname:              netmeta.config.publicHostname
+				grafanaInitialAdminPassword: netmeta.config.grafanaInitialAdminPassword
+				grafanaBasicAuth:            netmeta.config.grafanaBasicAuth
+				sessionSecret:               netmeta.config.sessionSecret
+				grafanaDefaultRole:          netmeta.config.grafanaDefaultRole
+				clickhouseReadonlyPassword:  netmeta.config.clickhouseReadonlyPassword
+				fastNetMon:                  netmeta.config.fastNetMon
+				grafanaGoogleAuth:           netmeta.config.grafanaGoogleAuth
+				dashboards:                  netmeta.dashboards
+			}
+		})
+	},
 
 	(reconciler & {
 		#Config: {

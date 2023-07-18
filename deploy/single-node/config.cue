@@ -152,9 +152,37 @@ _deviceAddressTest: {
 	}
 }
 
+// Grafana specific config parameters
+#GrafanaConfig: {
+	// Deploy a local grafana instance
+	deployGrafana: bool | *true
+
+	// Dashboard display config - these settings only affect rendering of the Grafana dashboards.
+	dashboardDisplay: #DashboardDisplayConfig
+
+	// Initial Grafana admin password
+	// (after the first deployment, it can only be changed within Grafana)
+	grafanaInitialAdminPassword: string
+
+	// Enable Grafana basic authentication (you might to disable it after setting up third-party auth).
+	// OAuth auto login will be enabled if you disable basic auth.
+	//
+	// Note that the built-in admin user can authenticate even if basic auth is disabled.
+	grafanaBasicAuth: bool | *true
+
+	// Optional: configure GSuite authentication
+	grafanaGoogleAuth?: #GoogleAuth
+
+	// Default org role for new Grafana users
+	grafanaDefaultRole: string | *"Viewer"
+}
+
 #NetMetaConfig: {
 	// Allow the use of legacy config parameters
 	#LegacyNetMetaConfig
+
+	// Allow the use of grafana config parameters
+	#GrafanaConfig
 
 	// Size of the goflow sFlow/IPFIX ingestion queue. Keeping
 	// a larger queue allows for backprocessing of longer periods of historical data.
@@ -175,9 +203,6 @@ _deviceAddressTest: {
 	// External ports
 	ports: #Ports
 
-	// Dashboard display config - these settings only affect rendering of the Grafana dashboards.
-	dashboardDisplay: #DashboardDisplayConfig
-
 	// Let's Encrypt Mode
 	//  - off: self-signed certificate (TODO, right now, it just disables certificates altogether)
 	//  - staging: staging Let's Encrypt server (recommended for testing!)
@@ -192,22 +217,6 @@ _deviceAddressTest: {
 
 	// Public hostname
 	publicHostname: string
-
-	// Initial Grafana admin password
-	// (after the first deployment, it can only be changed within Grafana)
-	grafanaInitialAdminPassword: string
-
-	// Enable Grafana basic authentication (you might to disable it after setting up third-party auth).
-	// OAuth auto login will be enabled if you disable basic auth.
-	//
-	// Note that the built-in admin user can authenticate even if basic auth is disabled.
-	grafanaBasicAuth: bool | *true
-
-	// Optional: configure GSuite authentication
-	grafanaGoogleAuth?: #GoogleAuth
-
-	// Default org role for new Grafana users
-	grafanaDefaultRole: string | *"Viewer"
 
 	// Expose the ClickHouse HTTP query API on the port defined above.
 	enableClickhouseIngress: bool | *false
