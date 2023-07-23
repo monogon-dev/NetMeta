@@ -214,6 +214,10 @@ _deviceAddressTest: {
 
 	// Let's Encrypt Account Email Address
 	letsencryptAccountMail: string
+	if letsencryptMode == "off" {
+		// setup a placeholder for letsencryptAccountMail
+		letsencryptAccountMail: "letsencrypt@example.com"
+	}
 
 	// Public hostname
 	publicHostname: string
