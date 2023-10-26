@@ -65,17 +65,20 @@ _trafficStatisticQueries: {
 			"""#
 	"Top 100 Next Hop":
 		#"""
-			SELECT
+			SELECT time, NextHop, BitsPerSecond
+			FROM
+			(SELECT
 			    $__timeInterval(TimeReceived) as time,
 			    NextHop,
-			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond
+			    (sum(Bytes * SamplingRate) * 8 / $__interval_s) AS BitsPerSecond,
+			    row_number() over (partition by time order by BitsPerSecond DESC) as row_num
 			FROM flows_raw
 			WHERE $__timeFilter(TimeReceived)
 			\#(_filtersWithHost)
 			AND NextHop != toIPv6('::')
 			GROUP BY time, NextHop
-			ORDER BY time
-			LIMIT 100
+			ORDER BY time) as subquery
+			where row_num <= 100
 			"""#
 	"Traffic per Ingress Interface":
 		#"""
