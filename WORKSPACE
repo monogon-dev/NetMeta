@@ -7,10 +7,10 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "099a9fb96a376ccbbb7d291ed4ecbdfd42f6bc822ab77ae6f1b5cb9e914e94fa",
+    sha256 = "278b7ff5a826f3dc10f04feaf0b70d48b68748ccd512d7f98bf442077f043fe3",
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.35.0/rules_go-v0.35.0.zip",
-        "https://github.com/bazelbuild/rules_go/releases/download/v0.35.0/rules_go-v0.35.0.zip",
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.41.0/rules_go-v0.41.0.zip",
+        "https://github.com/bazelbuild/rules_go/releases/download/v0.41.0/rules_go-v0.41.0.zip",
     ],
 )
 
@@ -18,7 +18,7 @@ load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_depe
 
 go_rules_dependencies()
 
-go_register_toolchains(version = "1.19.1")
+go_register_toolchains(version = "1.21.4")
 
 # Import Gazelle
 
@@ -106,16 +106,34 @@ load("@com_grail_bazel_toolchain//toolchain:deps.bzl", "bazel_toolchain_dependen
 
 bazel_toolchain_dependencies()
 
-load("@com_grail_bazel_toolchain//toolchain:rules.bzl", "llvm_toolchain")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-llvm_toolchain(
-    name = "llvm_toolchain",
-    llvm_version = "14.0.0",
+HERMETIC_CC_TOOLCHAIN_VERSION = "v2.1.3"
+
+http_archive(
+    name = "hermetic_cc_toolchain",
+    sha256 = "a5caccbf6d86d4f60afd45b541a05ca4cc3f5f523aec7d3f7711e584600fb075",
+    urls = [
+        "https://mirror.bazel.build/github.com/uber/hermetic_cc_toolchain/releases/download/{0}/hermetic_cc_toolchain-{0}.tar.gz".format(HERMETIC_CC_TOOLCHAIN_VERSION),
+        "https://github.com/uber/hermetic_cc_toolchain/releases/download/{0}/hermetic_cc_toolchain-{0}.tar.gz".format(HERMETIC_CC_TOOLCHAIN_VERSION),
+    ],
 )
 
-load("@llvm_toolchain//:toolchains.bzl", "llvm_register_toolchains")
+load("@hermetic_cc_toolchain//toolchain:defs.bzl", zig_toolchains = "toolchains")
 
-llvm_register_toolchains()
+# Plain zig_toolchains() will pick reasonable defaults. See
+# toolchain/defs.bzl:toolchains on how to change the Zig SDK version and
+# download URL.
+zig_toolchains()
+
+register_toolchains(
+    "@zig_sdk//toolchain:linux_amd64_musl",
+    "@zig_sdk//toolchain:linux_arm64_musl",
+    "@zig_sdk//toolchain:darwin_amd64",
+    "@zig_sdk//toolchain:darwin_arm64",
+    "@zig_sdk//toolchain:windows_amd64",
+    "@zig_sdk//toolchain:windows_arm64",
+)
 
 load("@io_bazel_rules_docker//container:container.bzl", "container_pull")
 

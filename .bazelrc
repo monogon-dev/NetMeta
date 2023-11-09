@@ -5,3 +5,6 @@ build --@io_bazel_rules_go//go/config:static
 
 build --stamp
 build --workspace_status_command scripts/print-workspace-status.sh
+
+build --incompatible_enable_cc_toolchain_resolution
+build --action_env BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
