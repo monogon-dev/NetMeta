@@ -85,7 +85,7 @@ package k8s
 
 netmeta: config: {
     grafanaInitialAdminPassword: "<generate and paste secret here>"
-    clickhouseAdminPassword:  "<generate and paste secret here>"
+    clickhouseAdminPassword:  "<generate and paste a url friendly secret here>"
     sessionSecret:               "<generate and paste secret here>"
 
     publicHostname: "flowmon.example.com"

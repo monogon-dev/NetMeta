@@ -2,7 +2,7 @@
 # Generate an example deploy/single-node/config_local.cue file
 
 function mkpw() {
-  head -c $1 /dev/random | base64
+  head -c $1 /dev/random | base32
 }
 
 # Don't forget to update the copy in README when changing this.
