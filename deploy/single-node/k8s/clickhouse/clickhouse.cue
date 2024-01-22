@@ -3,43 +3,15 @@ package clickhouse
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	chBase "github.com/monogon-dev/NetMeta/deploy/base/clickhouse"
 )
-
-// A stripped down version of the #SamplerConfig found in deploy/single-node/config.cue
-#SamplerConfig: [string]: {
-	device:             string
-	samplingRate:       int
-	anonymizeAddresses: bool
-	description:        string
-	interface: [string]: {
-		id:          int
-		description: string
-	}
-	vlan: [string]: {
-		id:          int
-		description: string
-	}
-	host: [string]: {
-		device:      string
-		description: string
-	}
-	...
-}
-
-#UserData: {
-	autnums: [string]: {
-		asn:     int
-		name:    string
-		country: string
-	}
-}
 
 #Config: {
 	clickhouseAdminPassword:    string
 	clickhouseReadonlyPassword: string
 	enableClickhouseIngress:    bool
-	sampler:                    #SamplerConfig
-	userData:                   #UserData
+	sampler:                    _
+	userData:                   _
 }
 
 ClickHouseInstallation: netmeta: spec: {
@@ -78,7 +50,10 @@ ClickHouseInstallation: netmeta: spec: {
 			"readonly/readonly":                                                    "1"
 			"readonly/constraints/additional_table_filters/changeable_in_readonly": ""
 		}
-		files: [string]: string
+		files: (chBase & #Config & {#Config: {
+			dataPath:   configuration.settings.format_schema_path
+			risinfoURL: "http://risinfo"
+		}}).files
 	}
 	templates: {
 		volumeClaimTemplates: [{

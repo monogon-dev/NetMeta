@@ -7,6 +7,7 @@ import reconciler "github.com/monogon-dev/NetMeta/reconciler:main"
 		...
 	}
 	sampler: [DEVICE=string]: isIncomingFlow: [...{[COLUMN=string]: string | int}]
+	kafkaBrokerList: string
 }
 
 function: [NAME=string]: reconciler.#Function & {

@@ -1,9 +1,5 @@
 package clickhouse
 
-import (
-		schema "github.com/monogon-dev/NetMeta/deploy/single-node/schema"
-)
-
 // curl -s https://www.iana.org/assignments/protocol-numbers/protocol-numbers-1.csv | awk -F ',' '{ print $1 "\t" $2 }'
 // plus some manual post-processing. Most of them are never seen on the wire, but doesn't hurt to have the full list.
 _files: IPProtocols: cfg: {
@@ -252,9 +248,3 @@ _files: TCPFlags: data: #"""
 	64	ECE
 	128	CWR
 	"""#
-
-ClickHouseInstallation: netmeta: spec: configuration: files: {
-	for k, v in schema.file {
-		"\(k)": v
-	}
-}

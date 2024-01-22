@@ -3,7 +3,6 @@ package clickhouse
 import (
 	"strings"
 	"strconv"
-	"netmeta.monogon.tech/xml"
 )
 
 // template for TSV dictionaries
@@ -20,7 +19,7 @@ _files: [NAME=string]: {
 		name: NAME
 		source: [{
 			file: {
-				path:   "/etc/clickhouse-server/config.d/\(NAME).tsv"
+				path:   "\(#Config.dataPath)/\(NAME).tsv"
 				format: "TSV"
 			}
 			settings: format_tsv_null_representation: "NULL"
@@ -29,17 +28,9 @@ _files: [NAME=string]: {
 	}
 }
 
-// Iterate over all defined files in _files and generate the config files for clickhouse
-ClickHouseInstallation: netmeta: spec: configuration: files: {
-	for k, v in _files {
-		"\(k).conf": (xml.#Marshal & {in: v._cfg}).out
-		"\(k).tsv":  v.data
-	}
-}
-
 // Dictionary for user-defined interface name lookup
 _files: InterfaceNames: {
-	data: strings.Join([ for s in #Config.sampler for i in s.interface {
+	data: strings.Join([for s in #Config.sampler for i in s.interface {
 		strings.Join([s.device, "\(i.id)", i.description], "\t")
 	}], "\n")
 
@@ -68,7 +59,7 @@ _files: InterfaceNames: {
 
 // Dictionary for user-defined sampler settings lookup
 _files: SamplerConfig: {
-	data: strings.Join([ for s in #Config.sampler {
+	data: strings.Join([for s in #Config.sampler {
 		let samplingRate = [
 			if s.samplingRate == 0 {
 				"NULL"
@@ -119,7 +110,7 @@ _files: SamplerConfig: {
 
 // Dictionary for user-defined vlan name lookup
 _files: VlanNames: {
-	data: strings.Join([ for s in #Config.sampler for v in s.vlan {
+	data: strings.Join([for s in #Config.sampler for v in s.vlan {
 		strings.Join([s.device, "\(v.id)", v.description], "\t")
 	}], "\n")
 
@@ -148,7 +139,7 @@ _files: VlanNames: {
 
 // Dictionary for user-defined host name lookup
 _files: HostNames: {
-	data: strings.Join([ for s in #Config.sampler for h in s.host {
+	data: strings.Join([for s in #Config.sampler for h in s.host {
 		strings.Join([s.device, h.device, h.description], "\t")
 	}], "\n")
 
@@ -176,7 +167,7 @@ _files: HostNames: {
 }
 
 _files: user_autnums: {
-	data: strings.Join([ for _, e in #Config.userData.autnums {
+	data: strings.Join([for _, e in #Config.userData.autnums {
 		strings.Join(["\(e.asn)", e.name, e.country], "\t")
 	}], "\n")
 
@@ -199,97 +190,3 @@ _files: user_autnums: {
 		}]
 	}
 }
-
-ClickHouseInstallation: netmeta: spec: configuration: files: "risinfo.conf": (xml.#Marshal & {in: {
-	yandex: dictionary: {
-		name: "risinfo"
-		source: http: {
-			url:    "http://risinfo/rib.tsv"
-			format: "TabSeparated"
-		}
-		lifetime: 3600
-		layout: ip_trie: access_to_key_from_attributes: true
-		structure: key: attribute: {
-			name: "prefix"
-			type: "String"
-		}
-		structure: attribute: {
-			name:       "asnum"
-			type:       "UInt32"
-			null_value: 0
-		}
-	}
-}}).out
-
-ClickHouseInstallation: netmeta: spec: configuration: files: "autnums.conf": (xml.#Marshal & {in: {
-	yandex: dictionary: {
-		name: "autnums"
-		source: clickhouse: {
-			query:
-				#"""
-					SELECT * FROM dictionaries.risinfo_autnums 
-					UNION ALL
-					SELECT * FROM dictionaries.user_autnums
-					"""#
-		}
-		lifetime: 3600
-		layout: flat: null
-		structure: [{
-			id: name: "asnum"
-		}, {
-			attribute: {
-				name:       "name"
-				type:       "String"
-				null_value: null
-			}
-		}, {
-			attribute: {
-				name:       "country"
-				type:       "String"
-				null_value: null
-			}
-		}]
-	}
-}}).out
-
-ClickHouseInstallation: netmeta: spec: configuration: files: "risinfo_autnums.conf": (xml.#Marshal & {in: {
-	yandex: dictionary: {
-		name: "risinfo_autnums"
-		source: http: {
-			url:    "http://risinfo/autnums.tsv"
-			format: "TabSeparated"
-		}
-		lifetime: 86400
-		layout: flat: null
-		structure: [{
-			id: name: "asnum"
-		}, {
-			attribute: {
-				name:       "name"
-				type:       "String"
-				null_value: null
-			}
-		}, {
-			attribute: {
-				name:       "country"
-				type:       "String"
-				null_value: null
-			}
-		}]
-	}
-}}).out
-
-ClickHouseInstallation: netmeta: spec: configuration: files: "format_function.xml": (xml.#Marshal & {in: {
-	yandex: functions: {
-		type:        "executable"
-		name:        "formatQuery"
-		return_type: "String"
-		argument: [{
-			type: "String"
-			name: "query"
-		}]
-		format:         "LineAsString"
-		command:        "clickhouse format --oneline"
-		execute_direct: "0"
-	}
-}}).out

@@ -49,6 +49,7 @@ _schema: (schema & {
 	#Config: {
 		fastNetMon: netmeta.config.fastNetMon
 		sampler:    netmeta.config.sampler
+		kafkaBrokerList: "netmeta-kafka-bootstrap:9092"
 	}
 })
 
